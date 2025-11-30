@@ -4,7 +4,11 @@
 
 
 .App {
-  text-align: center;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 24px;
+    text-align: left;
+    color: #002060;
+    font-style: normal;
 }
 
 .App-logo {
@@ -42,8 +46,8 @@
   }
 }
 
-.h1 {
-    font-family: 'frontend/src/Fonts/NHaasGroteskDSPro-55Rg.otf', serif;
-    font-size: 48px;
-    font-style: normal;
+.Navbar {
+    background-color: #fff;
+    width: 100%;
+    height: 200px;
 }

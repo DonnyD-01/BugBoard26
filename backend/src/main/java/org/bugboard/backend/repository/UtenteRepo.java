@@ -1,9 +1,9 @@
 package org.bugboard.backend.repository;
 
-import org.bugboard.backend.model.Progetto;
+import org.bugboard.backend.model.Utente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProgettoRepo extends JpaRepository<Progetto,Integer> {
+public interface UtenteRepo extends JpaRepository<Utente,String> {
 }

@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro";
+    src: url("./Fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro Blk";
+    src: url("./Fonts/NHaasGroteskDSPro-95Blk.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.segnalaissue {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 24px;
+    text-align: left;
+    color: #002060;
+    font-style: normal;
+}
+
+.homepage-container {
+    margin-top: 80px;
+    padding: 20px;
+}

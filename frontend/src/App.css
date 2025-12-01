@@ -1,5 +1,22 @@
 @font-face {
-    font-family: 'frontend/src/Fonts/NHaasGroteskDSPro-55Rg.otf';
+    font-family: "NeueHaasGroteskDisp Pro";
+    src: url("./Fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro Blk";
+    src: url("./Fonts/NHaasGroteskDSPro-95Blk.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro Md";
+    src: url("./Fonts/NHaasGroteskDSPro-65Md.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
 }
 
 
@@ -46,8 +63,7 @@
   }
 }
 
-.Navbar {
-    background-color: #fff;
-    width: 100%;
-    height: 200px;
+.homepage-container {
+    margin-top: 80px;
+    padding: 20px;
 }

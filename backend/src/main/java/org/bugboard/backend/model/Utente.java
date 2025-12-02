@@ -1,9 +1,7 @@
 package org.bugboard.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -13,7 +11,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Component
 public class Utente {
     @Id
@@ -31,7 +30,7 @@ public class Utente {
     @Column(name = "isadmin")
     private Boolean isAdmin;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name="Lavora",
             joinColumns = @JoinColumn(name="idutente"),
             inverseJoinColumns = @JoinColumn(name="idprogetto")

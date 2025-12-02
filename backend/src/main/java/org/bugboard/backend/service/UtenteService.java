@@ -7,8 +7,8 @@ import org.bugboard.backend.repository.UtenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,18 +26,10 @@ public class UtenteService {
         this.applicationContext = applicationContext;
     }
 
-    public List<Utente> getAllUsers() {
-        List<Utente> users = utenteRepo.findAll();
-        for (Utente u : users) {
-            u.setPassword(null);
-        }
-        return users;
-    }
-
+    @Transactional
     public Utente assignProjectToUser(int userId, int projectId) {
-        Utente user=applicationContext.getBean(Utente.class);
-        Progetto project=applicationContext.getBean(Progetto.class);
-        Set<Progetto> projectSet;
+        Utente user = applicationContext.getBean(Utente.class);
+        Progetto project = applicationContext.getBean(Progetto.class);
 
         Optional<Utente> optUser = utenteRepo.findById(userId);
         if(optUser.isPresent()){
@@ -48,7 +40,7 @@ public class UtenteService {
             project=optProject.get();
         }
 
-        projectSet = user.getProgettiAssegnati();
+        Set<Progetto> projectSet = user.getProgettiAssegnati();
         projectSet.add(project);
         user.setProgettiAssegnati(projectSet);
         return utenteRepo.save(user);

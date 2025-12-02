@@ -2,9 +2,7 @@ package org.bugboard.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -14,7 +12,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Component
 public class Progetto {
     @Id
@@ -27,6 +26,6 @@ public class Progetto {
 
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "progettiAssegnati", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "progettiAssegnati")
     private Set<Utente> setUtenti=new HashSet<>();
 }

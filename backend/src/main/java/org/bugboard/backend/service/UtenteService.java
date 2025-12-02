@@ -45,4 +45,6 @@ public class UtenteService {
         user.setProgettiAssegnati(projectSet);
         return utenteRepo.save(user);
     }
+
+
 }

@@ -1,0 +1,235 @@
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro";
+    src: url("./Fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro Blk";
+    src: url("./Fonts/NHaasGroteskDSPro-95Blk.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "NeueHaasGroteskDisp Pro Md";
+    src: url("./Fonts/NHaasGroteskDSPro-65Md.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.btn-indietro {
+    background: none;
+    border: none;
+    color: #B0B0B0;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.btn-indietro:hover {
+    color: #002060;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.detail-type-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.detail-title {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    color: #002060;
+    font-size: 30pt;
+    margin: 5px 0 0 0;
+}
+
+.detail-id {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #B0B0B0;
+    font-size: 18px;
+}
+
+.status-badge-large {
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+}
+.status-open { background-color: #e3f2fd; color: #1e88e5; }
+.status-progress { background-color: #fff3e0; color: #fb8c00; }
+.status-closed { background-color: #e8f5e9; color: #43a047; }
+
+
+.detail-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 32, 96, 0.05);
+    border: 1px solid #E0E0E0;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.info-box label {
+    display: block;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #B0B0B0;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.text-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #002060;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.type-badge-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #002060;
+    font-weight: 600;
+}
+
+.priority-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.priority-bar-track-large {
+    flex: 1;
+    height: 12px;
+    background-color: #E0E0E0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.priority-number {
+    font-size: 18px;
+    color: #002060;
+    font-weight: 600;
+}
+
+.priority-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(to right, #8F00FF 0%, #0000FF 25%, #00FF00 50%, #FFFF00 75%, #FF0000 100%);
+    background-size: 100% 100%;
+    transition: width 0.5s ease;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #B0B0B0;
+    margin: 30px 0;
+}
+
+.image-section h3 {
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    color: #002060;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.image-section {
+    margin-top: 30px;
+}
+
+.image-preview-box {
+    width: 100%;
+    height: 300px;
+    background-color: #F8F9FB;
+    border-radius: 12px;
+    background-size: contain; /* Mostra l'immagine intera */
+    background-repeat: no-repeat;
+    background-position: left;
+    border: 1px solid #EEF1F6;
+}
+
+.no-image-box {
+    width: 100%;
+    height: 100px;
+    background-color: #F8F9FB;
+    border-radius: 12px;
+    border: 1px dashed #B0B0B0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B0B0B0;
+}
+
+.detail-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.detail-description {
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    font-size: 20px;
+}
+
+.id-testo {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 20px;
+}
+
+.detail-section {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 20px;
+}
+
+.detail-priority-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.priority-text-large {
+    font-size: 18px;
+    color: #002060;
+    font-weight: 600;
+    white-space: nowrap;
+}

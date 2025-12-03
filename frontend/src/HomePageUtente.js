@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { AlertCircle, CheckCircle, Clock, FileText } from 'lucide-react';
 import './HomePageUtente.css'
+import {BiQuestionMark} from "react-icons/bi";
+import {useNavigate} from "react-router-dom";
 
 const mockIssues = [
     { id: 101, title: "Errore nel login con Google", type: "Bug", priority: 5, status: "Aperta" },
@@ -24,6 +26,8 @@ export default function HomePageUtente() {
 
     const [searchTerm, setSearchTerm] = useState("");
 
+    const navigate = useNavigate();
+
     const filteredIssues = mockIssues.filter(issue =>
         issue.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -33,6 +37,7 @@ export default function HomePageUtente() {
             case "Bug": return <AlertCircle size={16} />;
             case "Feature": return <CheckCircle size={16} />;
             case "Documentation": return <FileText size={16} />;
+            case "Question": return <BiQuestionMark size={16}/>;
             default: return <Clock size={16} />;
         }
     };
@@ -50,7 +55,6 @@ export default function HomePageUtente() {
 
                 <div className="issues-table-container">
 
-                    {/* Intestazione */}
                     <div className="issues-header">
                         <div className="col col-title">Titolo</div>
                         <div className="col col-priority">Priorità</div>
@@ -60,7 +64,11 @@ export default function HomePageUtente() {
                     <div className="issues-list">
                         {filteredIssues.length > 0 ? (
                             filteredIssues.map((issue) => (
-                                <div key={issue.id} className="issue-row">
+                                <div key={issue.id} className="issue-row"
+
+                                     onClick={() => navigate(`/VisualizzaIssue/${issue.id}`)}
+
+                                >
                                     <div className="col col-title">
                                         <span className="issue-title-text">{issue.title}</span>
                                     </div>

@@ -6,6 +6,7 @@ import HomePageUtente from "./HomePageUtente";
 import Login from "./Login";
 import Footer from "./Footer";
 import ProfiloUtente from "./ProfiloUtente";
+import DettaglioIssue from "./DettaglioIssue";
 
 const LayoutConNavbar = () => {
     return (
@@ -28,6 +29,7 @@ function App() {
 
                 <Route element={<LayoutConNavbar />}>
                     <Route path="/VisualizzaIssue" element={<HomePageUtente/>}/>
+                    <Route path="/VisualizzaIssue/:id" element={<DettaglioIssue/>} />
                     <Route path="/SegnalaIssue" element={<SegnalaIssue/>}/>
                     <Route path="/profilo" element={<ProfiloUtente/>}/>
                 </Route>

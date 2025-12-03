@@ -34,6 +34,7 @@ public class UtenteService {
         return utenteRepo.save(utente);
     }
 
+
     @Transactional
     public Utente assignProjectToUser(int userId, int projectId) {
         Utente user = applicationContext.getBean(Utente.class);

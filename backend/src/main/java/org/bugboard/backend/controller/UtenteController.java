@@ -18,11 +18,6 @@ public class UtenteController {
         this.service = service;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Utente> registerUser(@RequestBody Utente utente) {
-        return new ResponseEntity<>(service.registerUser(utente), HttpStatus.CREATED);
-    }
-
     @PutMapping("/{userId}/project/{projectId}")
     public ResponseEntity<Utente> assignProjectToUser(
             @PathVariable int userId,

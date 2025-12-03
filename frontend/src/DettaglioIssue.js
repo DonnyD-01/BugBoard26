@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DettaglioIssue.css';
-import { ArrowLeft, AlertCircle, CheckCircle, FileText, Clock, Construction,  CircleCheckBig} from 'lucide-react';
-import {BiQuestionMark} from "react-icons/bi";
+import { ArrowLeft} from 'lucide-react';
+import {getTypeIcon, getStatusIcon, getStatusColor} from './utils';
 
 const mockIssues = [
-    { id: 101, title: "Errore nel login con Google", type: "Bug", priority: 5, status: "Aperta", author: "Mario Rossi", date: "2023-10-01", description: "Quando provo a cliccare sul tasto 'Accedi con Google', la pagina si ricarica ma non effettua il login. Ho provato da Chrome e Firefox." },
-    { id: 102, title: "Richiesta documentazione API", type: "Documentation", priority: 2, status: "Chiusa", author: "Luigi Verdi", date: "2023-09-28", description: "Avrei bisogno della documentazione aggiornata per gli endpoint relativi al profilo utente." },
+    { id: 101, title: "Errore nel login con Google", type: "Bug", priority: 5, status: "Assegnata", author: "Mario Rossi", date: "2023-10-01", description: "Quando provo a cliccare sul tasto 'Accedi con Google', la pagina si ricarica ma non effettua il login. Ho provato da Chrome e Firefox.", image: "https://images.unsplash.com/photo-1555421689-491a97ff2040?auto=format&fit=crop&q=80&w=1000" },
+    { id: 102, title: "Richiesta documentazione API", type: "Feature", priority: 2, status: "Risolta", author: "Luigi Verdi", date: "2023-09-28", description: "Avrei bisogno della documentazione aggiornata per gli endpoint relativi al profilo utente.", image: null },
 ];
 
 export default function DettaglioIssue() {
@@ -35,33 +35,6 @@ export default function DettaglioIssue() {
 
     if (!issue) return <div>Caricamento...</div>;
 
-    const getTypeIcon = (type) => {
-        switch(type) {
-            case "Bug": return <AlertCircle size={20} />;
-            case "Feature": return <CheckCircle size={20} />;
-            case "Documentation": return <FileText size={20} />;
-            case "Question": return <BiQuestionMark size={20}/>;
-            default: return <Clock size={20} />;
-        }
-    };
-
-    const getStatusIcon = (status) => {
-        switch(status) {
-            case "Aperta": return <Clock size={20}/>;
-            case "In Corso": return <Construction size={20}/>;
-            case "Chiusa": return <CircleCheckBig size={20}/>
-        }
-    }
-
-    const getStatusColor = (status) => {
-        switch(status) {
-            case "Aperta": return "status-open";
-            case "In Corso": return "status-progress";
-            case "Chiusa": return "status-closed";
-            default: return "";
-        }
-    };
-
     return (
         <div className="page-wrapper">
 
@@ -71,47 +44,51 @@ export default function DettaglioIssue() {
                     <ArrowLeft size={20} /> Torna alla lista
                 </button>
 
-                <div className="issue-detail-card">
 
-                    <div className="detail-header">
-                        <div className={`detail-type-badge type-${issue.type?.toLowerCase()}`}>
-                            {getTypeIcon(issue.type)}
-                            {issue.type}
-                        </div>
-                        <div className={`detail-status-badge ${getStatusColor(issue.status)}`}>
-                            {getStatusIcon(issue.status)}
-                            <span>{issue.status}</span>
-                        </div>
-                    </div>
+                <div className={`detail-status-badge ${getStatusColor(issue.status)}`}>
+                    {getStatusIcon(issue.status)}
+                    <span>{issue.status}</span>
+                </div>
 
+                <div className="detail-header">
                     <div className="id-testo">
                         <span className="meta-label">ID:</span> #{issue.id}
                     </div>
+                    <div className={`detail-type-badge type-${issue.type?.toLowerCase()}`}>
+                        {getTypeIcon(issue.type, 20)}
+                        {issue.type}
+                    </div>
+                </div>
 
-                    <hr className="detail-divider" />
+                    <hr className="divider" />
 
                     <h1 className="detail-title">{issue.title}</h1>
 
-                    <div className="detail-section">
-                        <p className="detail-description">
-                            {issue.description || "Nessuna descrizione fornita."}
-                        </p>
-                    </div>
+
+                <p className="detail-description">
+                    {issue.description || "Nessuna descrizione fornita."}
+                </p>
 
                     <div className="detail-section">
                         <h3>Priorità</h3>
                         <div className="detail-priority-wrapper">
-                            <div className="priority-bar-track large">
+                            <div className="priority-bar-track-large">
                                 <div
-                                    className="priority-bar-fill"
+                                    className="priority-bar-fill-fluid"
                                     style={{ width: `${(issue.priority / 5) * 100}%` }}
                                 ></div>
                             </div>
                             <span className="priority-text-large">{issue.priority}/5</span>
                         </div>
                     </div>
-
-                </div>
+                {issue.image && (
+                    <div className="detail-section">
+                        <h3>Immagine</h3>
+                        <div className="detail-image-container">
+                            <img src={issue.image} alt="Allegato issue" className="detail-image" />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

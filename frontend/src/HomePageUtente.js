@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle, Clock, FileText } from 'lucide-react';
 import './HomePageUtente.css'
-import {BiQuestionMark} from "react-icons/bi";
 import {useNavigate} from "react-router-dom";
+import {getTypeIcon} from './utils';
 
 const mockIssues = [
     { id: 101, title: "Errore nel login con Google", type: "Bug", priority: 5, status: "Aperta" },
@@ -32,15 +31,6 @@ export default function HomePageUtente() {
         issue.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const getTypeIcon = (type) => {
-        switch(type) {
-            case "Bug": return <AlertCircle size={16} />;
-            case "Feature": return <CheckCircle size={16} />;
-            case "Documentation": return <FileText size={16} />;
-            case "Question": return <BiQuestionMark size={16}/>;
-            default: return <Clock size={16} />;
-        }
-    };
 
 
     return (
@@ -77,7 +67,8 @@ export default function HomePageUtente() {
                                         <div className="priority-bar-track">
                                             <div
                                                 className="priority-bar-fill"
-                                                style={{ width: `${(issue.priority / 5) * 100}%` }}
+                                                style={{ width: `${(issue.priority / 5) * 100}%`
+                                                }}
                                             ></div>
                                         </div>
                                         <span className="priority-text">{issue.priority}/5</span>

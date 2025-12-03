@@ -131,12 +131,11 @@
     background-color: #002060;
     color: #ffffff;
     border: 2px solid #002060;
-    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
     font-size: 16px;
     padding: 14px 32px;
     border-radius: 15px;
     cursor: pointer;
-    font-weight: 600;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 4px 6px rgba(0, 32, 96, 0.2);
 }

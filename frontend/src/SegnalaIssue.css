@@ -177,11 +177,12 @@
 .textarea-label {
     transform: none;
     top: 1px;
-    left: 16px;;
+    left: 16px;
+    margin-top: -50px;
 }
 
 .campo-textarea {
-    resize: vertical;
+    resize: none;
     min-height: 150px;
     line-height: 1.5;
     font-family: "NeueHaasGroteskDisp Pro", sans-serif;
@@ -190,7 +191,7 @@
 
 .campo-textarea:focus ~ .textarea-label,
 .campo-textarea:not(:placeholder-shown) ~ .textarea-label {
-    top: 14px;
+    top: 65px;
     left: 0px;
 
     width: 100%;
@@ -399,12 +400,13 @@
     background-color: white;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 32, 96, 0.2);
-    transition: background-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, background-color 0.2s ease;
 }
 
 .buttonAnnulla:hover {
     background-color: #002060;
     color: white;
+    transform: scale(1.03);
 }
 
 .buttonInvia {
@@ -427,6 +429,190 @@
     cursor: auto;
 }
 
-.buttonInvia:hover {
+.buttonInvia:enabled:hover {
     transform: scale(1.03);
+}
+
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 32, 96, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success-card {
+    background: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: slideUp 0.3s ease-out;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+}
+
+.success-icon {
+    color: #0F9A22FF;
+    margin-bottom: 20px;
+}
+
+.success-card h2 {
+    color: #002060;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+}
+
+.success-card p {
+    color: #B0B0B0;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.redirect-text {
+    font-size: 14px !important;
+    color: #999 !important;
+    margin-bottom: 30px !important;
+}
+
+.btn-close-success {
+    background-color: #002060;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    transition: transform 0.2s;
+}
+
+.btn-close-success:hover {
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 32, 96, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease-out;
+}
+
+.card-overlay {
+    background: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: slideUp 0.3s ease-out;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+}
+
+.icon-overlay {
+    margin-bottom: 20px;
+}
+
+.card-overlay h2 {
+    color: #002060;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+}
+
+.card-overlay p {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+
+.btn-success {
+    background-color: #002060;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-success:hover {
+    transform: scale(1.05);
+}
+
+.warning-icon { color: #FFA500; }
+
+.overlay-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-overlay {
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    transition: transform 0.2s;
+    border: none;
+}
+
+.btn-stay {
+    background-color: #002060;
+    color: white;
+}
+.btn-stay:hover { transform: scale(1.05); }
+
+.btn-leave {
+    background-color: white;
+    color: #8c0000;
+    border: 2px solid #8c0000;
+}
+.btn-leave:hover {
+    background-color: #ffebee;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.redirect-text {
+    font-size: 14px !important;
+    color: #999 !important;
+    margin-bottom: 30px !important;
 }

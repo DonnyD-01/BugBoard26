@@ -135,7 +135,8 @@
     border-radius: 6px;
     position: relative;
     overflow: hidden;
-    transition: width 0.5s ease;
+    transition: width 0.6s ease;
+    animation: riempiBarra 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .priority-bar-fill-fluid::after {
@@ -221,4 +222,10 @@
     object-fit: cover;
     object-position: center;
     display: block;
+}
+
+@keyframes riempiBarra {
+    from {
+        width: 0;
+    }
 }

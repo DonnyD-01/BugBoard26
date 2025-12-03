@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './ProfiloUtente.css';
-import NavbarUtente from './NavbarUtente';
-import { Save } from 'lucide-react';
+import {CircleCheck, Save} from 'lucide-react';
 
 export default function ProfiloUtente() {
+
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const [userData, setUserData] = useState({
         id: "882910",
@@ -25,12 +26,30 @@ export default function ProfiloUtente() {
 
     const handleSave = () => {
         console.log("Dati salvati:", {email: userData.email, telefono: userData.telefono});
-        alert("Modifiche salvate con successo!");
+        setShowSuccess(true);
     };
 
     return (
         <div className="page-wrapper">
-            <NavbarUtente/>
+
+            {showSuccess && (
+                <div className="success-overlay">
+                    <div className="success-card">
+                        <CircleCheck size={64} className="success-icon" />
+                        <h2>Fatto!</h2>
+                        <p>Le modifiche sono state salvate con successo.</p>
+
+                        <button
+                            className="btn-close-success"
+                            onClick={() => {
+                                setShowSuccess(false);
+                            }}
+                        >
+                            Chiudi
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <div className="homepage-container profile-container">
                 <div className="profile-header">

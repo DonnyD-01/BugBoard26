@@ -1,8 +1,8 @@
 import './SegnalaIssue.css';
 import './NavbarUtente.js';
-import NavbarUtente from "./NavbarUtente";
-import React, {useState} from "react";
-import {Image as ImageIcon, X} from "lucide-react";
+import React, {useEffect, useState} from "react";
+import {AlertTriangle, CircleCheck, Image as ImageIcon, X} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 
 const issueTypes = [
     { id: 1, title: "Question", desc: "Per richieste di chiarimenti" },
@@ -13,15 +13,57 @@ const issueTypes = [
 
 export default function SegnalaIssue() {
 
+    const navigate = useNavigate();
+
     const [selectedType, setSelectedType] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState(3);
     const [image, setImage] = useState(null);
+    const [fileName, setFileName] = useState("");
+
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
 
     const isFormValid = selectedType && title && description;
 
-    const [fileName, setFileName] = useState("");
+    const hasUnsavedChanges =
+        selectedType !== null ||
+        title !== "" ||
+        description !== "" ||
+        image !== null ||
+        priority !== 3;
+
+    useEffect(() => {
+        if (showSuccess) {
+            const timer = setTimeout(() => {
+                setShowSuccess(false);
+                navigate('/VisualizzaIssue');
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccess, navigate]);
+
+    const handleCancelRequest = () => {
+        if (hasUnsavedChanges) {
+            setShowWarning(true);
+        } else {
+            handleForceExit();
+        }
+    };
+
+    const handleForceExit = () => {
+        setSelectedType(null);
+        setTitle("");
+        setDescription("");
+        setPriority(3);
+        setImage(null);
+        setFileName("");
+
+        setShowWarning(false);
+        navigate('/VisualizzaIssue');
+    };
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -43,9 +85,54 @@ export default function SegnalaIssue() {
         setFileName("");
     };
 
+    const handleSubmit = () => {
+        setShowSuccess(true);
+    }
+
     return (
         <div className="segnalaissue">
-            <NavbarUtente></NavbarUtente>
+
+            {showSuccess && (
+                <div className="success-overlay">
+                    <div className="success-card">
+                        <CircleCheck size={64} className="success-icon" />
+                        <h2>Segnalazione Inviata!</h2>
+                        <p>La tua issue è stata registrata con successo.</p>
+                        <p>Il Project Admin la assegnerà ad un membro del team il prima possibile</p>
+                        <p className="redirect-text">Sarai reindirizzato a breve alla tua HomePage...</p>
+
+                        <button
+                            className="btn-close-success"
+                            onClick={() => {
+                                setShowSuccess(false);
+                                navigate('/VisualizzaIssue');
+                            }}
+                        >
+                            Chiudi e vai alle Issue
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showWarning && (
+                <div className="overlay warning-overlay">
+                    <div className="card-overlay warning-card">
+                        <AlertTriangle size={64} className="icon-overlay warning-icon" />
+                        <h2>Modifiche non salvate</h2>
+                        <p>Se esci, tutte le modifiche andranno perse.</p>
+
+                        <div className="overlay-buttons">
+                            <button className="btn-overlay btn-stay" onClick={() => setShowWarning(false)}>
+                                Rimani qui
+                            </button>
+                            <button className="btn-overlay btn-leave" onClick={handleForceExit}>
+                                Esci
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="homepage-container">
                 <h1>Segnala issue</h1>
                 <label className={"obbligatorio"}>I campi contrassegnati con * sono obbligatori</label>
@@ -126,8 +213,8 @@ export default function SegnalaIssue() {
                 </div>
 
                 <div className="pulsanti">
-                    <button onClick={handleReset} className={"buttonAnnulla"}>Annulla</button>
-                    <button disabled={!isFormValid} className={"buttonInvia"}>Invia segnalazione</button>
+                    <button onClick={handleCancelRequest} className={"buttonAnnulla"}>Annulla</button>
+                    <button disabled={!isFormValid} className={"buttonInvia"} onClick={handleSubmit}>Invia segnalazione</button>
                 </div>
             </div>
         </div>

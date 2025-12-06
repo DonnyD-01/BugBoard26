@@ -1,29 +1,11 @@
-.HomePageUtente {
-    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
-    font-size: 24px;
-    text-align: left;
-    color: #002060;
-    font-style: normal;
-}
-
-.HomePageUtente-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.HomePageUtente-link {
-    color: #61dafb;
-}
-
 .homepage-container {
     margin-top: 50px;
     padding-left: 20px;
+}
+
+.homepage-container h1 {
+    margin-bottom: 20px;
+    color: #002060;
 }
 
 .header-row {

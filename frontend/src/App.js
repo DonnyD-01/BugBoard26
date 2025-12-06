@@ -3,12 +3,11 @@ import './App.css';
 import NavbarUtente from "./NavbarUtente";
 import NavbarAmministratore from './NavbarAmministratore';
 import SegnalaIssue from "./SegnalaIssue";
-import HomePageUtente from "./HomePageUtente";
+import HomePage from "./HomePage";
 import Login from "./Login";
 import Footer from "./Footer";
-import ProfiloUtente from "./ProfiloUtente";
+import Profilo from "./Profilo";
 import {DettaglioIssue} from "./DettaglioIssue";
-import HomePageAmministratore from "./HomePageAmministratore";
 import ProtectedRoute from './ProtectedRoute';
 import GestisciUtenti from "./GestisciUtenti";
 
@@ -42,19 +41,19 @@ const LayoutAdmin = () => {
 
                         {/*<Route element={<ProtectedRoute allowedRole="user" />}>*/}
                             <Route element={<LayoutUtente/>}>
-                                <Route path="/visualizza-issue" element={<HomePageUtente/>}/>
+                                <Route path="/home" element={<HomePage/>}/>
                                 <Route path="/dettaglio-issue/:id" element={<DettaglioIssue/>}/>
                                 <Route path="/segnala-issue" element={<SegnalaIssue/>}/>
-                                <Route path="/profilo" element={<ProfiloUtente/>}/>
+                                <Route path="/profilo" element={<Profilo/>}/>
                             </Route>
                         {/*}</Route>*/}
 
                         {/*<Route element={<ProtectedRoute allowedRole="admin" />}>*/}
                             <Route element={<LayoutAdmin/>}>
                                 <Route path="/admin/segnala-issue" element={<SegnalaIssue/>}/>
-                                <Route path="/gestisci-issue" element={<HomePageAmministratore/>}/>
+                                <Route path="/admin/home" element={<HomePage/>}/>
                                 <Route path="/admin/dettaglio-issue/:id" element={<DettaglioIssue/>}/>
-                                <Route path="/admin/profilo" element={<ProfiloUtente/>}/>
+                                <Route path="/admin/profilo" element={<Profilo/>}/>
                                 <Route path="/admin/gestione-utenze" element={<GestisciUtenti />} />
                             </Route>
                         {/*</Route>*/}

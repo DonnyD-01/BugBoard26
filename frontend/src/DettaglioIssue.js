@@ -32,7 +32,7 @@ export function DettaglioIssue() {
             setIssue({
                 id: id,
                 title: "Issue non trovata nel mock locale",
-                description: "Dettaglio non disponibile perché l'ID non è presente nell'array mockIssues di questo file. Copia l'array completo da VisualizzaIssue.js per vederla.",
+                description: "Dettaglio non disponibile.",
                 type: "Sconosciuto",
                 priority: 0,
                 status: "Errore",
@@ -102,7 +102,7 @@ export function DettaglioIssue() {
 
             <div className="pulsanti-azioni">
                 <button className="btn-indietro"
-                        onClick={() => navigate(isAdmin ? '/gestisci-issue' : '/visualizza-issue')}>
+                        onClick={() => navigate(isAdmin ? '/admin/home' : '/home')}>
                     <ArrowLeft size={20}/> Torna alla lista
                 </button>
 

@@ -23,7 +23,7 @@ const ProtectedRoute = ({ allowedRole }) => {
         if (userRole  !== allowedRole) {
 
             if (allowedRole === 'admin') {
-                return <Navigate to="/visualizza-issue" replace />;
+                return <Navigate to="/home" replace />;
             }
             return <Navigate to="/" replace />;
         }

@@ -1,3 +1,4 @@
+/*
 import React, {useState} from 'react';
 import { FiltersBar } from './FiltersBar';
 import { FiltersBarSenzaStato } from './FiltersBarSenzaStato';
@@ -157,4 +158,4 @@ export default function HomePageAmministratore() {
                 </div>
             </div>
     );
-}
+}*/

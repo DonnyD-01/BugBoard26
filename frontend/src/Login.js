@@ -33,10 +33,10 @@ export default function Login() {
         localStorage.setItem("userRole", userRole);
         if (userRole === "admin") {
             console.log("Login come Admin");
-            navigate('/gestisci-issue');
+            navigate('/admin/home');
         } else {
             console.log("Login come Utente");
-            navigate('/visualizza-issue');
+            navigate('/home');
         }
         //logica di login
 

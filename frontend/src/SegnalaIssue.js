@@ -38,7 +38,7 @@ export default function SegnalaIssue() {
         if (showSuccess) {
             const timer = setTimeout(() => {
                 setShowSuccess(false);
-                navigate('/visualizza-issue');
+                navigate('/home');
             }, 5000);
 
             return () => clearTimeout(timer);
@@ -62,7 +62,7 @@ export default function SegnalaIssue() {
         setFileName("");
 
         setShowWarning(false);
-        navigate('/visualizza-issue');
+        navigate('/home');
     };
 
     const handleImageUpload = (e) => {
@@ -105,7 +105,7 @@ export default function SegnalaIssue() {
                             className="btn-close-success"
                             onClick={() => {
                                 setShowSuccess(false);
-                                navigate('/visualizza-issue');
+                                navigate('/home');
                             }}
                         >
                             Chiudi e vai alle Issue

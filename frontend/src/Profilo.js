@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import './ProfiloUtente.css';
-import {CircleCheck, Save} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import './Profilo.css';
+import {CircleCheck, Edit2, Save, ShieldCheck, X} from 'lucide-react';
 
-export default function ProfiloUtente() {
+export default function Profilo() {
 
     const [showSuccess, setShowSuccess] = useState(false);
+
+    const [isEditing, setIsEditing] = useState(false);
+
+    const userRole = localStorage.getItem("userRole") || "admin";
+    const isAdmin = userRole === "admin";
 
     const [userData, setUserData] = useState({
         id: "882910",
@@ -15,6 +20,19 @@ export default function ProfiloUtente() {
         password: "passwordSegreta123",
         telefono: "+39 333 1234567"
     });
+
+    const [originalData, setOriginalData] = useState(null);
+
+    const handleStartEdit = () => {
+        setOriginalData({ ...userData });
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setUserData(originalData);
+        setOriginalData(null);
+        setIsEditing(false);
+    };
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -27,7 +45,16 @@ export default function ProfiloUtente() {
     const handleSave = () => {
         console.log("Dati salvati:", {email: userData.email, telefono: userData.telefono});
         setShowSuccess(true);
+        setIsEditing(false);
+        setOriginalData(null);
     };
+
+    useEffect(() => {
+        if(showSuccess) {
+            const timer = setTimeout(() => setShowSuccess(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccess]);
 
     return (
         <div className="page-wrapper">
@@ -52,9 +79,18 @@ export default function ProfiloUtente() {
             )}
 
             <div className="homepage-container profile-container">
-                <div className="profile-header">
-                    <h1>Il mio Profilo</h1>
-                    <p>Gestisci le tue informazioni personali e di contatto</p>
+                <div className="profile-header-row">
+                    <div className="profile-header">
+                        <h1>Il mio Profilo</h1>
+                        <p>Gestisci le tue informazioni personali e di contatto</p>
+                    </div>
+
+                        {isAdmin && (
+                            <div className="admin-badge">
+                                <ShieldCheck size={20} />
+                                <span>Amministratore</span>
+                            </div>
+                        )}
                 </div>
 
 
@@ -105,39 +141,54 @@ export default function ProfiloUtente() {
 
                     <hr className="divider"/>
 
-                    <h3 className="section-title">Contatti <span
-                        className="editable-tag">(Modificabili)</span></h3>
+                <div className="section-header-editable">
+                <h3 className="section-title">Contatti <span
+                        className="editable-tag">(Modificabili)</span>
+                    {isEditing && <span className="editable-tag">(In modifica)</span>}
+
+                </h3>
+                    {!isEditing ? (
+                        <button className="btnSalva" onClick={handleStartEdit}>
+                            <Edit2 size={16} /> Modifica
+                        </button>
+                    ) : (
+                        <div className="buttons-group">
+                            <button className="btn-save-contact" onClick={handleSave}>
+                                <Save size={16} /> Salva
+                            </button>
+                            <button className="btn-cancel-contact" onClick={handleCancel}>
+                                <X size={16} /> Annulla
+                            </button>
+                        </div>
+                    )}
+                </div>
 
                     <div className="form-grid">
-                        <div className="floating-label-group">
+                        <div className={`floating-label-group ${!isEditing ? "disabled-group" : ""}`}>
                             <input
                                 type="email"
                                 name="email"
                                 value={userData.email}
                                 onChange={handleChange}
-                                className="campo"
+                                disabled={!isEditing}
+                                className={`campo ${!isEditing ? "disabled-input" : ""}`}
                                 placeholder=" "
                             />
                             <label className="floating-label">Email</label>
                         </div>
 
-                        <div className="floating-label-group">
+                        <div className={`floating-label-group ${!isEditing ? "disabled-group" : ""}`}>
                             <input
                                 type="tel"
                                 name="telefono"
                                 value={userData.telefono}
                                 onChange={handleChange}
-                                className="campo"
+                                disabled={!isEditing}
+                                className={`campo ${!isEditing ? "disabled-input" : ""}`}
                                 placeholder=" "
                             />
                             <label className="floating-label">Numero di Telefono</label>
                         </div>
-                    </div>
-
-                    <div className="action-row">
-                        <button className="btnSalva" onClick={handleSave}>
-                            <Save size={18} style={{marginRight: '8px'}}/> Salva modifiche
-                        </button>
                     </div>
             </div>
         </div>

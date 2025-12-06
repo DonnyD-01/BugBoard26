@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
-import './HomePageUtente.css'
-import { useNavigate } from "react-router-dom";
+import './HomePage.css'
+import {useLocation, useNavigate} from "react-router-dom";
 import { getTypeIcon } from './utils';
 import { ChevronUp, ChevronDown} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
@@ -8,7 +8,7 @@ import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
 import {mockIssues} from "./utils";
 import { getAllIssues } from "./services/api";
 
-export default function HomePageUtente() {
+export default function HomePage() {
 
 
     // const [issues, setIssues] = useState([]);
@@ -25,6 +25,13 @@ export default function HomePageUtente() {
     // if (error) return <p>Errore: {error}</p>;
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const isAdmin = location.pathname.includes("/admin");
+
+    const pageTitle = "Issues";
+    const table1Title = isAdmin ? "Issue da assegnare" : "Le tue issue assegnate";
+
     const initialFilters = { search: "", type: "All", status: "All", priority: "All" };
 
     const [myFilters, setMyFilters] = useState(initialFilters);
@@ -62,6 +69,15 @@ export default function HomePageUtente() {
         });
     };
 
+    const rawTable1Issues = isAdmin
+        ? mockIssues.filter(i => i.status === "To-do")
+        : mockIssues.filter(i => i.assignee === "Me");
+
+    const rawProjectIssues = mockIssues;
+
+    const table1List = sortIssuesLogic(filterIssuesLogic(rawTable1Issues, myFilters), mySort);
+    const projectList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
+
     const handleSortClick = (key, currentSort, setSort) => {
         let direction = 'asc';
         if (currentSort.key === key && currentSort.direction === 'asc') {
@@ -78,14 +94,13 @@ export default function HomePageUtente() {
     };
 
     const rawMyIssues = mockIssues.filter(i => i.assignee === "Me");
-    const rawProjectIssues = mockIssues;
 
     const myFinalList = sortIssuesLogic(filterIssuesLogic(rawMyIssues, myFilters), mySort);
 
     const projectFinalList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
 
     const renderRow = (issue) => (
-        <div key={issue.id} className="issue-row" onClick={() => navigate(`/dettaglio-issue/${issue.id}`)}>
+        <div key={issue.id} className="issue-row" onClick={() => navigate(isAdmin ? `/admin/dettaglio-issue/${issue.id}` : `/dettaglio-issue/${issue.id}`)}>
             <div className="col col-title">
                 <span className="issue-title-text">{issue.title}</span>
             </div>
@@ -107,11 +122,13 @@ export default function HomePageUtente() {
     return (
         <div className="homepage">
             <div className="homepage-container">
-                <h1>Issues</h1>
+                <h1>{pageTitle}</h1>
             </div>
 
+
+
             <div className="header-row">
-                <h1>Le tue issue assegnate</h1>
+                <h1>{table1Title}</h1>
             </div>
 
             <FiltersBarSenzaStato

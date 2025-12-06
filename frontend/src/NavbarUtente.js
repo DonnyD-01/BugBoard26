@@ -53,7 +53,7 @@ export default function NavbarUtente() {
                 <img src="/Logo/LogoBugBoard26.svg" alt="logo" className="logo"/>
             </div>
             <div className="navbar-center">
-                <NavLink to={"/visualizza-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Visualizza Issue</NavLink>
+                <NavLink to={"/home"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Visualizza Issue</NavLink>
                 <NavLink to={"/segnala-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Segnala Issue</NavLink>
             </div>
             <div className="navbar-right">

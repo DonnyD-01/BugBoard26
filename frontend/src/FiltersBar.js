@@ -41,9 +41,6 @@ export const FiltersBar = ({ filters, setFilters, onReset }) => {
                     <option value="To-do">To-do</option>
                     <option value="Assegnata">Assegnata</option>
                     <option value="Risolta">Risolta</option>
-                    <option value="Aperta">Aperta</option>
-                    <option value="In Corso">In Corso</option>
-                    <option value="Chiusa">Chiusa</option>
                 </select>
 
                 <select

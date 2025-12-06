@@ -33,6 +33,15 @@ export const mockIssues = [
     { id: 112, title: "Login lento da Safari", type: "Bug", priority: 4, status: "To-do", assignee: "Marco" },
 ];
 
+export const mockUsers = [
+    { id: 1, nome: "Mario", cognome: "Rossi", email: "mario.rossi@email.com", role: "user" },
+    { id: 2, nome: "Luigi", cognome: "Verdi", email: "luigi.admin@bugboard.it", role: "admin" },
+    { id: 3, nome: "Anna", cognome: "Bianchi", email: "anna.bianchi@email.com", role: "user" },
+    { id: 4, nome: "Gennaro", cognome: "Esposito", email: "gennaro.dev@email.com", role: "user" },
+    { id: 5, nome: "Sofia", cognome: "Neri", email: "sofia.lead@bugboard.it", role: "admin" },
+    { id: 6, nome: "Marco", cognome: "Gialli", email: "marco.gialli@email.com", role: "user" },
+];
+
 
 export const getTypeIcon = (type, size = 16) => {
     switch(type) {

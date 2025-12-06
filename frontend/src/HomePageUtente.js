@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import './HomePageUtente.css'
 import { useNavigate } from "react-router-dom";
 import { getTypeIcon } from './utils';
@@ -6,8 +6,24 @@ import { ChevronUp, ChevronDown} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
 import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
 import {mockIssues} from "./utils";
+import { getAllIssues } from "./services/api";
 
 export default function HomePageUtente() {
+
+
+    // const [issues, setIssues] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(null);
+    //
+    // useEffect(() => {
+    //     getAllIssues()
+    //         .then(data => setIssues(data))
+    //         .catch(err => console.error(err));
+    // }, []);
+    //
+    // if (loading) return <p>Caricamento in corso...</p>;
+    // if (error) return <p>Errore: {error}</p>;
+
     const navigate = useNavigate();
     const initialFilters = { search: "", type: "All", status: "All", priority: "All" };
 

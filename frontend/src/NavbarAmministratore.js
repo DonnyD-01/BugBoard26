@@ -53,9 +53,9 @@ export default function NavbarAmministratore() {
                 <img src="/Logo/LogoBugBoard26.svg" alt="logo" className="logo"/>
             </div>
             <div className="navbar-center">
-                <NavLink to={"/gestisci-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Gestisci issue</NavLink>
-                <NavLink to={"/users"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Gestisci utenze</NavLink>
-                <NavLink to={"/admin/segnala-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Segnala issue</NavLink>
+                <NavLink to={"/gestisci-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Gestisci Issue</NavLink>
+                <NavLink to={"/admin/gestione-utenze"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Gestisci Utenze</NavLink>
+                <NavLink to={"/admin/segnala-issue"} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>Segnala Issue</NavLink>
             </div>
             <div className="navbar-right">
                 <ProfileMenu/>

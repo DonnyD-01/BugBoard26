@@ -1,0 +1,278 @@
+.actions-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.action-buttons-group {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 20px 0;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-add-user {
+    background-color: #002060;
+    width: 100%;
+}
+
+.btn-add-admin {
+    background-color: #d32f2f;
+}
+
+.users-filters-container {
+    background-color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-label {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    color: #002060;
+    margin-right: 10px;
+}
+
+.role-toggle-slider {
+    position: relative;
+    display: flex;
+
+    background: #7676801F;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: none;
+    box-shadow:
+            none;
+
+    border-radius: 50px;
+    padding: 2px;
+    width: 270px;
+    height: 44px;
+    box-sizing: border-box;
+}
+
+.filters-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: nowrap;
+}
+
+.slider-btn {
+    flex: 1;
+    position: relative;
+    z-index: 2;
+
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 13px;
+    color: #000000;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, font-weight 0.2s ease;
+    border-radius: 50px;
+    outline: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn.active {
+    color: #002060;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.slider-btn:not(.active):hover {
+    opacity: 0.8;
+}
+
+.sliding-pill {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 3);
+
+    background-color: #FFFFFF;
+
+    border-radius: 50px;
+
+    box-shadow: 0 4px 10px rgba(0, 32, 96, 0.12), 0 3px 1px rgba(0,0,0,0.04) inset;
+
+    z-index: 1;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sliding-pill.pos-0 {
+    transform: translateX(0%);
+}
+
+.sliding-pill.pos-1 {
+    transform: translateX(100%);
+}
+
+.sliding-pill.pos-2 {
+    transform: translateX(200%);
+}
+
+@media (max-width: 768px) {
+    .role-toggle-slider {
+        width: 100%;
+    }
+}
+
+.users-table-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 32, 96, 0.08);
+    border: 1px solid #E0E0E0;
+    overflow: hidden;
+    margin: 0 20px 50px 20px;
+}
+
+.users-header, .user-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 2fr 120px 100px;
+    align-items: center;
+    padding: 15px 25px;
+    gap: 15px;
+}
+
+.users-header {
+    background-color: #F8F9FB;
+    border-bottom: 2px solid #002060;
+    padding-right: 35px;
+}
+
+.u-col {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 15px;
+    color: #002060;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.users-header .u-col {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    color: #002060;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.user-row {
+    border-bottom: 1px solid #F0F0F0;
+    transition: background-color 0.2s;
+}
+
+.user-row:hover {
+    background-color: #F0F4FF;
+}
+
+.u-col-id {
+    font-weight: bold;
+    color: #B0B0B0;
+}
+
+.u-col-name, .u-col-surname {
+    font-weight: 500;
+    color: #002060;
+}
+
+.badge-admin {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #efffeb;
+    color: #4dd32f;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    border: 1px solid #d2ffcd;
+}
+
+.badge-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #e3f2fd;
+    color: #1e88e5;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    border: 1px solid #bbd2e6;
+}
+
+.u-col-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    color: #B0B0B0;
+}
+
+.icon-btn.edit:hover { color: #002060; background-color: #Eef2ff; }
+.icon-btn.delete:hover { color: #d32f2f; background-color: #ffebee; }
+
+.users-list {
+    height: 400px;
+    overflow-y: auto;
+    background-color: white;
+}
+.users-list::-webkit-scrollbar { width: 8px; }
+.users-list::-webkit-scrollbar-track { background: #f1f1f1; }
+.users-list::-webkit-scrollbar-thumb { background: #002060; border-radius: 10px; }
+
+@media (max-width: 900px) {
+    .users-header { display: none; }
+    .user-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+    .u-col { width: 100%; margin-bottom: 5px; }
+}
+

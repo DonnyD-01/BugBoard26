@@ -9,9 +9,34 @@ const getHeaders = () => {
 };
 
 
-export const getAllIssues = async () => {
-    const response = await fetch(`${BASE_URL}/issues`, { headers: getHeaders() });
-    if (!response.ok) throw new Error("Errore fetch issues");
+export const loginUser = async (email, password) => {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) throw new Error("Credenziali errate");
+    return await response.json();
+};
+
+export const getIssues = async () => {
+    const response = await fetch(`${BASE_URL}/issues`, {
+        method: 'GET',
+        headers: getHeaders()
+    });
+
+    if (!response.ok) throw new Error("Errore nel recupero delle issue");
+    return await response.json();
+};
+
+export const getIssueById = async (id) => {
+    const response = await fetch(`${BASE_URL}/issues/${id}`, {
+        method: 'GET',
+        headers: getHeaders()
+    });
+
+    if (!response.ok) throw new Error("Issue non trovata");
     return await response.json();
 };
 

@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import './DettaglioIssue.css';
-import {ArrowLeft, Check, Edit2, Trash2, Save, X, Image as ImageIcon, Upload} from 'lucide-react';
+import {ArrowLeft, Edit2, Trash2, Save, X, Image as ImageIcon, Upload, UploadCloud} from 'lucide-react';
 import {getTypeIcon, getStatusIcon, getStatusColor, mockIssues} from './utils';
+import StatusTracker from "./Statustracker";
 
 export function DettaglioIssue() {
     const {id} = useParams();
@@ -41,12 +42,16 @@ export function DettaglioIssue() {
         }
     }, [id]);
 
-    const canEdit = issue?.assignee === currentUser;
+    const canEdit = isAdmin;
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setEditedData(prev => ({...prev, [name]: value}));
     }
+
+    const handleStatusChange = (newStatus) => {
+        setEditedData(prev => ({ ...prev, status: newStatus }));
+    };
 
     const triggerFileUpload = () => {
         if (isEditing && fileInputRef.current) {
@@ -135,18 +140,12 @@ export function DettaglioIssue() {
                 </div>
             </div>
 
-            <div className="status-container">
-                <div className={`detail-status-badge ${getStatusColor(issue.status)}`}>
-                    {getStatusIcon(issue.status)}
-                    <span>{issue.status}</span>
-                </div>
-
-                {issue.status === "Assegnata" && !isEditing && (
-                    <button className="btn-mark-solved" onClick={handleMarkAsSolved}>
-                        <Check size={18}/> Segna come Risolta
-                    </button>
-                )}
-            </div>
+            <StatusTracker
+                status={isEditing ? editedData.status : issue.status}
+                onMarkAsSolved={handleMarkAsSolved}
+                isEditing={isEditing}
+                onStatusChange={handleStatusChange}
+            />
 
 
             <div className={"detail-container"}>
@@ -262,16 +261,10 @@ export function DettaglioIssue() {
 
                 <div className="detail-section">
                     <h3>Immagine</h3>
-                    <p className="nome-file-caricato">
-                        {currentData.image ? (
-                            <>File allegato: <strong>{currentData.fileName}</strong></>
-                        ) : (
-                            <span style={{color: '#B0B0B0'}}>Nessuna immagine</span>
-                        )}
-                    </p>
-                    <div className={`inserisci-immagine ${isEditing ? "editable" : ""}`}
-                    onClick={triggerFileUpload}
-                    >
+                    <div className="overlay-filename-badge">
+                        <span>File: {currentData.fileName || "immagine.jpg"}</span>
+                    </div>
+                    <div className={`detail-image-container ${isEditing ? "editable" : ""}`} onClick={triggerFileUpload}>
                         <input
                             type="file"
                             ref={fileInputRef}
@@ -279,35 +272,39 @@ export function DettaglioIssue() {
                             accept="image/*"
                             onChange={handleImageChange}
                         />
-
                         {currentData.image ? (
                             <>
                                 <img src={currentData.image} alt="Allegato issue" className="detail-image" />
+
                                 {isEditing && (
-                                    <div className="placeholder-content">
-                                        <Upload size={32} />
-                                        <span>Clicca per cambiare</span>
+                                    <div className="image-edit-overlay">
+                                        <div className="overlay-content">
+                                            <Upload size={40} strokeWidth={2} className="bounce-icon" />
+                                            <span className="overlay-title">Cambia immagine</span>
+                                            <span className="overlay-subtitle">Clicca per sostituire</span>
+                                        </div>
                                     </div>
                                 )}
                             </>
                         ) : (
-                            <div className="placeholder-content">
+                            <>
                                 {isEditing ? (
-                                    <>
-                                        <Upload size={48} color="#002060" strokeWidth={1.5} />
-                                        <span style={{color: '#002060', fontWeight: 'bold'}}>Clicca per caricare un'immagine</span>
-                                    </>
+                                    <div className="upload-cta-placeholder">
+                                        <UploadCloud size={64} strokeWidth={1.5} color="#002060" className="bounce-icon" />
+                                        <span className="cta-title">Carica un'immagine</span>
+                                        <span className="cta-subtitle">Clicca qui per sfogliare i file</span>
+                                    </div>
                                 ) : (
-                                    <>
+                                    <div className="no-image-placeholder">
                                         <ImageIcon size={48} color="#B0B0B0" strokeWidth={1.5} />
                                         <span>Nessuna immagine</span>
-                                    </>
+                                    </div>
                                 )}
-                            </div>
+                            </>
                         )}
                     </div>
-                </div>
         </div>
+            </div>
         </div>
     );
 }

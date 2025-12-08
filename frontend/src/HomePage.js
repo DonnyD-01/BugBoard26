@@ -15,14 +15,33 @@ export default function HomePage() {
     // const [loading, setLoading] = useState(true);
     // const [error, setError] = useState(null);
     //
-    // useEffect(() => {
-    //     getAllIssues()
-    //         .then(data => setIssues(data))
-    //         .catch(err => console.error(err));
-    // }, []);
-    //
-    // if (loading) return <p>Caricamento in corso...</p>;
-    // if (error) return <p>Errore: {error}</p>;
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             try {
+//                 setLoading(true);
+//                 const data = await getIssues(); // Chiamata vera al Back-End
+//                 setIssues(data); // Salva i dati veri
+//             } catch (err) {
+//                 console.error(err);
+//                 setError("Impossibile caricare le issue. Controlla la connessione.");
+//                 // Fallback: se il server è giù, puoi usare i mockIssues per non rompere tutto
+//                 // setIssues(mockIssues);
+//             } finally {
+//                 setLoading(false);
+//             }
+//         };
+//
+//         fetchData();
+//     }, []);
+//
+//     // 3. Gestione visiva durante il caricamento
+//     if (loading) return <div style={{padding: 40, textAlign: 'center'}}>Caricamento dati in corso...</div>;
+//     if (error) return <div style={{padding: 40, textAlign: 'center', color: 'red'}}>{error}</div>;
+//
+//     // ... Il resto del codice rimane uguale, ma userai 'issues' invece di 'mockIssues' ...
+//
+//     const filteredIssues = issues.filter(issue => ... ); // Usa 'issues' (stato) non 'mockIssues' (costante)
+//
 
     const navigate = useNavigate();
     const location = useLocation();

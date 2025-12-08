@@ -6,7 +6,7 @@
 .pulsanti-azioni {
     position: relative;
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     padding: 0;
 
     display: flex;
@@ -16,7 +16,6 @@
     height: 50px;
 }
 
-.btn-indietro,
 .btn-edit-mode,
 .btn-delete-issue,
 .btn-save,
@@ -59,35 +58,6 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-}
-
-.btn-indietro {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 220px;
-    height: 45px;
-    background-color: white;
-    color: #B0B0B0;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    gap: 8px;
-    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    z-index: 10;
-}
-
-.btn-indietro:hover {
-    color: #002060;
 }
 
 .central-actions {
@@ -145,14 +115,7 @@
     font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
 }
 
-.status-todo { background-color: #e3f2fd; color: #1e88e5; }
-.status-assegnata { background-color: #fff3e0; color: #fb8c00; }
-.status-risolta { background-color: #e8f5e9; color: #0F9A22; }
 
-.type-bug { color: #d32f2f; background-color: #ffebee; }
-.type-feature { color: #092f00; background-color: #dcffdd; }
-.type-question { color: #1976d2; background-color: #e3f2fd; }
-.type-documentation { color: #c2a800; background-color: #fffacd; }
 
 
 .detail-card {
@@ -523,18 +486,123 @@
     font-weight: 500;
 }
 
-.detail-image-container {
-    margin-top: 15px;
-    margin-bottom: 100px;
-    width: 100%;
-    height: 400px;
-    background-color: #F8F9FB;
-    border-radius: 15px;
-    border: 2px solid #E0E0E0;
-    overflow: hidden;
-    position: relative;
+.detail-image-container.editable {
+    cursor: pointer;      /* Cursore manina */
+    border-style: dashed; /* Opzionale: rende il bordo tratteggiato in modifica */
+    border-color: #002060;
 }
 
 .detail-image-container:hover {
-    border-color: #B0B0B0;
+}
+
+.detail-image-container.editable:hover {
+    background-color: #Eef2ff;
+    border-color: #002060;
+}
+
+/* --- STILI PER L'AREA DI CARICAMENTO IN MODIFICA --- */
+
+/* Container base (già presente, assicurati che abbia position: relative) */
+.detail-image-container {
+    /* ... altre proprietà ... */
+    position: relative; /* FONDAMENTALE per l'overlay */
+}
+
+/* 1. OVERLAY (Quando c'è già un'immagine) */
+.image-edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Sfondo bianco semitrasparente per rendere leggibile il testo */
+    background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Invisibile di default */
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px); /* Effetto sfocatura moderno */
+}
+
+/* Mostra l'overlay quando si passa il mouse sul container in modifica */
+.detail-image-container.editable:hover .image-edit-overlay {
+    opacity: 1;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #002060;
+    text-align: center;
+}
+
+.overlay-title {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.overlay-subtitle {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    color: #555;
+}
+
+
+/* 2. CTA PLACEHOLDER (Quando è vuoto in modifica) */
+.upload-cta-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background-color: #F0F4FF; /* Sfondo leggermente azzurro */
+    color: #002060;
+    transition: all 0.3s ease;
+}
+
+/* Cambia colore al passaggio del mouse */
+.detail-image-container.editable:hover .upload-cta-placeholder {
+    background-color: #E8EFFF;
+}
+
+.cta-title {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 22px;
+    margin-top: 10px;
+}
+
+.cta-subtitle {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+    color: #666;
+}
+
+
+/* --- ANIMAZIONE ICONA (Bounce leggero all'hover) --- */
+.bounce-icon {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.detail-image-container.editable:hover .bounce-icon {
+    transform: translateY(-5px) scale(1.05);
+    color: #002060; /* Assicura il colore blu intenso all'hover */
+}
+
+
+/* --- AGGIUSTAMENTO BORDI IN MODIFICA --- */
+.detail-image-container.editable {
+    cursor: pointer;
+    /* Bordo tratteggiato blu per indicare "area attiva" */
+    border: 3px dashed #B0B0B0;
+    background-color: #FAFAFA;
+}
+
+.detail-image-container.editable:hover {
+    border-color: #002060;
 }

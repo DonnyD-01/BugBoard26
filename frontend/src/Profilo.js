@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Profilo.css';
-import {CircleCheck, Edit2, Save, ShieldCheck, X} from 'lucide-react';
+import {CircleCheck, Edit2, Save, ShieldCheck, X, EyeOff, Eye} from 'lucide-react';
 
 export default function Profilo() {
 
     const [showSuccess, setShowSuccess] = useState(false);
 
     const [isEditing, setIsEditing] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const userRole = localStorage.getItem("userRole");
     const isAdmin = userRole === "admin";
@@ -25,6 +27,7 @@ export default function Profilo() {
 
     const handleStartEdit = () => {
         setOriginalData({ ...userData });
+        setUserData(prev => ({ ...prev, vecchiaPassword: "", nuovaPassword: "" }))
         setIsEditing(true);
     };
 
@@ -32,6 +35,7 @@ export default function Profilo() {
         setUserData(originalData);
         setOriginalData(null);
         setIsEditing(false);
+        setShowPassword(false);
     };
 
     const handleChange = (e) => {
@@ -44,9 +48,15 @@ export default function Profilo() {
 
     const handleSave = () => {
         console.log("Dati salvati:", {email: userData.email, telefono: userData.telefono});
+
+        if (userData.nuovaPassword) {
+            setUserData(prev => ({ ...prev, password: prev.nuovaPassword }));
+        }
+
         setShowSuccess(true);
         setIsEditing(false);
         setOriginalData(null);
+        setShowPassword(false);
     };
 
     useEffect(() => {
@@ -165,6 +175,19 @@ export default function Profilo() {
                     <div className="form-grid">
                         <div className={`floating-label-group ${!isEditing ? "disabled-group" : ""}`}>
                             <input
+                                type="tel"
+                                name="telefono"
+                                value={userData.telefono}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                                className={`campo ${!isEditing ? "disabled-input" : ""}`}
+                                placeholder=" "
+                            />
+                            <label className="floating-label">Numero di Telefono</label>
+                        </div>
+
+                        <div className={`floating-label-group ${!isEditing ? "disabled-group" : ""}`}>
+                            <input
                                 type="email"
                                 name="email"
                                 value={userData.email}
@@ -176,18 +199,47 @@ export default function Profilo() {
                             <label className="floating-label">Email</label>
                         </div>
 
-                        <div className={`floating-label-group ${!isEditing ? "disabled-group" : ""}`}>
-                            <input
-                                type="tel"
-                                name="telefono"
-                                value={userData.telefono}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                                className={`campo ${!isEditing ? "disabled-input" : ""}`}
-                                placeholder=" "
-                            />
-                            <label className="floating-label">Numero di Telefono</label>
-                        </div>
+                        {!isEditing ? (
+                            <div className="floating-label-group disabled-group">
+                                <input
+                                    type="password"
+                                    value={userData.password}
+                                    className="campo disabled-input"
+                                    disabled
+                                    placeholder=" "
+                                />
+                                <label className="floating-label">Password</label>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="floating-label-group">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="vecchiaPassword"
+                                        value={userData.vecchiaPassword}
+                                        onChange={handleChange}
+                                        className="campo"
+                                        placeholder=" "
+                                    />
+                                    <label className="floating-label">Vecchia Password</label>
+                                    <button className="password-toggle-btn" onClick={() => setShowPassword(!showPassword)}>
+                                        {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
+                                    </button>
+                                </div>
+
+                                <div className="floating-label-group">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="nuovaPassword"
+                                        value={userData.nuovaPassword}
+                                        onChange={handleChange}
+                                        className="campo"
+                                        placeholder=" "
+                                    />
+                                    <label className="floating-label">Nuova Password</label>
+                                </div>
+                            </>
+                        )}
                     </div>
         </div>
     );

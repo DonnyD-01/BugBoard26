@@ -1,8 +1,3 @@
-.homepage-container {
-    margin-top: 50px;
-    padding-left: 20px;
-}
-
 .homepage-container h1 {
     margin-bottom: 0;
     color: #002060;
@@ -151,13 +146,7 @@
     height: 100%;
     width: 140px;
 
-    background: linear-gradient(to right,
-    #8F00FF 0%,
-    #0000FF 25%,
-    #00FF00 50%,
-    #FFFF00 75%,
-    #FF0000 100%
-    );
+    background: var(--gradienteBarra);
 }
 
 .priority-indicator {
@@ -192,19 +181,6 @@
     }
 }
 
-.type-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    border-radius: 50px;
-    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
-    font-size: 13px;
-    background-color: #F5F7FA;
-    color: #555;
-    white-space: nowrap;
-}
-
 .col-type {
     display: flex;
     align-items: center;
@@ -223,19 +199,6 @@
 .priority-high { background-color: #ff0000; box-shadow: 0 0 5px rgba(255,0,0,0.5); }
 .priority-medium { background-color: #ffa500; }
 .priority-low { background-color: #B0B0B0; }
-
-
-.status-badge {
-    padding: 6px 12px;
-    border-radius: 50px;
-    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
-    font-size: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    justify-content: center;
-    white-space: nowrap;
-}
 
 .btn-details {
     background: transparent;
@@ -329,10 +292,3 @@
         width: 0;
     }
 }
-
-.status-todo { background-color: #e3f2fd; color: #1e88e5; }
-.status-assegnata { background-color: #fff3e0; color: #fb8c00; }
-.status-risolta { background-color: #e8f5e9; color: #0F9A22; }
-.status-aperta { background-color: #e3f2fd; color: #1e88e5; }
-.status-incorso { background-color: #fff3e0; color: #fb8c00; }
-.status-chiusa { background-color: #e8f5e9; color: #0F9A22; }

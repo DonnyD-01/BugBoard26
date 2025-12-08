@@ -1,0 +1,275 @@
+/* --- StatusTracker.css ALLINEATO --- */
+
+.status-tracker-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 10px 5px;
+}
+
+.stepper-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+    width: 100%;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    min-width: 70px;
+}
+
+.status-label {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* --- CALCOLO GEOMETRICO PER ALLINEAMENTO --- */
+/* Altezza Testo: 20px
+   Margine Sotto Testo: 12px
+   Altezza Cerchio Base: 28px (Raggio 14px)
+
+   Centro del cerchio = 20px + 12px + 14px = 46px dall'alto.
+*/
+
+/* --- TESTO --- */
+.step-text {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    color: #B0B0B0;
+    transition: all 0.3s ease;
+
+    /* Altezza e margini fissi per garantire l'allineamento */
+    height: 20px;
+    margin-bottom: 12px;
+
+    text-align: center;
+    white-space: nowrap;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-weight: 500;
+}
+
+/* --- CERCHIO (Base) --- */
+.step-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: #B0B0B0;
+    flex-shrink: 0;
+
+    /* Importante per lo z-index rispetto alla linea */
+    position: relative;
+    z-index: 2;
+    background-clip: padding-box; /* Evita che il bordo sgrani */
+}
+
+.step-circle svg {
+    stroke: currentColor;
+    transition: all 0.3s ease;
+}
+
+/* --- LINEA DI CONNESSIONE --- */
+.step-line {
+    width: 100%;
+    height: 3px;
+    flex: 1;
+    background-color: #E0E0E0;
+
+    /* CALCOLO POSIZIONE: */
+    /* Centro Cerchio (46px) - Metà Altezza Linea (1.5px) = 44.5px */
+    margin-top: 44.5px;
+
+    margin-left: -2px;
+    margin-right: -2px;
+    position: relative;
+    z-index: 1; /* Sotto i cerchi */
+    transition: background-color 0.3s ease;
+}
+
+
+/* ==================================================================
+   STATO ATTIVO (MODIFICA CON SCALE)
+================================================================== */
+
+/* TRUCCO: Invece di cambiare width/height (che sposta il centro),
+   usiamo 'scale'. Il centro rimane a 46px, quindi la linea rimane allineata.
+*/
+
+.step-item.active .step-circle {
+    transform: scale(1.4); /* Ingrandisce del 40% (diventa visivamente ~40px) */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: white;
+    border-width: 1.5px; /* Compensa lo scale per non avere un bordo troppo spesso */
+    z-index: 10;
+}
+
+.step-item.active .step-text {
+    font-size: 16px;
+    font-weight: 700;
+    transform: translateY(-2px); /* Sposta leggermente su il testo per non toccare il cerchio ingrandito */
+    color: #002060; /* Colore base attivo (poi sovrascritto dai colori specifici) */
+}
+
+
+/* ==================================================================
+   COLORI SPECIFICI (SOLO SE ACTIVE)
+================================================================== */
+
+/* TO-DO Attivo */
+.step-item.is-todo.active .step-circle {
+    border-color: #1e88e5;
+    color: #1e88e5;
+    background-color: #e3f2fd;
+}
+.step-item.is-todo.active .step-text { color: #1e88e5; }
+
+/* ASSEGNATA Attivo */
+.step-item.is-assigned.active .step-circle {
+    border-color: #fb8c00;
+    color: #fb8c00;
+    background-color: #fff3e0;
+}
+.step-item.is-assigned.active .step-text { color: #fb8c00; }
+
+/* RISOLTA Attivo */
+.step-item.is-solved.active .step-circle {
+    border-color: #43a047;
+    color: #43a047;
+    background-color: #e8f5e9;
+}
+.step-item.is-solved.active .step-text { color: #43a047; }
+
+
+/* --- LINEA COMPLETATA (Opzionale: se vuoi colorare il percorso) --- */
+/* Se vuoi che la linea resti grigia, rimuovi questo blocco */
+/* .step-line.completed {
+    background-color: #002060;
+} */
+
+
+/* --- PULSANTE --- */
+.btn-quick-resolve {
+    margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    background-color: #e8f5e9;
+    color: #0F9A22;
+    border: 2px solid #0F9A22;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.btn-quick-resolve:hover {
+    background-color: #0F9A22;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ==================================================================
+   ANIMAZIONI DI CARICAMENTO (ENTRATA)
+================================================================== */
+
+/* 1. Definizione Keyframes */
+
+/* Effetto "Pop In" per i cerchi e il testo */
+@keyframes popInStep {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        /* Nota: non forziamo scale(1) qui per non sovrascrivere
+           l'eventuale scale(1.4) dello stato .active definito prima */
+        transform: scale(var(--scale-target, 1)) translateY(0);
+    }
+}
+
+/* Effetto "Crescita" per la linea (da sinistra a destra) */
+@keyframes growLine {
+    0% {
+        transform: scaleX(0); /* Larghezza 0 */
+        opacity: 0;
+    }
+    100% {
+        transform: scaleX(1); /* Larghezza 100% */
+        opacity: 1;
+    }
+}
+
+/* 2. Applicazione Animazioni */
+
+/* Configurazione base per gli STEP (Cerchio + Testo) */
+.step-item {
+    /* Stato iniziale invisibile */
+    opacity: 0;
+    /* Applica l'animazione */
+    animation: popInStep 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Se lo step è ATTIVO, il target dello scale è 1.4 (quello definito prima),
+   altrimenti è 1. Usiamo una variabile CSS per gestire l'eccezione. */
+.step-item.active { --scale-target: 1; } /* Il testo non scala */
+.step-item.active .step-circle { --scale-target: 1.4; } /* Il cerchio sì */
+
+
+/* Configurazione base per le LINEE */
+.step-line {
+    opacity: 0;
+    transform-origin: left; /* L'animazione parte da sinistra */
+    animation: growLine 0.5s ease-out forwards;
+}
+
+
+/* 3. Sequenza Temporale (Il trucco dell'onda) */
+/* Dato che nel DOM sono fratelli: [Item] [Line] [Item] [Line] [Item] */
+
+/* Primo cerchio: Subito */
+.stepper-wrapper > :nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+/* Prima linea: Dopo 0.3s */
+.stepper-wrapper > :nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+/* Secondo cerchio: Dopo 0.5s */
+.stepper-wrapper > :nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+/* Seconda linea: Dopo 0.7s */
+.stepper-wrapper > :nth-child(4) {
+    animation-delay: 0.7s;
+}
+
+/* Terzo cerchio: Dopo 0.9s */
+.stepper-wrapper > :nth-child(5) {
+    animation-delay: 0.9s;
+}

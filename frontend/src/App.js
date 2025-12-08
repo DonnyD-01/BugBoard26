@@ -11,6 +11,7 @@ import {DettaglioIssue} from "./DettaglioIssue";
 import ProtectedRoute from './ProtectedRoute';
 import GestisciUtenti from "./GestisciUtenti";
 import NuovoUtente from './NuovoUtente';
+import DettaglioUtente from './DettaglioUtente';
 
 const LayoutUtente = () => {
     return (
@@ -57,6 +58,7 @@ const LayoutAdmin = () => {
                                 <Route path="/admin/profilo" element={<Profilo/>}/>
                                 <Route path="/admin/gestione-utenze" element={<GestisciUtenti />} />
                                 <Route path="/admin/nuovo-utente" element={<NuovoUtente />} />
+                                <Route path="dettaglio-utente" element={<DettaglioUtente/>} />
                             </Route>
                         {/*</Route>*/}
                     </Routes>

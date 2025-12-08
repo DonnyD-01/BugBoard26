@@ -139,7 +139,9 @@ export default function SegnalaIssue() {
             )}
 
             <div className="homepage-container">
-                <h1>Segnala issue</h1>
+                <div className="titolo-pagina">
+                    <h1>Segnala Issue</h1>
+                </div>
                 <label className={"obbligatorio"}>I campi contrassegnati con * sono obbligatori</label>
                 <label className={"label-tipo-issue"}>Tipo di issue: *</label>
                 <div className="tipo-issue">

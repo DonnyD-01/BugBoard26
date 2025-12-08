@@ -141,7 +141,7 @@ export default function GestisciUtenti() {
                 <div className="users-list">
                     {sortedUsers.length > 0 ? (
                         sortedUsers.map((user) => (
-                            <div key={user.id} className="user-row">
+                            <div key={user.id} className="user-row" onClick={() => navigate(`/dettaglio-utente/${user.id}`)} style={{ cursor: 'pointer' }}>
                                 <div className="u-col u-col-id">#{user.id}</div>
                                 <div className="u-col u-col-name">{user.nome}</div>
                                 <div className="u-col u-col-surname">{user.cognome}</div>
@@ -159,7 +159,10 @@ export default function GestisciUtenti() {
                                 </div>
 
                                 <div className="u-col u-col-actions">
-                                    <button className="icon-btn delete" title="Elimina"><Trash2 size={18}/></button>
+                                    <button className="icon-btn delete" title="Elimina" onClick={(e) => {
+                                        e.stopPropagation() // Evita che scatti il click della riga
+                                        navigate(`/dettaglio-utente/${user.id}`);
+                                    }}><Trash2 size={18}/></button>
                                 </div>
                             </div>
                         ))

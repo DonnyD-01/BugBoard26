@@ -35,7 +35,7 @@ function ProfileMenu() {
 
                 {isOpen && (
                     <div className="dropdown-menu">
-                        <a href="/profilo" className="menu-item"><FaUser/>Profilo</a>
+                        <a href="/admin/profilo" className="menu-item"><FaUser/>Profilo</a>
                         <a href="/" className="menu-item link-logout"><FaSignOutAlt/>Esci</a>
                     </div>
                 )}

@@ -5,7 +5,7 @@ import { getTypeIcon } from './utils';
 import { ChevronUp, ChevronDown} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
 import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
-import {mockIssues} from "./utils";
+import {mockIssues, getStatusColor, getStatusIcon} from "./utils";
 import { getAllIssues } from "./services/api";
 
 export default function HomePage() {
@@ -172,7 +172,7 @@ export default function HomePage() {
             />
 
             <div className="issues-table-container">
-                <div className="issues-header">
+                <div className="issues-header grid-4-cols">
                     <div className="col col-title sortable-header" onClick={() => handleSortClick('title', projectSort, setProjectSort)}>
                         Titolo {renderSortIcon('title', projectSort)}
                     </div>
@@ -182,11 +182,43 @@ export default function HomePage() {
                     <div className="col col-type sortable-header" onClick={() => handleSortClick('type', projectSort, setProjectSort)}>
                         Tipo {renderSortIcon('type', projectSort)}
                     </div>
+                    <div className="col col-status sortable-header" onClick={() => handleSortClick('status', projectSort, setProjectSort)}>
+                        Stato {renderSortIcon('status', projectSort)}
+                    </div>
                 </div>
 
                 <div className="issues-list">
                     {projectFinalList.length > 0 ? (
-                        projectFinalList.map(issue => renderRow(issue))
+                        projectFinalList.map(issue =>
+                            <div
+                                key={issue.id}
+                                className="issue-row grid-4-cols" /* NOTA LA CLASSE AGGIUNTA */
+                                onClick={() => navigate(`/dettaglio-issue/${issue.id}`)}
+                            >
+                                <div className="col col-title">
+                                    <span className="issue-title-text">{issue.title}</span>
+                                </div>
+                                <div className="col col-priority">
+                                    <div className="priority-bar-track">
+                                        <div className="priority-bar-fill" style={{ width: `${(issue.priority / 5) * 100}%` }}></div>
+                                    </div>
+                                    <span className="priority-text">{issue.priority}/5</span>
+                                </div>
+                                <div className="col col-type">
+                                    <div className={`type-badge type-${issue.type.toLowerCase()}`}>
+                                        {getTypeIcon(issue.type)}
+                                        <span>{issue.type}</span>
+                                    </div>
+                                </div>
+
+                                <div className="col col-status">
+                                <span className={`status-badge ${getStatusColor(issue.status)}`}>
+                                    {getStatusIcon(issue.status, 16)}
+                                    {issue.status}
+                                </span>
+                                </div>
+                            </div>
+                                )
                     ) : (
                         <div className="no-results">
                             <p>Nessuna issue nel progetto.</p>

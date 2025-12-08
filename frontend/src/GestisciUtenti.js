@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './GestisciUtenti.css';
 import { useNavigate } from 'react-router-dom';
 import { mockUsers } from './utils';
-import { Search, Filter, ChevronDown, ChevronUp, UserPlus, ShieldPlus, Trash2, Edit2, ShieldCheck, User2 } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, UserPlus, Trash2, ShieldCheck, User2 } from "lucide-react";
 
 export default function GestisciUtenti() {
 
@@ -56,17 +56,13 @@ export default function GestisciUtenti() {
 
     const handleAddUser = () => {
         console.log("Naviga a creazione Utente");
-        // navigate('/admin/nuovo-utente');
+        navigate('/admin/nuovo-utente');
     };
 
-    const handleAddAdmin = () => {
-        console.log("Naviga a creazione Admin");
-        // navigate('/admin/nuovo-admin');
-    };
     return (
         <div className="homepage">
             <div className="homepage-container">
-                <h1>Gestione Utenze</h1>
+                <h1>Gestisci Utenze</h1>
             </div>
 
             <div className="action-buttons-group">
@@ -105,16 +101,16 @@ export default function GestisciUtenti() {
                             Tutti
                         </button>
                         <button
-                            className={`slider-btn ${roleFilter === 'admin' ? 'active' : ''}`}
+                            className={`slider-btn-admin ${roleFilter === 'admin' ? 'active' : ''}`}
                             onClick={() => setRoleFilter('admin')}
                         >
-                            Admin
+                            <ShieldCheck size="18"/> Admin
                         </button>
                         <button
-                            className={`slider-btn ${roleFilter === 'user' ? 'active' : ''}`}
+                            className={`slider-btn-user ${roleFilter === 'user' ? 'active' : ''}`}
                             onClick={() => setRoleFilter('user')}
                         >
-                            Utenti
+                            <User2 size="18"/> Utenti
                         </button>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
 }
 
 .homepage-container h1 {
-    margin-bottom: 20px;
+    margin-bottom: 0;
     color: #002060;
 }
 
@@ -34,14 +34,18 @@
     box-shadow: 0 10px 30px rgba(0, 32, 96, 0.08);
     border: 1px solid #E0E0E0;
     overflow: hidden;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     margin-right: 20px;
     margin-left: 20px;
 }
 
+.grid-4-cols {
+    grid-template-columns: 3.5fr 1.5fr 1fr 0.8fr !important;
+}
+
 .issues-header, .issue-row {
     display: grid;
-    grid-template-columns: 3fr 1.2fr 0.8fr;
+    grid-template-columns: 3fr 1.5fr 0.8fr;
     align-items: center;
     padding: 15px 25px;
     gap: 20px;
@@ -62,7 +66,7 @@
 }
 
 .issues-list {
-    height: 280px;
+    height: 240px;
     overflow-y: auto;
     background-color: white;
 }
@@ -117,7 +121,7 @@
 }
 
 .priority-bar-track {
-    width: 100px;
+    width: 140px;
     height: 8px;
     background-color: #E0E0E0;
     border-radius: 4px;
@@ -145,7 +149,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 100px;
+    width: 140px;
 
     background: linear-gradient(to right,
     #8F00FF 0%,
@@ -206,6 +210,11 @@
     align-items: center;
 }
 
+.col-status {
+    display: flex;
+    align-items: center;
+}
+
 .priority-dot {
     width: 10px;
     height: 10px;
@@ -218,12 +227,14 @@
 
 .status-badge {
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 50px;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
     font-size: 12px;
-    font-weight: 600;
-    text-align: center;
-    display: inline-block;
-    min-width: 80px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 .btn-details {
@@ -318,3 +329,10 @@
         width: 0;
     }
 }
+
+.status-todo { background-color: #e3f2fd; color: #1e88e5; }
+.status-assegnata { background-color: #fff3e0; color: #fb8c00; }
+.status-risolta { background-color: #e8f5e9; color: #0F9A22; }
+.status-aperta { background-color: #e3f2fd; color: #1e88e5; }
+.status-incorso { background-color: #fff3e0; color: #fb8c00; }
+.status-chiusa { background-color: #e8f5e9; color: #0F9A22; }

@@ -16,9 +16,14 @@
     border-radius: 50px;
     border: 2px solid #E0E0E0;
     font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #002060;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
+}
+
+.search-box input:hover {
+    border-color: #002060;
 }
 
 .search-box input:focus {

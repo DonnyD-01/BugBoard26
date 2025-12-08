@@ -1,0 +1,215 @@
+.homepage-container p {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 20px;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #B0B0B0;
+}
+
+.header-create-row h1 {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    color: #002060;
+    margin: 0;
+    font-size: 32px;
+}
+
+.header-create-row p {
+    color: #666;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.role-selection-area {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.role-label {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #002060;
+    font-size: 14px;
+}
+
+.role-slider-container {
+    position: relative;
+    width: 320px;
+    height: 50px;
+    background-color: #F0F2F5;
+    border-radius: 50px;
+    display: flex;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid #E0E0E0;
+}
+
+.role-pill {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: calc(50% - 4px);
+    background-color: white;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 1;
+}
+
+.role-pill.left { transform: translateX(0); }
+.role-pill.right { transform: translateX(100%); }
+
+.role-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    color: #1e88e5;
+    transition: color 0.3s;
+    user-select: none;
+}
+
+.role-option-admin {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    color: #4dd32f;
+    transition: color 0.3s;
+    user-select: none;
+}
+
+.role-option.active {
+    color: #1e88e5;
+    font-weight: 600;
+}
+
+.role-option-admin.active {
+    color: #4dd32f;
+    font-weight: 600;
+}
+
+.form-grid-create {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+}
+
+.input-icon-right {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #B0B0B0;
+    pointer-events: none;
+}
+
+input[type="date"].campo {
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    color: #000000;
+    text-transform: uppercase;
+
+
+    padding-right: 10px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+
+    width: 20px;
+    height: 20px;
+
+    filter: invert(10%) sepia(66%) saturate(3677%) hue-rotate(228deg) brightness(88%) contrast(103%);
+
+
+    opacity: 1;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #B0B0B0;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.toggle-password-btn:hover { color: #002060; }
+
+.actions-footer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.btn-cancel-create {
+    width: 200px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: transparent;
+    border: 2px solid #d32f2f;
+    color: #d32f2f;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+.btn-cancel-create:hover { background-color: #ffebee; }
+
+.btn-save-create {
+    width: 200px;
+    padding: 12px 30px;
+    border-radius: 12px;
+    background-color: #002060;
+    border: 2px solid #002060;
+    color: white;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 32, 96, 0.2);
+}
+.btn-save-create:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 32, 96, 0.3); }
+.btn-save-create:disabled { background-color: #ccc; border-color: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+
+@media (max-width: 768px) {
+    .form-grid-create {
+        grid-template-columns: 1fr;
+    }
+}

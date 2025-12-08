@@ -252,7 +252,7 @@ export function DettaglioIssue() {
                         <div className="priority-bar-track-large">
                             <div
                                 className="priority-bar-fill-fluid"
-                                style={{width: `${((issue.priority - 1)/ 4) * 100}%`}}
+                                style={{width: `${((issue.priority / 5)) * 100}%`}}
                             ></div>
                         </div>
                     </div>

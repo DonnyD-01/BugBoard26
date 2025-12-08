@@ -56,7 +56,7 @@ export default function Login() {
 
                 <form onSubmit={handleLogin} className="login-form">
                     <div className="floating-label-group login-input-group">
-                        <input
+                        <input autoFocus
                             type="email"
                             value={email}
                             onChange={(e) => {setEmail(e.target.value);

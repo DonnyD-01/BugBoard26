@@ -8,7 +8,7 @@ export default function Profilo() {
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const userRole = localStorage.getItem("userRole") || "admin";
+    const userRole = localStorage.getItem("userRole");
     const isAdmin = userRole === "admin";
 
     const [userData, setUserData] = useState({
@@ -57,7 +57,7 @@ export default function Profilo() {
     }, [showSuccess]);
 
     return (
-        <div className="page-wrapper">
+        <div className="homepage-container">
 
             {showSuccess && (
                 <div className="success-overlay">
@@ -78,7 +78,6 @@ export default function Profilo() {
                 </div>
             )}
 
-            <div className="homepage-container profile-container">
                 <div className="profile-header-row">
                     <div className="profile-header">
                         <h1>Il mio Profilo</h1>
@@ -190,7 +189,6 @@ export default function Profilo() {
                             <label className="floating-label">Numero di Telefono</label>
                         </div>
                     </div>
-            </div>
         </div>
     );
 }

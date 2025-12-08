@@ -2,7 +2,7 @@ import './SegnalaIssue.css';
 import './NavbarUtente.js';
 import React, {useEffect, useState} from "react";
 import {AlertTriangle, CircleCheck, Image as ImageIcon, X} from "lucide-react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const issueTypes = [
     { id: 1, title: "Question", desc: "Per richieste di chiarimenti" },
@@ -14,6 +14,11 @@ const issueTypes = [
 export default function SegnalaIssue() {
 
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const isAdmin = location.pathname.includes("/admin");
+
+    const homePath = isAdmin ? '/admin/home' : '/home';
 
     const [selectedType, setSelectedType] = useState(null);
     const [title, setTitle] = useState("");
@@ -38,12 +43,12 @@ export default function SegnalaIssue() {
         if (showSuccess) {
             const timer = setTimeout(() => {
                 setShowSuccess(false);
-                navigate('/home');
+                navigate(homePath);
             }, 5000);
 
             return () => clearTimeout(timer);
         }
-    }, [showSuccess, navigate]);
+    }, [showSuccess, navigate, homePath]);
 
     const handleCancelRequest = () => {
         if (hasUnsavedChanges) {
@@ -62,7 +67,7 @@ export default function SegnalaIssue() {
         setFileName("");
 
         setShowWarning(false);
-        navigate('/home');
+        navigate(homePath);
     };
 
     const handleImageUpload = (e) => {
@@ -105,7 +110,7 @@ export default function SegnalaIssue() {
                             className="btn-close-success"
                             onClick={() => {
                                 setShowSuccess(false);
-                                navigate('/home');
+                                navigate(homePath);
                             }}
                         >
                             Chiudi e vai alle Issue

@@ -464,8 +464,10 @@
 
 .success-card p {
     color: #B0B0B0;
-    font-size: 16px;
+    font-size: 18px;
     margin-bottom: 5px;
+    text-align: center;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
 }
 
 .redirect-text {
@@ -538,9 +540,10 @@
 
 .card-overlay p {
     color: #555;
-    font-size: 16px;
+    font-size: 12px;
     margin-bottom: 20px;
     line-height: 1.5;
+    text-align: center;
 }
 
 

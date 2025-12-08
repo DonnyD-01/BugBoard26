@@ -25,7 +25,7 @@ export const mockIssues = [
     { id: 104, title: "Disallineamento Navbar su Mobile", type: "Bug", priority: 4, status: "To-do", assignee: "Me" },
     { id: 105, title: "Come resettare la password?", type: "Question", priority: 1, status: "Risolta", assignee: "Sofia" },
     { id: 106, title: "Errore 404 su pagina profilo", type: "Bug", priority: 5, status: "To-do", assignee: "Me" },
-    { id: 107, title: "Migliorare performance dashboard", type: "Feature", priority: 3, status: "In Corso", assignee: "Team" },
+    { id: 107, title: "Migliorare performance dashboard", type: "Feature", priority: 3, status: "Assegnata", assignee: "Team" },
     { id: 108, title: "Traduzione incompleta in Inglese", type: "Bug", priority: 2, status: "To-do", assignee: "Giovanni" },
     { id: 109, title: "Aggiornare termini e condizioni", type: "Documentation", priority: 1, status: "Risolta", assignee: "Me" },
     { id: 110, title: "Il footer si sovrappone al contenuto", type: "Bug", priority: 3, status: "To-do", assignee: "Me" },

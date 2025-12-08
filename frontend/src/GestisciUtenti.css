@@ -89,7 +89,7 @@
     flex-wrap: nowrap;
 }
 
-.slider-btn {
+.slider-btn, .slider-btn-admin, .slider-btn-user {
     flex: 1;
     position: relative;
     z-index: 2;
@@ -100,7 +100,6 @@
 
     font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
     font-size: 13px;
-    color: #000000;
     opacity: 0.6;
     transition: opacity 0.2s ease, font-weight 0.2s ease;
     border-radius: 50px;
@@ -111,8 +110,32 @@
     justify-content: center;
 }
 
+.slider-btn {
+    color: black;
+}
+
+.slider-btn-admin {
+    color: #4dd32f;
+}
+
+.slider-btn-user {
+    color: #1e88e5;
+}
+
 .slider-btn.active {
     color: #002060;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.slider-btn-admin.active {
+    color: #4dd32f;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.slider-btn-user.active {
+    color: #1e88e5;
     opacity: 1;
     font-weight: 600;
 }

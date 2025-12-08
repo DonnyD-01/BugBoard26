@@ -10,6 +10,7 @@ import Profilo from "./Profilo";
 import {DettaglioIssue} from "./DettaglioIssue";
 import ProtectedRoute from './ProtectedRoute';
 import GestisciUtenti from "./GestisciUtenti";
+import NuovoUtente from './NuovoUtente';
 
 const LayoutUtente = () => {
     return (
@@ -55,6 +56,7 @@ const LayoutAdmin = () => {
                                 <Route path="/admin/dettaglio-issue/:id" element={<DettaglioIssue/>}/>
                                 <Route path="/admin/profilo" element={<Profilo/>}/>
                                 <Route path="/admin/gestione-utenze" element={<GestisciUtenti />} />
+                                <Route path="/admin/nuovo-utente" element={<NuovoUtente />} />
                             </Route>
                         {/*</Route>*/}
                     </Routes>

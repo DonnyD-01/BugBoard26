@@ -19,14 +19,13 @@ public class ProgettoController {
         this.service = service;
     }
 
-    @GetMapping("/projects")
-    public ResponseEntity<List<Progetto>> getAllProjects() {
-        return new ResponseEntity<>(service.getAllProjects(), HttpStatus.OK);
+    @GetMapping("/admin/{userId}/projects")
+    public ResponseEntity<List<Progetto>> getAllProjectsFromUserId(@PathVariable int userId) {
+        return new ResponseEntity<>(service.getAllProjectsfromUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/projects")
     public ResponseEntity<List<Progetto>> getAssignedActiveProjectsFromUserId(@PathVariable int userId) {
         return new ResponseEntity<>(service.getAssignedActiveProjectsFromUserId(userId),HttpStatus.OK);
     }
-
 }

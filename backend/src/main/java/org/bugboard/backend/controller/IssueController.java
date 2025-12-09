@@ -5,9 +5,7 @@ import org.bugboard.backend.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +21,20 @@ public class IssueController {
     @GetMapping("/{userId}/issues")
     public ResponseEntity<List<Issue>> getAllAssignedIssues(@PathVariable int userId) {
         return new ResponseEntity<>(service.getAllAssignedIssues(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/issue/{issueId}")
+    public ResponseEntity<Issue> getIssue(@PathVariable int issueId) {
+        return new ResponseEntity<>(service.getIssueFromId(issueId),HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/issue/update")
+    public ResponseEntity<Issue> updateIssue(@RequestBody Issue issue) {
+        return new ResponseEntity<>(service.updateIssueFromId(issue),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/issue/{issueId}")
+    public ResponseEntity<Issue> deleteIssue(@PathVariable int issueId) {
+        return new ResponseEntity<>(service.deleteIssueFromId(issueId),HttpStatus.OK);
     }
 }

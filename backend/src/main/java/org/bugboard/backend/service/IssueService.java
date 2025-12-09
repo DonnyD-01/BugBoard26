@@ -25,13 +25,36 @@ public class IssueService {
     }
 
     public List<Issue> getAllAssignedIssues(int userId) {
-        Utente user=applicationContext.getBean(Utente.class);
+        Utente user = applicationContext.getBean(Utente.class);
 
         Optional<Utente> optUser = utenteRepo.findById(userId);
-        if(optUser.isPresent()){
-            user=optUser.get();
+        if (optUser.isPresent()) {
+            user = optUser.get();
         }
 
         return issueRepo.findIssuesByIdAssegnato(user);
+    }
+
+    public Issue getIssueFromId(int issueId) {
+        Issue issue = applicationContext.getBean(Issue.class);
+        Optional<Issue> optIssue = issueRepo.findById(issueId);
+        if (optIssue.isPresent()) {
+            issue = optIssue.get();
+        }
+        return issue;
+    }
+
+    public Issue updateIssueFromId(Issue issue) {
+        return issueRepo.save(issue);
+    }
+
+    public Issue deleteIssueFromId(int issueId) {
+        Issue issue = applicationContext.getBean(Issue.class);
+        Optional<Issue> optIssue = issueRepo.findById(issueId);
+        if (optIssue.isPresent()) {
+            issue = optIssue.get();
+        }
+        issueRepo.delete(issue);
+        return issue;
     }
 }

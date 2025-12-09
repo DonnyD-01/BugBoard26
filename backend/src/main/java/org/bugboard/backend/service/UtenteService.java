@@ -41,7 +41,8 @@ public class UtenteService {
     public String verifyUser(UserLogin userLogin) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword()));
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(userLogin.getEmail());
+            Utente user = utenteRepo.findByEmail(userLogin.getEmail());
+            return jwtService.generateToken(user);
         }
         return "Login Failed";
     }

@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './GestisciUtenti.css';
 import { useNavigate } from 'react-router-dom';
-import { mockUsers } from './utils';
-import { Search, ChevronDown, ChevronUp, UserPlus, Trash2, ShieldCheck, User2 } from "lucide-react";
+import { mockUsers, potentialUsersToAdd } from './utils';
+import { Search, ChevronDown, ChevronUp, UserPlus, ShieldCheck, User2, CircleCheck} from "lucide-react";
+import DettaglioUtente from './DettaglioUtente';
+import AggiungiUtenteEsistente from "./AggiungiUtenteEsistente";
 
 export default function GestisciUtenti() {
 
     const navigate = useNavigate();
 
+    const [usersList, setUsersList] = useState(mockUsers);
+
+    const [availableUsers, setAvailableUsers] = useState(potentialUsersToAdd);
+
     const [searchTerm, setSearchTerm] = useState("");
     const [roleFilter, setRoleFilter] = useState("All"); // 'All', 'admin', 'user'
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
+
+    const [showAddPanel, setShowAddPanel] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [addedUserName, setAddedUserName] = useState("");
+
+    useEffect(() => {
+        if (showSuccess) {
+            const timer = setTimeout(() => setShowSuccess(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccess]);
 
     const filteredUsers = mockUsers.filter(user => {
         const matchesSearch =
@@ -54,20 +71,67 @@ export default function GestisciUtenti() {
             : <ChevronDown size={16} className="sort-icon active" />;
     };
 
+    const handleUserSelectedToAdd = (userToAdd) => {
+        // 1. Qui faresti la chiamata al BACK-END
+        // await api.addUserToProject(userToAdd.id);
+        console.log(`ID inviato al backend: ${userToAdd.id}`);
+
+        // 2. Aggiorniamo il Frontend
+        setUsersList(prev => [...prev, userToAdd]);
+        setAvailableUsers(prev => prev.filter(u => u.id !== userToAdd.id));
+
+        // 3. Chiudi pannello e mostra successo
+        setShowAddPanel(false);
+        setAddedUserName(`${userToAdd.nome} ${userToAdd.cognome}`);
+        setShowSuccess(true);
+    };
+
     const handleAddUser = () => {
         console.log("Naviga a creazione Utente");
         navigate('/admin/nuovo-utente');
     };
 
+    const [selectedUser, setSelectedUser] = useState(null);
+
     return (
         <div className="homepage">
+
+            {showSuccess && (
+                <div className="success-overlay">
+                    <div className="success-card">
+                        <CircleCheck size={64} className="success-icon" />
+                        <h2>Utente Aggiunto!</h2>
+                        <p><b>{addedUserName}</b> è stato aggiunto correttamente alla lista.</p>
+                        <button className="btn-close-success" onClick={() => setShowSuccess(false)}>Chiudi</button>
+                    </div>
+                </div>
+            )}
+
+            {selectedUser && (
+                <DettaglioUtente
+                    user={selectedUser}
+                    onClose={() => setSelectedUser(null)}
+                />
+            )}
+
+            {showAddPanel && (
+                <AggiungiUtenteEsistente
+                    users={availableUsers}
+                    onSelect={handleUserSelectedToAdd}
+                    onClose={() => setShowAddPanel(false)}
+                />
+            )}
+
             <div className="homepage-container">
                 <h1>Gestisci Utenze</h1>
             </div>
 
             <div className="action-buttons-group">
+                <button className="btn-action btn-add-user" onClick={() => setShowAddPanel(true)}>
+                    <UserPlus size={18} /> Aggiungi Utente Esistente
+                </button>
                 <button className="btn-action btn-add-user" onClick={handleAddUser}>
-                        <UserPlus size={18} /> Aggiungi Utente
+                    <UserPlus size={18} /> Aggiungi Nuovo Utente
                 </button>
             </div>
 
@@ -133,15 +197,12 @@ export default function GestisciUtenti() {
                     <div className="u-col u-col-role">
                         Ruolo
                     </div>
-                    <div className="u-col u-col-actions">
-                        Azioni
-                    </div>
                 </div>
 
                 <div className="users-list">
                     {sortedUsers.length > 0 ? (
                         sortedUsers.map((user) => (
-                            <div key={user.id} className="user-row" onClick={() => navigate(`/dettaglio-utente/${user.id}`)} style={{ cursor: 'pointer' }}>
+                            <div key={user.id} className="user-row" onClick={() => setSelectedUser(user)} style={{ cursor: 'pointer' }}>
                                 <div className="u-col u-col-id">#{user.id}</div>
                                 <div className="u-col u-col-name">{user.nome}</div>
                                 <div className="u-col u-col-surname">{user.cognome}</div>
@@ -156,13 +217,6 @@ export default function GestisciUtenti() {
                                         <span className="badge-user">
                                             <User2 size={18}/> Utente</span>
                                     )}
-                                </div>
-
-                                <div className="u-col u-col-actions">
-                                    <button className="icon-btn delete" title="Elimina" onClick={(e) => {
-                                        e.stopPropagation() // Evita che scatti il click della riga
-                                        navigate(`/dettaglio-utente/${user.id}`);
-                                    }}><Trash2 size={18}/></button>
                                 </div>
                             </div>
                         ))

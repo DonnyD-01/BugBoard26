@@ -34,13 +34,30 @@ export const mockIssues = [
 ];
 
 export const mockUsers = [
-    { id: 1, nome: "Mario", cognome: "Rossi", email: "mario.rossi@email.com", role: "user" },
+    { id: 1, nome: "Mario", cognome: "Rossi", email: "mario.rossi@email.com", role: "user", dataNascita: '2025-12-09', telefono: "0818991010" },
     { id: 2, nome: "Luigi", cognome: "Verdi", email: "luigi.admin@bugboard.it", role: "admin" },
     { id: 3, nome: "Anna", cognome: "Bianchi", email: "anna.bianchi@email.com", role: "user" },
     { id: 4, nome: "Gennaro", cognome: "Esposito", email: "gennaro.dev@email.com", role: "user" },
     { id: 5, nome: "Sofia", cognome: "Neri", email: "sofia.lead@bugboard.it", role: "admin" },
     { id: 6, nome: "Marco", cognome: "Gialli", email: "marco.gialli@email.com", role: "user" },
 ];
+
+export const potentialUsersToAdd = [
+    { id: 99, nome: "Alessandro", cognome: "Volta", email: "ale.volta@email.com", role: "user" },
+    { id: 100, nome: "Galileo", cognome: "Galilei", email: "g.galilei@email.com", role: "admin" },
+    { id: 101, nome: "Leonardo", cognome: "Da Vinci", email: "leo.davinci@email.com", role: "user" },
+];
+
+export const mockProjects = [
+    { id: 1, title: "App Mobile iOS", description: "Sviluppo della nuova applicazione nativa per iPhone.", status: "Attivo", manager: "Mario Rossi" },
+    { id: 2, title: "Refactoring Backend", description: "Migrazione del database e pulizia del codice legacy.", status: "In sospeso", manager: "Luigi Verdi" },
+    { id: 3, title: "Sito Web Corporate", description: "Redesign completo del portale istituzionale.", status: "Attivo", manager: "Anna Bianchi" },
+    { id: 4, title: "Integrazione API Pagamenti", description: "Implementazione Stripe e PayPal.", status: "Chiuso", manager: "Mario Rossi" },
+    { id: 5, title: "Dashboard Analytics", description: "Nuovi grafici e reportistica per gli admin.", status: "Attivo", manager: "Sofia Neri" },
+    { id: 6, title: "Marketing Q4", description: "Campagna pubblicitaria fine anno.", status: "Chiuso", manager: "Gennaro Esposito" },
+];
+
+
 
 
 export const getTypeIcon = (type, size = 16) => {

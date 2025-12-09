@@ -22,7 +22,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 20px;
+    padding: 0px 20px;
+    height: 45px;
     border-radius: 12px;
     border: none;
     font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
@@ -42,8 +43,28 @@
     width: 100%;
 }
 
-.btn-add-admin {
-    background-color: #d32f2f;
+.btn-add-existing {
+    width: 100%;
+    background-color: white;
+    border: 2px solid #002060;
+    color: #002060;
+    position: relative;
+    padding-right: 15px;
+}
+
+.btn-add-existing:hover {
+    background-color: #F0F4FF;
+}
+
+.hidden-select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 .users-filters-container {
@@ -195,6 +216,14 @@
     gap: 15px;
 }
 
+.users-header-panel, .user-row-panel {
+    display: grid;
+    grid-template-columns: 0.7fr 0.7fr 1.5fr 0.7fr 0.5fr;
+    align-items: center;
+    padding: 15px 25px;
+    gap: 15px;
+}
+
 .users-header {
     background-color: #F8F9FB;
     border-bottom: 2px solid #002060;
@@ -213,7 +242,7 @@
 .users-header .u-col {
     font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
     color: #002060;
-    font-size: 14px;
+    font-size: 16px;
     text-transform: uppercase;
 }
 
@@ -299,3 +328,87 @@
     .u-col { width: 100%; margin-bottom: 5px; }
 }
 
+.wide-panel {
+    width: 700px;
+    height: 550px;
+    max-width: 95%;
+}
+
+.panel-description {
+    color: #666;
+    margin-bottom: 20px;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 18px;
+    text-align: justify;
+}
+
+.modal-search-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.modal-search-box input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border-radius: 12px;
+    border: 1px solid #E0E0E0;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    background-color: #F8F9FB;
+}
+
+.users-header-panel {
+    background-color: #F8F9FB;
+    border-bottom: 2px solid #002060;
+    padding-right: 35px;
+}
+
+.modal-search-box input:focus {
+    border-color: #002060;
+    background-color: white;
+}
+
+.modal-table {
+    margin: 0;
+    box-shadow: none;
+    border: 1px solid #E0E0E0;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-list {
+    height: 300px;
+}
+
+.btn-icon-add {
+    background-color: #e8f5e9;
+    color: #0F9A22;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.user-row-panel:hover .btn-icon-add {
+    background-color: #0F9A22;
+    color: white;
+    transform: scale(1.1);
+}
+
+.user-row-panel {
+    border-bottom: 1px solid #F0F0F0;
+    transition: background-color 0.2s;
+}
+
+.user-row-panel:hover {
+    background-color: #F0F4FF;
+}

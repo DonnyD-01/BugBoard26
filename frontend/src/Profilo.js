@@ -110,26 +110,6 @@ export default function Profilo() {
                         <div className="floating-label-group disabled-group">
                             <input
                                 type="text"
-                                value={userData.id}
-                                className="campo disabled-input"
-                                disabled
-                            />
-                            <label className="floating-label">ID Utente</label>
-                        </div>
-
-                        <div className="floating-label-group disabled-group">
-                            <input
-                                type="date"
-                                value={userData.dataNascita}
-                                className="campo disabled-input"
-                                disabled
-                            />
-                            <label className="floating-label">Data di Nascita</label>
-                        </div>
-
-                        <div className="floating-label-group disabled-group">
-                            <input
-                                type="text"
                                 value={userData.nome}
                                 className="campo disabled-input"
                                 disabled
@@ -145,6 +125,16 @@ export default function Profilo() {
                                 disabled
                             />
                             <label className="floating-label">Cognome</label>
+                        </div>
+
+                        <div className="floating-label-group disabled-group">
+                            <input
+                                type="date"
+                                value={userData.dataNascita}
+                                className="campo disabled-input"
+                                disabled
+                            />
+                            <label className="floating-label">Data di Nascita</label>
                         </div>
                     </div>
 

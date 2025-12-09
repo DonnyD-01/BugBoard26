@@ -1,7 +1,8 @@
 import {NavLink, useNavigate} from 'react-router-dom'
 import './NavbarUtente.css';
 import {useState} from "react";
-import {FaUserCircle, FaChevronDown, FaSignOutAlt, FaUser} from 'react-icons/fa';
+import {FaUserCircle} from 'react-icons/fa';
+import { User2, ChevronDown, LogOut} from "lucide-react";
 
 function ProfileMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -30,13 +31,13 @@ function ProfileMenu() {
             <div className="profile-menu-container">
                 <div className="profile-button" onClick={toggleMenu}>
                     <FaUserCircle className="profile-icon" />
-                    <FaChevronDown className="chevron-icon" />
+                    <ChevronDown className="chevron-icon" />
                 </div>
 
                 {isOpen && (
                     <div className="dropdown-menu">
-                        <a href="/admin/profilo" className="menu-item"><FaUser/>Profilo</a>
-                        <a href="/" className="menu-item link-logout"><FaSignOutAlt/>Esci</a>
+                        <a href="/admin/profilo" className="menu-item"><User2/>Profilo</a>
+                        <a href="/" className="menu-item link-logout"><LogOut/>Esci</a>
                     </div>
                 )}
             </div>

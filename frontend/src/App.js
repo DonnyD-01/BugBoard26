@@ -11,7 +11,10 @@ import {DettaglioIssue} from "./DettaglioIssue";
 import ProtectedRoute from './ProtectedRoute';
 import GestisciUtenti from "./GestisciUtenti";
 import NuovoUtente from './NuovoUtente';
-import DettaglioUtente from './DettaglioUtente';
+import DettaglioUtente from "./DettaglioUtente";
+import {Progetti} from "./Progetti";
+import SplashScreen from "./SplashScreen";
+import {useEffect, useState} from "react";
 
 const LayoutUtente = () => {
     return (
@@ -34,6 +37,21 @@ const LayoutAdmin = () => {
 }
 
     function App() {
+
+        const [showSplash, setShowSplash] = useState(true);
+
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setShowSplash(false);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }, []);
+
+        if (showSplash) {
+            return <SplashScreen />;
+        }
+
         return (
             <div className="App">
                 <Router>
@@ -42,6 +60,7 @@ const LayoutAdmin = () => {
                         <Route path="/" element={<Login/>}/>
 
                         {/*<Route element={<ProtectedRoute allowedRole="user" />}>*/}
+                        <Route path="/progetti" element={<Progetti />} />
                             <Route element={<LayoutUtente/>}>
                                 <Route path="/home" element={<HomePage/>}/>
                                 <Route path="/dettaglio-issue/:id" element={<DettaglioIssue/>}/>
@@ -51,6 +70,7 @@ const LayoutAdmin = () => {
                         {/*}</Route>*/}
 
                         {/*<Route element={<ProtectedRoute allowedRole="admin" />}>*/}
+                        <Route path="/progetti" element={<Progetti />} />
                             <Route element={<LayoutAdmin/>}>
                                 <Route path="/admin/segnala-issue" element={<SegnalaIssue/>}/>
                                 <Route path="/admin/home" element={<HomePage/>}/>
@@ -58,7 +78,7 @@ const LayoutAdmin = () => {
                                 <Route path="/admin/profilo" element={<Profilo/>}/>
                                 <Route path="/admin/gestione-utenze" element={<GestisciUtenti />} />
                                 <Route path="/admin/nuovo-utente" element={<NuovoUtente />} />
-                                <Route path="dettaglio-utente" element={<DettaglioUtente/>} />
+                                <Route path="/admin/dettaglio-utente/:id" element={<DettaglioUtente/>} />
                             </Route>
                         {/*</Route>*/}
                     </Routes>

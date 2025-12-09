@@ -84,7 +84,18 @@
     font-size: 18px;
 }
 
-/* Badge Ruolo Grande */
+.user-intro {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-intro h1 {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 36px;
+}
+
 .role-badge-large {
     display: flex;
     align-items: center;
@@ -92,20 +103,19 @@
     padding: 8px 20px;
     border-radius: 50px;
     font-size: 16px;
-    font-weight: 600;
-    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
 }
 
 .role-badge-large.admin {
-    background-color: #ffebee;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
+    background-color: #efffeb;
+    color: #4dd32f;
+    border: 1px solid #d2ffcd;
 }
 
 .role-badge-large.user {
     background-color: #e3f2fd;
     color: #1e88e5;
-    border: 1px solid #bbdefb;
+    border: 1px solid #bbd2e6;
 }
 
 .divider {
@@ -115,22 +125,8 @@
     margin: 20px 0 40px 0;
 }
 
-/* --- FORM GRID (Reuse similar styles) --- */
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
-    row-gap: 10px;
-}
-
 .full-width { grid-column: 1 / -1; }
 
-.floating-label-group {
-    position: relative;
-    width: 100%;
-    margin-bottom: 25px;
-    background: transparent;
-}
 
 
 .campo:focus { border-color: #002060; }
@@ -149,6 +145,8 @@
     transform: translateY(-50%);
     color: #B0B0B0;
 }
+
+
 
 @media (max-width: 768px) {
     .form-grid { grid-template-columns: 1fr; }

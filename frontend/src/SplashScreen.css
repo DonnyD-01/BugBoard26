@@ -1,0 +1,50 @@
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #F8F9FB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeOut 0.5s ease-out 2.8s forwards;
+}
+
+.splash-logo {
+    width: 400px;
+    height: auto;
+
+    animation:
+            logoEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+            logoPulse 2s infinite ease-in-out 0.8s;
+}
+
+@keyframes logoEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes logoPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

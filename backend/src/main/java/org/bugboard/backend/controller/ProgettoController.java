@@ -28,5 +28,4 @@ public class ProgettoController {
     public ResponseEntity<List<Progetto>> getAssignedActiveProjectsFromUserId(@PathVariable int userId) {
         return new ResponseEntity<>(service.getAssignedActiveProjectsFromUserId(userId),HttpStatus.OK);
     }
-
 }

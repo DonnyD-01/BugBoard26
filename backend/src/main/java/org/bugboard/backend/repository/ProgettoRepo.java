@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ProgettoRepo extends JpaRepository<Progetto,Integer> {
+    List<Progetto> findBySetUtenti_idUtente(int userId);
     List<Progetto> findBySetUtenti_idUtenteAndStato(int setUtentiIdUtente, String stato);
 }

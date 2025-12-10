@@ -23,19 +23,20 @@ public class Issue {
     private int priorita;
     @Column(name="immagine")
     private String linkImmagine;
+    private String stato;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="idprogetto")
-    private Progetto idProgetto;
+    private Progetto progetto;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="idcreatore",referencedColumnName="idutente")
-    private Utente idCreatore;
+    private Utente utenteCreatore;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="idassegnato",referencedColumnName="idutente")
-    private Utente idAssegnato;
+    private Utente utenteAssegnato;
 }

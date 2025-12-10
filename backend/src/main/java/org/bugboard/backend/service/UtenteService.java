@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,5 +73,7 @@ public class UtenteService {
         return utenteRepo.save(user);
     }
 
-
+    public List<Utente> getAllUsersFromProject(int projectId) {
+        return utenteRepo.findByProgettiAssegnati_idProgetto(projectId);
+    }
 }

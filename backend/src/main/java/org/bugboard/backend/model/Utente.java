@@ -1,5 +1,6 @@
 package org.bugboard.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ public class Utente {
     @Column(name = "isadmin")
     private Boolean isAdmin;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name="Lavora",
             joinColumns = @JoinColumn(name="idutente"),

@@ -1,8 +1,10 @@
 package org.bugboard.backend.service;
 
 import org.bugboard.backend.model.Issue;
+import org.bugboard.backend.model.Progetto;
 import org.bugboard.backend.model.Utente;
 import org.bugboard.backend.repository.IssueRepo;
+import org.bugboard.backend.repository.ProgettoRepo;
 import org.bugboard.backend.repository.UtenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -16,12 +18,14 @@ public class IssueService {
     private final IssueRepo issueRepo;
     private final UtenteRepo utenteRepo;
     private final ApplicationContext applicationContext;
+    private final ProgettoRepo progettoRepo;
 
     @Autowired
-    public IssueService(IssueRepo issueRepo, UtenteRepo utenteRepo, ApplicationContext applicationContext) {
+    public IssueService(IssueRepo issueRepo, UtenteRepo utenteRepo, ApplicationContext applicationContext, ProgettoRepo progettoRepo) {
         this.issueRepo = issueRepo;
         this.utenteRepo = utenteRepo;
         this.applicationContext = applicationContext;
+        this.progettoRepo = progettoRepo;
     }
 
     public List<Issue> getAllAssignedIssues(int userId) {
@@ -32,10 +36,10 @@ public class IssueService {
             user = optUser.get();
         }
 
-        return issueRepo.findIssuesByIdAssegnato(user);
+        return issueRepo.findIssuesByUtenteAssegnato(user);
     }
 
-    public Issue getIssueFromId(int issueId) {
+    public Issue getIssue(int issueId) {
         Issue issue = applicationContext.getBean(Issue.class);
         Optional<Issue> optIssue = issueRepo.findById(issueId);
         if (optIssue.isPresent()) {
@@ -44,11 +48,22 @@ public class IssueService {
         return issue;
     }
 
-    public Issue updateIssueFromId(Issue issue) {
+    public Issue addIssue(int projectId,int userId,Issue issue) {
+        Optional<Progetto> optProject=progettoRepo.findById(projectId);
+        optProject.ifPresent(issue::setProgetto);
+        Optional<Utente> optUser = utenteRepo.findById(userId);
+        optUser.ifPresent(issue::setUtenteCreatore);
+
+        issue.setStato("ToDo");
+        issue.setLinkImmagine("https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg");
         return issueRepo.save(issue);
     }
 
-    public Issue deleteIssueFromId(int issueId) {
+    public Issue updateIssue(Issue issue) {
+        return issueRepo.save(issue);
+    }
+
+    public Issue deleteIssue(int issueId) {
         Issue issue = applicationContext.getBean(Issue.class);
         Optional<Issue> optIssue = issueRepo.findById(issueId);
         if (optIssue.isPresent()) {
@@ -57,4 +72,6 @@ public class IssueService {
         issueRepo.delete(issue);
         return issue;
     }
+
+
 }

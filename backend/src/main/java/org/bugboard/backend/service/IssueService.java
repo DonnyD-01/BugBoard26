@@ -36,10 +36,10 @@ public class IssueService {
             user = optUser.get();
         }
 
-        return issueRepo.findIssuesByIdAssegnato(user);
+        return issueRepo.findIssuesByUtenteAssegnato(user);
     }
 
-    public Issue getIssueFromId(int issueId) {
+    public Issue getIssue(int issueId) {
         Issue issue = applicationContext.getBean(Issue.class);
         Optional<Issue> optIssue = issueRepo.findById(issueId);
         if (optIssue.isPresent()) {
@@ -59,11 +59,11 @@ public class IssueService {
         return issueRepo.save(issue);
     }
 
-    public Issue updateIssueFromId(Issue issue) {
+    public Issue updateIssue(Issue issue) {
         return issueRepo.save(issue);
     }
 
-    public Issue deleteIssueFromId(int issueId) {
+    public Issue deleteIssue(int issueId) {
         Issue issue = applicationContext.getBean(Issue.class);
         Optional<Issue> optIssue = issueRepo.findById(issueId);
         if (optIssue.isPresent()) {

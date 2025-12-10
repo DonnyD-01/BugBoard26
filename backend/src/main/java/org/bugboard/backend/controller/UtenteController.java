@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class UtenteController {
@@ -16,6 +18,11 @@ public class UtenteController {
     @Autowired
     public UtenteController(UtenteService service) {
         this.service = service;
+    }
+
+    @GetMapping("/admin/{projectId}/users")
+    public ResponseEntity<List<Utente>> getAllUsersFromProject(@PathVariable int projectId) {
+        return new ResponseEntity<>(service.getAllUsersFromProject(projectId),HttpStatus.OK);
     }
 
     @PutMapping("/{userId}/project/{projectId}")

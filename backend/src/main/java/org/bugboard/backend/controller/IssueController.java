@@ -28,6 +28,14 @@ public class IssueController {
         return new ResponseEntity<>(service.getIssueFromId(issueId),HttpStatus.OK);
     }
 
+    @PutMapping("/{projectId}/{userId}/issue/add")
+    public ResponseEntity<Issue> addIssue(
+            @PathVariable int projectId,
+            @PathVariable int userId,
+            @RequestBody Issue issue) {
+        return new ResponseEntity<>(service.addIssue(projectId,userId,issue),HttpStatus.OK);
+    }
+
     @PutMapping("/admin/issue/update")
     public ResponseEntity<Issue> updateIssue(@RequestBody Issue issue) {
         return new ResponseEntity<>(service.updateIssueFromId(issue),HttpStatus.OK);

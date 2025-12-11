@@ -7,9 +7,7 @@ import org.bugboard.backend.service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthenticationController {
@@ -26,9 +24,10 @@ public class AuthenticationController {
         return new ResponseEntity<>(service.verifyUser(userLogin),HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<@NonNull Utente> registerUser(@RequestBody Utente utente) {
-        return new ResponseEntity<>(service.registerUser(utente), HttpStatus.CREATED);
+    @PutMapping("/admin/{projectId}/register")
+    public ResponseEntity<@NonNull Utente> registerUser(@PathVariable int projectId, @RequestBody Utente utente){
+        int userId=service.registerUser(utente).getIdUtente();
+        return new ResponseEntity<>(service.assignProjectToUser(projectId,userId), HttpStatus.CREATED);
     }
 
 }

@@ -48,13 +48,13 @@ public class UtenteService {
         return "Login Failed";
     }
 
-    public Utente registerUser(Utente utente) {
+    public Utente registerUser(Utente utente){
         utente.setPassword(passwordEncoder.encode(utente.getPassword()));
         return utenteRepo.save(utente);
     }
 
     @Transactional
-    public Utente assignProjectToUser(int userId, int projectId) {
+    public Utente assignProjectToUser(int projectId, int userId) {
         Utente user = applicationContext.getBean(Utente.class);
         Progetto project = applicationContext.getBean(Progetto.class);
 

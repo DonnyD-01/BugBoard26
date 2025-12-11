@@ -59,8 +59,16 @@ public class IssueService {
         return issueRepo.save(issue);
     }
 
-    public Issue updateIssue(Issue issue) {
-        return issueRepo.save(issue);
+    public Issue updateIssue(Issue updatedIssue) {
+        Issue oldIssue;
+        Optional<Issue> optIssue = issueRepo.findById(updatedIssue.getIdIssue());
+        if (optIssue.isPresent()) {
+            oldIssue = optIssue.get();
+            updatedIssue.setProgetto(oldIssue.getProgetto());
+            updatedIssue.setUtenteAssegnato(oldIssue.getUtenteAssegnato());
+            updatedIssue.setUtenteCreatore(oldIssue.getUtenteCreatore());
+        }
+        return issueRepo.save(updatedIssue);
     }
 
     public Issue deleteIssue(int issueId) {

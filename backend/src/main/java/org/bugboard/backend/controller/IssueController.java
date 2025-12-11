@@ -33,7 +33,7 @@ public class IssueController {
             @PathVariable int projectId,
             @PathVariable int userId,
             @RequestBody Issue issue) {
-        return new ResponseEntity<>(service.addIssue(projectId,userId,issue),HttpStatus.OK);
+        return new ResponseEntity<>(service.addIssue(projectId,userId,issue),HttpStatus.CREATED);
     }
 
     @PutMapping("/admin/issue/update")

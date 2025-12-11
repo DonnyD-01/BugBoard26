@@ -25,11 +25,11 @@ public class UtenteController {
         return new ResponseEntity<>(service.getAllUsersFromProject(projectId),HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}/project/{projectId}")
+    @PutMapping("/admin/{projectId}/assign/{userId}")
     public ResponseEntity<Utente> assignProjectToUser(
-            @PathVariable int userId,
-            @PathVariable int projectId
+            @PathVariable int projectId,
+            @PathVariable int userId
     ){
-        return new ResponseEntity<>(service.assignProjectToUser(userId, projectId),HttpStatus.OK);
+        return new ResponseEntity<>(service.assignProjectToUser(projectId, userId),HttpStatus.OK);
     }
 }

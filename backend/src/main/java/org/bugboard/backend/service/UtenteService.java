@@ -53,6 +53,10 @@ public class UtenteService {
         return utenteRepo.save(utente);
     }
 
+    public List<Utente> getAllUsers() {
+        return utenteRepo.findAll();
+    }
+
     @Transactional
     public Utente assignProjectToUser(int projectId, int userId) {
         applicationContext.getBean(Utente.class);
@@ -84,4 +88,5 @@ public class UtenteService {
     public List<Utente> getAllUsersFromProject(int projectId) {
         return utenteRepo.findByProgettiAssegnati_idProgetto(projectId);
     }
+
 }

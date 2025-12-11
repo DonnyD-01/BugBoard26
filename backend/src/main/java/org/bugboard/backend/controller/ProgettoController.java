@@ -21,7 +21,7 @@ public class ProgettoController {
 
     @GetMapping("/admin/{userId}/projects")
     public ResponseEntity<List<Progetto>> getAllProjectsFromUserId(@PathVariable int userId) {
-        return new ResponseEntity<>(service.getAllProjectsfromUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllProjectsFromUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/projects")

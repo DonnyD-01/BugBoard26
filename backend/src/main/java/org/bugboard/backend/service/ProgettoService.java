@@ -17,8 +17,7 @@ public class ProgettoService {
         this.progettoRepo = repo;
     }
 
-
-    public List<Progetto> getAllProjectsfromUserId(int userId) {
+    public List<Progetto> getAllProjectsFromUserId(int userId) {
         return progettoRepo.findBySetUtenti_idUtente(userId);
     }
 

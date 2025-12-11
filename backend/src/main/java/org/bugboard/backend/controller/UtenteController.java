@@ -20,16 +20,23 @@ public class UtenteController {
         this.service = service;
     }
 
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<Utente>> getAllUsers() {
+        return new ResponseEntity<>(service.getAllUsers(),HttpStatus.OK);
+    }
+
     @GetMapping("/admin/{projectId}/users")
     public ResponseEntity<List<Utente>> getAllUsersFromProject(@PathVariable int projectId) {
         return new ResponseEntity<>(service.getAllUsersFromProject(projectId),HttpStatus.OK);
     }
 
+
     @PutMapping("/admin/{projectId}/assign/{userId}")
     public ResponseEntity<Utente> assignProjectToUser(
             @PathVariable int projectId,
-            @PathVariable int userId
-    ){
+            @PathVariable int userId) {
         return new ResponseEntity<>(service.assignProjectToUser(projectId, userId),HttpStatus.OK);
     }
+
+
 }

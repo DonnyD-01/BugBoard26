@@ -4,10 +4,7 @@ import org.bugboard.backend.model.Issue;
 import org.bugboard.backend.model.Progetto;
 import org.bugboard.backend.model.Utente;
 import org.bugboard.backend.repository.IssueRepo;
-import org.bugboard.backend.repository.ProgettoRepo;
-import org.bugboard.backend.repository.UtenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,16 +13,12 @@ import java.util.Optional;
 @Service
 public class IssueService {
     private final IssueRepo issueRepo;
-    private final UtenteRepo utenteRepo;
-    private final ApplicationContext applicationContext;
-    private final ProgettoRepo progettoRepo;
+    private final OptionalService optionalService;
 
     @Autowired
-    public IssueService(IssueRepo issueRepo, UtenteRepo utenteRepo, ApplicationContext applicationContext, ProgettoRepo progettoRepo) {
+    public IssueService(IssueRepo issueRepo, OptionalService optionalService) {
         this.issueRepo = issueRepo;
-        this.utenteRepo = utenteRepo;
-        this.applicationContext = applicationContext;
-        this.progettoRepo = progettoRepo;
+        this.optionalService = optionalService;
     }
 
     public List<Issue> getAllAssignedIssues(int projectId,int userId) {
@@ -37,23 +30,20 @@ public class IssueService {
     }
 
     public Issue getIssue(int issueId) {
-        Issue issue = applicationContext.getBean(Issue.class);
-        Optional<Issue> optIssue = issueRepo.findById(issueId);
-        if (optIssue.isPresent()) {
-            issue = optIssue.get();
-        }
-        return issue;
+        return optionalService.checkIssue(issueId);
     }
 
     public Issue addIssue(int projectId,int userId,Issue issue) {
-        Optional<Progetto> optProject=progettoRepo.findById(projectId);
-        optProject.ifPresent(issue::setProgetto);
-        Optional<Utente> optUser = utenteRepo.findById(userId);
-        optUser.ifPresent(issue::setUtenteCreatore);
-
-        issue.setStato("ToDo");
-        issue.setLinkImmagine("https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg");
-        return issueRepo.save(issue);
+        Progetto project=optionalService.checkProgetto(projectId);
+        Utente user=optionalService.checkUtente(userId);
+        if(project!=null && user!=null) {
+            issue.setProgetto(project);
+            issue.setUtenteCreatore(user);
+            issue.setStato("ToDo");
+            issue.setLinkImmagine("https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg");
+            return issueRepo.save(issue);
+        }
+        return null;
     }
 
     public Issue updateIssue(Issue updatedIssue) {
@@ -64,19 +54,42 @@ public class IssueService {
             updatedIssue.setProgetto(oldIssue.getProgetto());
             updatedIssue.setUtenteAssegnato(oldIssue.getUtenteAssegnato());
             updatedIssue.setUtenteCreatore(oldIssue.getUtenteCreatore());
+            return issueRepo.save(updatedIssue);
         }
-        return issueRepo.save(updatedIssue);
+        return null;
     }
 
     public Issue deleteIssue(int issueId) {
-        Issue issue = applicationContext.getBean(Issue.class);
-        Optional<Issue> optIssue = issueRepo.findById(issueId);
-        if (optIssue.isPresent()) {
-            issue = optIssue.get();
+        Issue issue = optionalService.checkIssue(issueId);
+        if(issue!=null){
+            issueRepo.delete(issue);
         }
-        issueRepo.delete(issue);
-        return issue;
+        return null;
     }
 
+
+    public Issue assignIssue(int issueId, int userId) {
+        Issue issue = optionalService.checkIssue(issueId);
+        Utente user = optionalService.checkUtente(userId);
+
+        if(issue!=null && user!=null) {
+            issue.setUtenteAssegnato(user);
+            issue.setStato("Assegnata");
+            return issueRepo.save(issue);
+        }
+        return null;
+    }
+
+    public Issue setIssueAsSolved(int issueId) {
+        Issue issue = optionalService.checkIssue(issueId);
+        if(issue!=null){
+            if(!issue.getStato().equals("Assegnata")){
+                return null;
+            }
+            issue.setStato("Risolta");
+            return issueRepo.save(issue);
+        }
+        return null;
+    }
 
 }

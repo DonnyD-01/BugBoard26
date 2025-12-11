@@ -1,55 +1,27 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './HomePage.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import { getTypeIcon } from './utils';
-import { ChevronUp, ChevronDown} from 'lucide-react';
+import { ChevronUp, ChevronDown, AlertCircle} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
 import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
 import {mockIssues, getStatusColor, getStatusIcon} from "./utils";
-import { getAllIssues } from "./services/api";
+import {getIssues, getIssuesByProjectId} from "./services/api";
+import LoadingSpinner from './LoadingSpinner';
+import {useAuth} from "./context/AuthContext";
 
 export default function HomePage() {
 
 
-    // const [issues, setIssues] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
-    //
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             try {
-//                 setLoading(true);
-//                 const data = await getIssues(); // Chiamata vera al Back-End
-//                 setIssues(data); // Salva i dati veri
-//             } catch (err) {
-//                 console.error(err);
-//                 setError("Impossibile caricare le issue. Controlla la connessione.");
-//                 // Fallback: se il server è giù, puoi usare i mockIssues per non rompere tutto
-//                 // setIssues(mockIssues);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
-//
-//         fetchData();
-//     }, []);
-//
-//     // 3. Gestione visiva durante il caricamento
-//     if (loading) return <div style={{padding: 40, textAlign: 'center'}}>Caricamento dati in corso...</div>;
-//     if (error) return <div style={{padding: 40, textAlign: 'center', color: 'red'}}>{error}</div>;
-//
-//     // ... Il resto del codice rimane uguale, ma userai 'issues' invece di 'mockIssues' ...
-//
-//     const filteredIssues = issues.filter(issue => ... ); // Usa 'issues' (stato) non 'mockIssues' (costante)
-//
+    const [issues, setIssues] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, isAdmin } = useAuth();
 
-    const isAdmin = location.pathname.includes("/admin");
-
-    const pageTitle = "Issues";
-    const table1Title = isAdmin ? "Issue da assegnare" : "Le tue issue assegnate";
+    const currentProjectId = localStorage.getItem("currentProjectId") || 1;
 
     const initialFilters = { search: "", type: "All", status: "All", priority: "All" };
 
@@ -59,8 +31,30 @@ export default function HomePage() {
     const [mySort, setMySort] = useState({ key: null, direction: 'asc' });
     const [projectSort, setProjectSort] = useState({ key: null, direction: 'asc' });
 
-    const filterIssuesLogic = (issues, filters) => {
-        return issues.filter(issue => {
+    useEffect(() => {
+         const fetchData = async () => {
+             if(!currentProjectId) return;
+             try {
+                 setLoading(true);
+                 const data = await getIssuesByProjectId(currentProjectId); // Chiamata vera al Back-End
+                 setIssues(data); // Salva i dati veri
+             } catch (err) {
+                 console.error(err);
+                 setError("Impossibile caricare le issue. Controlla la connessione.");
+             } finally {
+                 setLoading(false);
+             }
+         };
+
+         fetchData();
+     }, [currentProjectId]);
+
+    const pageTitle = "Issues";
+    const table1Title = isAdmin ? "Issue da assegnare" : "Le tue issue assegnate";
+
+    const filterIssuesLogic = (issuesList, filters) => {
+        if (!issuesList) return [];
+        return issuesList.filter(issue => {
             const matchesSearch = issue.title.toLowerCase().includes(filters.search.toLowerCase());
             const matchesType = filters.type === "All" || issue.type === filters.type;
             const matchesStatus = filters.status === "All" || issue.status === filters.status;
@@ -70,10 +64,10 @@ export default function HomePage() {
         });
     };
 
-    const sortIssuesLogic = (issues, sortConfig) => {
-        if (!sortConfig.key) return issues;
+    const sortIssuesLogic = (issuesList, sortConfig) => {
+        if (!sortConfig.key) return issuesList;
 
-        return [...issues].sort((a, b) => {
+        return [...issuesList].sort((a, b) => {
             let aValue = a[sortConfig.key];
             let bValue = b[sortConfig.key];
 
@@ -89,13 +83,13 @@ export default function HomePage() {
     };
 
     const rawTable1Issues = isAdmin
-        ? mockIssues.filter(i => i.status === "To-do")
-        : mockIssues.filter(i => i.assignee === "Me");
+        ? issues.filter(i => i.status === "ToDo")
+        : issues.filter(i => i.assigneeEmail === user?.email);
 
-    const rawProjectIssues = mockIssues;
+    const rawProjectIssues = issues;
 
-    const table1List = sortIssuesLogic(filterIssuesLogic(rawTable1Issues, myFilters), mySort);
-    const projectList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
+    const myFinalList = sortIssuesLogic(filterIssuesLogic(rawTable1Issues, myFilters), mySort);
+    const projectFinalList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
 
     const handleSortClick = (key, currentSort, setSort) => {
         let direction = 'asc';
@@ -111,12 +105,6 @@ export default function HomePage() {
             ? <ChevronUp size={16} className="sort-icon active" />
             : <ChevronDown size={16} className="sort-icon active" />;
     };
-
-    const rawMyIssues = mockIssues.filter(i => i.assignee === "Me");
-
-    const myFinalList = sortIssuesLogic(filterIssuesLogic(rawMyIssues, myFilters), mySort);
-
-    const projectFinalList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
 
     const renderRow = (issue) => (
         <div key={issue.id} className="issue-row" onClick={() => navigate(isAdmin ? `/admin/dettaglio-issue/${issue.id}` : `/dettaglio-issue/${issue.id}`)}>
@@ -137,6 +125,20 @@ export default function HomePage() {
             </div>
         </div>
     );
+
+    if (loading) {
+        return <LoadingSpinner message="Caricamento issues..." />;
+    }
+    if (error) {
+        return (
+            <div style={{padding: 40, textAlign: 'center', color: 'red', display:'flex', flexDirection:'column', alignItems:'center', gap:10}}>
+                <AlertCircle size={48} />
+                <p>{error}</p>
+                <button style={{padding:'8px 16px', cursor:'pointer'}} onClick={() => window.location.reload()}>Riprova</button>
+            </div>
+        );
+    }
+
 
     return (
         <div className="homepage">

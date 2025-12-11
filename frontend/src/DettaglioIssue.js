@@ -1,80 +1,123 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import './DettaglioIssue.css';
-import {ArrowLeft, Edit2, Trash2, Save, X, Image as ImageIcon, Upload, UploadCloud} from 'lucide-react';
+import {ArrowLeft, Edit2, Trash2, Save, X, Image as ImageIcon, Upload, UploadCloud, AlertCircle} from 'lucide-react';
 import {getTypeIcon, getStatusIcon, getStatusColor, mockIssues, mockTeamUsers} from './utils';
 import StatusTracker from "./Statustracker";
 import AssegnaIssue from "./AssegnaIssue";
 import { useAuth } from './context/AuthContext';
-
+import LoadingSpinner from './LoadingSpinner';
+import { getIssueById, updateIssue, deleteIssue } from './services/api';
 
 export function DettaglioIssue() {
     const {id} = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const { user, isAdmin } = useAuth();
 
     const [issue, setIssue] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedData, setEditedData] = useState(null);
-
-    const currentUserId = 100; //parseInt(localStorage.getItem("userId") || "0");
-
     const [showAssignPanel, setShowAssignPanel] = useState(false);
-
-    const handleOpenAssignPanel = () => {
-        setShowAssignPanel(true);
-    };
-
-    const handleAssignUser = (selectedUser) => {
-        console.log("Assegnando a:", selectedUser.nome);
-
-        // Aggiorna lo stato della issue
-        setIssue(prev => ({
-            ...prev,
-            status: "Assegnata",      // Cambia stato
-            assignee: selectedUser.nome, // Imposta nome visibile
-            assigneeId: selectedUser.id  // Imposta ID per i permessi
-        }));
-
-        // Chiudi il pannello
-        setShowAssignPanel(false);
-    };
-
-    const location = useLocation();
+    const [isSaving, setIsSaving] = useState(false);
 
     const fileInputRef = useRef(null);
 
-    const isAdmin = location.pathname.includes("/admin");
-
     useEffect(() => {
-        const foundIssue = mockIssues.find(i => i.id === parseInt(id));
+        const fetchIssueDetail = async () => {
+            try {
+                setLoading(true);
+                const data = await getIssueById(id);
+                setIssue(data);
+                setEditedData(data);
+            } catch (err) {
+                console.error(err);
+                setError("Issue non trovata o errore di connessione.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        if (foundIssue) {
-            setIssue(foundIssue);
-            setEditedData(foundIssue);
-        } else {
-
-            setIssue({
-                id: id,
-                title: "Issue non trovata nel mock locale",
-                description: "Dettaglio non disponibile.",
-                type: "Sconosciuto",
-                priority: 0,
-                status: "Errore",
-                author: "Sistema",
-            });
-        }
+        fetchIssueDetail();
     }, [id]);
-
-    const canEdit = isAdmin;
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setEditedData(prev => ({...prev, [name]: value}));
     }
 
+    const handleOpenAssignPanel = () => {
+        setShowAssignPanel(true);
+    };
+
+    const handleAssignUser = async (selectedUser) => {
+        console.log("Assegnando a:", selectedUser.email);
+
+        const newData = {
+            ...issue,
+            status: "Assegnata",
+            assigneeEmail: selectedUser.email, // Salva l'email (EmailAss)
+            assigneeName: selectedUser.nome
+        };
+
+        try {
+            await updateIssue(id, newData);
+            setIssue(newData);
+            setEditedData(newData);
+            setShowAssignPanel(false);
+        } catch (err) {
+            alert("Errore durante l'assegnazione");
+        }
+    };
+
     const handleStatusChange = (newStatus) => {
         setEditedData(prev => ({ ...prev, status: newStatus }));
+    };
+
+    const handleDeleteIssue = async () => {
+        if (window.confirm("Sei sicuro di voler eliminare questa issue? Questa azione è irreversibile.")) {
+            try {
+                await deleteIssue(id);
+                navigate(isAdmin ? '/admin/home' : '/home');
+            } catch (err) {
+                alert("Errore durante l'eliminazione");
+            }
+        }
+    }
+
+    if (loading) return <LoadingSpinner message="Caricamento dettaglio..." />;
+
+    if (error) return (
+        <div style={{padding: 140, textAlign: 'center', color: 'red'}}>
+            <AlertCircle size={48} style={{margin:'0 auto 10px'}}/>
+            <h2>Errore</h2>
+            <p>{error}</p>
+            <button className="btn-indietro" onClick={() => navigate(-1)} style={{marginTop:20}}>Torna indietro</button>
+        </div>
+    );
+
+    const isAssignedToCurrentUser = issue.assigneeEmail === user?.email;
+    const canResolve = isAssignedToCurrentUser || isAdmin;
+
+    const canEdit = isAdmin;
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setEditedData(prev => ({
+                    ...prev,
+                    image: reader.result, // Base64
+                    fileName: file.name
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const triggerFileUpload = () => {
@@ -83,24 +126,39 @@ export function DettaglioIssue() {
         }
     }
 
-    const handleSave = () => {
-        setIssue(editedData);
-        setIsEditing(false);
-        console.log("Dati salvati:", editedData);
-    }
+    const handleSave = async () => {
+        try {
+            setIsSaving(true);
+            await updateIssue(id, editedData);
+
+            setIssue(editedData);
+            setIsEditing(false);
+        } catch (err) {
+            alert("Errore durante il salvataggio");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleCancel = () => {
         setEditedData(issue);
         setIsEditing(false);
     };
 
+    const assigneeNameDisplay = issue.assigneeName || mockTeamUsers.find(u => u.email === issue.assigneeEmail)?.nome || issue.assigneeEmail;
+
     const currentData = isEditing ? editedData : issue;
 
-    const handleMarkAsSolved = () => {
-        setIssue(prev => ({
-            ...prev,
-            status: "Risolta"
-        }));
+    const handleMarkAsSolved = async () => {
+        const newData = { ...issue, status: "Risolta" };
+
+        try {
+            await updateIssue(id, newData);
+            setIssue(newData);
+            setEditedData(newData);
+        } catch (err) {
+            alert("Impossibile aggiornare lo stato");
+        }
     };
 
     const handleMarkAsAssigned = () => {
@@ -110,31 +168,6 @@ export function DettaglioIssue() {
             assigneeId: currentData.id
         }));
     };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const previewUrl = URL.createObjectURL(file);
-
-            setEditedData(prev => ({
-                ...prev,
-                image: previewUrl,
-                fileName: file.name
-            }));
-        }
-    };
-    const handleDeleteIssue = () => {
-        if (window.confirm("Sei sicuro di voler eliminare questa issue?")) {
-            console.log("Issue eliminata");
-            navigate('/home-admin');
-        }
-    }
-
-    if (!issue) return <div>Caricamento...</div>;
-
-    const isAssignedToCurrentUser = issue.assigneeId === currentUserId;
-
-    const canResolve = isAssignedToCurrentUser || isAdmin;
 
     return (
         <div className="page-init">
@@ -185,7 +218,7 @@ export function DettaglioIssue() {
 
             <StatusTracker
                 status={isEditing ? editedData.status : issue.status}
-                assigneeName={issue.assignee}
+                assigneeName={assigneeNameDisplay}
                 onMarkAsSolved={handleMarkAsSolved}
                 onMarkAsAssigned={handleOpenAssignPanel}
                 isEditing={isEditing}
@@ -215,9 +248,9 @@ export function DettaglioIssue() {
                         <option value="Question">Question</option>
                     </select>
                 ) : (
-                    <div className={`detail-type-badge type-${issue.type?.toLowerCase()}`}>
-                        {getTypeIcon(issue.type, 20)}
-                        {issue.type}
+                    <div className={`detail-type-badge type-${(issue.type|| "generic").toLowerCase()}`}>
+                        {getTypeIcon(issue.type || "bug", 20)}
+                        {issue.type || "Tipo sconosciuto"}
                     </div>
                 )}
             </div>

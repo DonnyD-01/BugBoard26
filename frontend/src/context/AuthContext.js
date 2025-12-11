@@ -8,51 +8,72 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const parseJwt = (token) => {
+        try {
+            // Divide il token in 3 parti e prende la seconda (Payload)
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        } catch (e) {
+            console.error("Errore decodifica token:", e);
+            return null;
+        }
+    };
+
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
+        const storedRole = localStorage.getItem("userRole");
+        const storedId = localStorage.getItem("userId");
+        const storedEmail = localStorage.getItem("userEmail");
 
-        if (storedToken) {
-            try {
-                const decoded = jwtDecode(storedToken);
-                const currentTime = Date.now() / 1000;
-
-                if (decoded.exp < currentTime) {
-                    logout();
-                } else {
-                    setUser({
-                        id: decoded.id,
-                        role: decoded.admin,
-                        email: decoded.sub,
-                        token: storedToken
-                    });
-                }
-            } catch (error) {
-                console.error("Token non valido", error);
-                logout();
-            }
+        if (storedToken && storedRole) {
+            setUser({
+                token: storedToken,
+                role: storedRole,
+                id: storedId,
+                email: storedEmail
+            });
         }
         setLoading(false);
     }, []);
 
     const login = (token) => {
-        localStorage.setItem("token", token);
         const decoded = jwtDecode(token);
-        const role = decoded.role;
 
-        localStorage.setItem("userRole", role);
+        if (!decoded) {
+            console.error("Token non valido");
+            return;
+        }
+
+        const isBackendAdmin = decoded.admin === true;
+
+        const roleString = isBackendAdmin ? "admin" : "user";
+
+        const userEmail = decoded.sub;
+        const userId = decoded.id;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userRole", roleString);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("userEmail", userEmail);
 
         setUser({
-            id:  decoded.id,
-            role: decoded.admin,
-            email: decoded.sub,
-            token: token
+            token: token,
+            role: roleString,
+            id: userId,
+            email: userEmail
         });
     };
 
     const logout = () => {
         localStorage.removeItem("token");
-
         localStorage.removeItem("userRole");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userEmail");
         setUser(null);
     };
 

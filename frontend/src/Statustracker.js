@@ -44,10 +44,6 @@ export default function StatusTracker({ status, assigneeName, assigneeCognome, o
     return (
         <div className={`status-tracker-container ${themeClass}`}>
 
-            <div className="status-label">
-                {isEditing ? "Seleziona nuovo stato:" : ""}
-            </div>
-
             <div className="stepper-wrapper">
                 {steps.map((stepName, index) => {
 
@@ -64,11 +60,7 @@ export default function StatusTracker({ status, assigneeName, assigneeCognome, o
 
                     return (
                         <React.Fragment key={index}>
-                            <div className={`step-item ${className} ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''} ${isEditing ? 'editable-step' : ''}`} onClick={() => {
-                                if (isEditing && onStatusChange) {
-                                    onStatusChange(stepName);
-                                }
-                            }}>
+                            <div className={`step-item ${className} ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}`}>
                                 <span className="step-text">{stepName}
 
                                     {showAssignee && (

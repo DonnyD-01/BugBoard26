@@ -2,100 +2,54 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import './Login.css'
 import {Eye, EyeOff, AlertCircle, Loader2} from 'lucide-react';
-import { loginUser } from './services/api';
-import { jwtDecode } from "jwt-decode";
+import { loginAPI } from './services/api';
+import LoadingSpinner from "./LoadingSpinner";
 import { useAuth } from './context/AuthContext';
 
 export default function Login() {
 
-    const { login } = useAuth();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
     const [showPassword, setShowPassword] = useState(false);
 
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-
     const navigate = useNavigate();
+    const { login } = useAuth();
 
-    /*const handleLogin = async (e) => { // Nota la keyword 'async'
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
-        // 1. Validazione base
-        if (!email.trim() || !password.trim()) {
-            setError("Per favore, inserisci sia l'email che la password.");
+        if (!email || !password) {
+            setError("Inserisci email e password!");
             return;
         }
 
-        setError("");
-        setIsLoading(true); // Attiva lo spinner
+        setIsLoading(true);
 
         try {
-            // 2. Chiamata al Back-End
-            const data = await loginUser(email, password);
+            // 1. CHIAMIAMO L'API MOCK
+            const response = await loginAPI(email, password);
 
-            // 3. Il server ti risponde. Di solito l'oggetto ha un campo 'accessToken' o 'token'
-            // Chiedi al collega come si chiama il campo. Ipotizziamo 'accessToken'.
-            const token = data.accessToken;
+            if (response.success) {
+                // 2. PASSIAMO IL TOKEN FINTO AL CONTEXT
+                // Il context lo decodificherà, vedrà "admin": true/false e imposterà il ruolo
+                login(response.accessToken);
 
-            if (!token) throw new Error("Token non ricevuto dal server");
-
-            // 4. Salva il token nel browser
-            localStorage.setItem("token", token);
-
-            // 5. Decodifica il token per leggere il ruolo
-            const decoded = jwtDecode(token);
-
-            // Ipotizziamo che nel token ci sia un campo "role" o "roles"
-            // Esempio: decoded.role = "ADMIN" o "USER"
-            const userRole = decoded.role || "user";
-
-            // 6. Reindirizzamento in base al ruolo
-            if (userRole === "admin" || userRole === "ADMIN") {
-                console.log("Login come Admin");
-                navigate('/admin/home'); // Assicurati che la rotta nel Router sia questa
+                // 3. REINDIRIZZIAMO
+                navigate('/progetti');
             } else {
-                console.log("Login come Utente");
-                navigate('/home-utente'); // Assicurati che la rotta nel Router sia questa
+                setError("Credenziali non valide");
             }
 
         } catch (err) {
-            console.error("Errore Login:", err);
-            setError("Email o password non corretti."); // Messaggio per l'utente
+            setError("Errore durante il login. Riprova.");
         } finally {
-            setIsLoading(false); // Spegni lo spinner in ogni caso
+            setIsLoading(false);
         }
-    }*/
-
-    const handleLogin = (e) => {
-        e.preventDefault();
-
-        if (!email.trim() || !password.trim()) {
-            setError("Per favore, inserisci sia l'email che la password.");
-            return;
-        }
-
-        setError("");
-        console.log("Login tentato con:", email);
-
-        let userRole = "user";
-
-        if (email.toLowerCase().includes("admin")) {
-            userRole = "admin";
-        }
-
-        localStorage.setItem("userRole", userRole);
-        if (userRole === "admin") {
-            console.log("Login come Admin");
-            navigate('/progetti');
-        } else {
-            console.log("Login come Utente");
-            navigate('/progetti');
-        }
-        //logica di login
-
-    }
+    };
 
     return (
         <div className="login-page">
@@ -109,7 +63,7 @@ export default function Login() {
                     <span>{error}</span>
                 </div>}
 
-                <form onSubmit={handleLogin} className="login-form">
+                <form onSubmit={handleSubmit} className="login-form">
                     <div className="floating-label-group login-input-group">
                         <input autoFocus
                             type="email"
@@ -146,10 +100,10 @@ export default function Login() {
                         )}
                     </div>
 
-                    <button onClick={handleLogin} className="btnAccedi" disabled={isLoading}>
+                    <button onClick={handleSubmit} className="btnAccedi" disabled={isLoading}>
                         {isLoading ? (
                             <span style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                                <Loader2 className="animate-spin" size={20} /> Accesso...
+                                <LoadingSpinner message="Accesso..."/>
                             </span>
                         ) : (
                             "Entra"

@@ -19,21 +19,25 @@ import { AuthProvider } from './context/AuthContext';
 
 const LayoutUtente = () => {
     return (
-        <>
+        <div className="app-layout-wrapper">
             <NavbarUtente />
-            <Outlet />
+            <div className="main-content-wrapper">
+                <Outlet />
+            </div>
             <Footer />
-        </>
+        </div>
     );
 };
 
 const LayoutAdmin = () => {
     return (
-        <>
-            <NavbarAmministratore/> {}
-            <Outlet/>
+        <div className="app-layout-wrapper">
+            <NavbarAmministratore/>
+            <div className="main-content-wrapper">
+                <Outlet/>
+            </div>
             <Footer/>
-        </>
+        </div>
     );
 }
 

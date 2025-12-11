@@ -48,6 +48,32 @@ body {
     padding: 20px;
 }
 
+/* App.css */
+
+/* Wrapper principale che avvolge Navbar, Pagina e Footer */
+.app-layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Altezza minima: 100% della finestra visibile */
+}
+
+/* Il contenitore dove viene renderizzata la pagina (Outlet) */
+.main-content-wrapper {
+    flex: 1; /* Occupa tutto lo spazio disponibile */
+    display: flex; /* Opzionale: utile se vuoi centrare contenuti di loading */
+    flex-direction: column;
+}
+
+/* Opzionale: Per centrare verticalmente il loading nella pagina */
+.homepage-loading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh; /* Sicurezza extra */
+}
+
 .campo {
     font-family: "NeueHaasGroteskDisp Pro", sans-serif;
     font-size: 14pt;

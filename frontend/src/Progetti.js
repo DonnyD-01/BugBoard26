@@ -1,24 +1,57 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Progetti.css';
-import { Search, Folder, Clock, CheckCircle, XCircle, ChevronRight, LogOut } from 'lucide-react';
+import { Search, Folder, Clock, CheckCircle, XCircle, ChevronRight, LogOut, AlertCircle } from 'lucide-react';
 import { mockProjects } from './utils';
 import  Footer from "./Footer";
+import { useAuth } from './context/AuthContext';
+import { getProjectsByUserId, getAssignedActiveProjectsFromUserId } from './services/api';
+import LoadingSpinner from './LoadingSpinner';
 
 export function Progetti() {
     const navigate = useNavigate();
+    const { user, logout, isAdmin } = useAuth();
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
 
-    const userRole = localStorage.getItem("userRole");
-    const isAdmin = userRole === "admin";
+    useEffect(() => {
+        const fetchProjects = async () => {
+            // Se non c'è un utente (es. refresh pagina veloce), aspettiamo o gestiamo
+            if (!user || !user.id) return;
 
-    const filteredProjects = mockProjects.filter(project => {
+            try {
+                setLoading(true);
+                // Chiamata al Backend passando l'ID dell'utente loggato
+                let data;
+
+                if (isAdmin) {
+                    // SE ADMIN: Voglio vedere TUTTO lo storico (Attivi, Chiusi, Sospesi)
+                    // Chiamo la funzione generica
+                    data = await getProjectsByUserId(user.id);
+                } else {
+                    // SE UTENTE: Voglio vedere SOLO quelli su cui posso lavorare ora
+                    // Chiamo la funzione specifica del backend
+                    data = await getAssignedActiveProjectsFromUserId(user.id);
+                }
+
+                setProjects(data);
+            } catch (err) {
+                console.error(err);
+                setError("Impossibile caricare i progetti.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProjects();
+    }, [user, isAdmin]);
+
+    const filteredProjects = projects.filter(project => {
         const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             project.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-        const isVisible = isAdmin ? true : project.status !== "Chiuso";
-
-        return matchesSearch && isVisible;
+        return matchesSearch;
     });
 
     const getStatusConfig = (status) => {
@@ -35,15 +68,33 @@ export function Progetti() {
     };
 
     const handleProjectClick = (projectId) => {
-        // Qui navighi alla lista issue di QUEL progetto specifico
-        // Es: navigate(`/progetti/${projectId}/issues`);
-        // Per ora rimandiamo alla home utente generica o dove preferisci
+        localStorage.setItem("currentProjectId", projectId);
+
         if (isAdmin) {
             navigate('/admin/home');
         } else {
             navigate('/home');
         }
     };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
+    if (loading) return <LoadingSpinner message="Recupero i tuoi progetti..." />;
+
+    if (error) return (
+        <div style={{padding: 40, textAlign: 'center', color: 'red', display:'flex', flexDirection:'column', alignItems:'center', gap:10}}>
+            <AlertCircle size={48} />
+            <p>{error}</p>
+            <button className="btnEsci-project" onClick={() => window.location.reload()}>Riprova</button>
+        </div>
+    );
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <div className="projects-page">
@@ -52,15 +103,12 @@ export function Progetti() {
 
                 <div className="logo-header">
                     <img src="/Logo/LogoBugBoard26.svg" alt="Logo" className="logo-projects"/>
-                    <button className="btnEsci-project"
-
-                            onClick={() => navigate('/')}
-                    >
+                    <button className="btnEsci-project" onClick={handleLogout}>
                         <LogOut size={30}/> Esci
                     </button>
                 </div>
 
-                <h1>Benvenuto, Gennaro</h1>
+                <h1>Benvenuto, {user.nome || user.email?.split('@')[0] || "Utente"}</h1>
                 <p className="subtitle">Seleziona un progetto per entrare</p>
 
                 <div className="projects-actions-bar">
@@ -103,7 +151,9 @@ export function Progetti() {
                     ) : (
                         <div className="no-results-box">
                             <Folder size={48} color="#B0B0B0" strokeWidth={1}/>
-                            <p>Nessun progetto trovato.</p>
+                            <p>{searchTerm
+                                ? "Nessun progetto corrisponde alla ricerca."
+                                : "Non hai progetti attivi al momento."}</p>
                         </div>
                     )}
                 </div>

@@ -1,8 +1,9 @@
 import './SegnalaIssue.css';
-import './NavbarUtente.js';
 import React, {useEffect, useState} from "react";
 import {AlertTriangle, CircleCheck, Image as ImageIcon, X} from "lucide-react";
 import {useLocation, useNavigate} from "react-router-dom";
+import {createIssue} from "./services/api";
+import { useAuth } from './context/AuthContext';
 
 const issueTypes = [
     { id: 1, title: "Question", desc: "Per richieste di chiarimenti" },
@@ -14,9 +15,10 @@ const issueTypes = [
 export default function SegnalaIssue() {
 
     const navigate = useNavigate();
-
     const location = useLocation();
-    const isAdmin = location.pathname.includes("/admin");
+
+    const { user, isAdmin } = useAuth();
+    const currentProjectId = localStorage.getItem("currentProjectId");
 
     const homePath = isAdmin ? '/admin/home' : '/home';
 
@@ -29,6 +31,9 @@ export default function SegnalaIssue() {
 
     const [showSuccess, setShowSuccess] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const isFormValid = selectedType && title && description;
 
@@ -81,21 +86,64 @@ export default function SegnalaIssue() {
         }
     };
 
-    const handleReset = () => {
-        setSelectedType(null);
-        setTitle("");
-        setDescription("");
-        setPriority(3);
-        setImage(null);
-        setFileName("");
-    };
+    const handleSubmit = async () => {
+        if (!isFormValid) return;
 
-    const handleSubmit = () => {
-        setShowSuccess(true);
+        if (!user || !user.id) {
+            setErrorMsg("Errore: Utente non identificato. Effettua nuovamente il login.");
+            return;
+        }
+
+        if (!currentProjectId) {
+            setErrorMsg("Errore: Nessun progetto selezionato.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        setErrorMsg(null);
+
+        // A. Convertiamo l'ID del tipo (1,2..) nella stringa che si aspetta il backend ("Bug", "Feature"...)
+        const selectedTypeObj = issueTypes.find(t => t.id === selectedType);
+        const typeString = selectedTypeObj ? selectedTypeObj.title : "Generic";
+
+        // B. Creiamo l'oggetto Payload (DTO)
+        const newIssueData = {
+            tipo: typeString,
+            titolo: title,
+            description: description,
+            priorita: priority,
+            linkImmagine: image,
+            stato: "ToDo",
+            assignee: null
+        };
+
+        try {
+            await createIssue(currentProjectId, user.id, newIssueData);
+
+            setIsSubmitting(false);
+            setShowSuccess(true);
+        } catch (error) {
+            console.error(error);
+            setIsSubmitting(false);
+            setErrorMsg("Si è verificato un errore durante l'invio. Riprova più tardi.");
+        }
     }
 
     return (
         <div className="segnalaissue">
+
+            {errorMsg && (
+                <div className="error-banner" style={{
+                    backgroundColor: '#ffebee', color: '#c62828', padding: '15px',
+                    margin: '20px auto', maxWidth: '800px', borderRadius: '8px', border: '1px solid #ffcdd2',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                }}>
+                    <span>{errorMsg}</span>
+                    <button onClick={() => setErrorMsg(null)} style={{background:'none', border:'none', cursor:'pointer'}}>
+                        <X size={18} color="#c62828"/>
+                    </button>
+                </div>
+            )}
 
             {showSuccess && (
                 <div className="success-overlay">

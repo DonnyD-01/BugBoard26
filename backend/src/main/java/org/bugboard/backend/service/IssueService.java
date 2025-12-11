@@ -28,15 +28,12 @@ public class IssueService {
         this.progettoRepo = progettoRepo;
     }
 
-    public List<Issue> getAllAssignedIssues(int userId) {
-        Utente user = applicationContext.getBean(Utente.class);
+    public List<Issue> getAllAssignedIssues(int projectId,int userId) {
+        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtente(projectId,userId);
+    }
 
-        Optional<Utente> optUser = utenteRepo.findById(userId);
-        if (optUser.isPresent()) {
-            user = optUser.get();
-        }
-
-        return issueRepo.findIssuesByUtenteAssegnato(user);
+    public List<Issue> getAllIssuesFromProject(int projectId) {
+        return issueRepo.findIssuesByProgetto_IdProgetto(projectId);
     }
 
     public Issue getIssue(int issueId) {

@@ -55,16 +55,24 @@ public class UtenteService {
 
     @Transactional
     public Utente assignProjectToUser(int projectId, int userId) {
-        Utente user = applicationContext.getBean(Utente.class);
-        Progetto project = applicationContext.getBean(Progetto.class);
+        applicationContext.getBean(Utente.class);
+        applicationContext.getBean(Progetto.class);
+        Utente user;
+        Progetto project;
 
         Optional<Utente> optUser = utenteRepo.findById(userId);
         if(optUser.isPresent()){
             user=optUser.get();
         }
+        else {
+            return null;
+        }
         Optional<Progetto> optProject = progettoRepo.findById(projectId);
         if(optProject.isPresent()){
             project=optProject.get();
+        }
+        else {
+            return null;
         }
 
         Set<Progetto> projectSet = user.getProgettiAssegnati();

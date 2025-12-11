@@ -18,9 +18,16 @@ public class IssueController {
         this.service = service;
     }
 
-    @GetMapping("/{userId}/issues")
-    public ResponseEntity<List<Issue>> getAllAssignedIssues(@PathVariable int userId) {
-        return new ResponseEntity<>(service.getAllAssignedIssues(userId), HttpStatus.OK);
+    @GetMapping("/{projectId}/{userId}/issues")
+    public ResponseEntity<List<Issue>> getAllAssignedIssues(
+            @PathVariable int projectId,
+            @PathVariable int userId) {
+        return new ResponseEntity<>(service.getAllAssignedIssues(projectId,userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{projectId}/issues")
+    public ResponseEntity<List<Issue>> getAllIssuesFromProject(@PathVariable int projectId) {
+        return new ResponseEntity<>(service.getAllIssuesFromProject(projectId), HttpStatus.OK);
     }
 
     @GetMapping("/issue/{issueId}")

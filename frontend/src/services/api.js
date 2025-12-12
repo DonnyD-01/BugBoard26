@@ -1,50 +1,64 @@
-import {mockIssues, mockProjects, mockProjectsIssues} from "../utils";
+import {mockIssues, mockProjects, mockProjectsIssues, mockTeamUsers, potentialUsersToAdd} from "../utils";
 
 const BASE_URL = "http://localhost:8080/api";
 
-// src/services/api.js
-
-// ... (lascia pure le altre funzioni come getIssues, createIssue ecc.) ...
-
 export const loginAPI = async (email, password) => {
-
-    // Simuliamo il ritardo del server
     return new Promise((resolve, reject) => {
         setTimeout(() => {
+            console.log(`LOGIN: Tento accesso con ${email}`);
 
-            // 1. LOGICA DI SIMULAZIONE RUOLO
-            // Se la mail contiene "admin", sarà admin (true), altrimenti user (false)
-            const isAdmin = email.toLowerCase().includes("admin");
+            const foundUser = mockTeamUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
 
-            // 2. CREIAMO IL PAYLOAD JSON (Esattamente come il tuo backend)
+            let userId;
+            let isAdmin;
+            let userEmail = email;
+
+            if (foundUser) {
+                userId = foundUser.idUtente || foundUser.id;
+                isAdmin = foundUser.isAdmin === true || foundUser.role === 'admin';
+                console.log(`LOGIN: Utente trovato: ${foundUser.nome} (ID: ${userId})`);
+            } else {
+                // FALLBACK (Se usi una mail non presente nel mock, es. test rapidi)
+                console.warn("LOGIN: Utente non trovato nel mock, uso identità generica.");
+                isAdmin = email.toLowerCase().includes("admin");
+                userId = isAdmin ? 300 : 200; // 300 Luigi (Admin), 200 Mario (User)
+            }
+
+            // 2. CREIAMO IL PAYLOAD CON L'ID CORRETTO
             const payload = {
-                admin: isAdmin,           // IL TUO BOOLEANO
-                id: isAdmin ? 100 : 200,  // ID finto (100 admin, 200 user)
-                sub: email,               // L'email
+                admin: isAdmin,
+                id: userId, // Qui ora c'è l'ID specifico di Walter (es. 1)
+                sub: userEmail,
                 iat: Math.floor(Date.now() / 1000),
-                exp: Math.floor(Date.now() / 1000) + (60 * 60) // Scade tra 1 ora
+                exp: Math.floor(Date.now() / 1000) + (60 * 60)
             };
 
-            // 3. GENERIAMO UN FINTO TOKEN JWT
-            // Un JWT è fatto da: Header.Payload.Signature
-            // A noi serve solo che il Payload (la parte centrale) sia Base64 valido.
-
             const fakeHeader = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
-            const fakePayload = btoa(JSON.stringify(payload)); // Codifichiamo il JSON in Base64
-            const fakeSignature = "firma-finta-inutile-per-il-frontend";
+            const fakePayload = btoa(JSON.stringify(payload));
+            const fakeSignature = "firma-finta";
 
-            const fakeJwtToken = `${fakeHeader}.${fakePayload}.${fakeSignature}`;
-
-            console.log("LOGIN MOCK: Token Generato:", payload);
-
-            // Restituiamo il token come farebbe il server reale
             resolve({
                 success: true,
-                accessToken: fakeJwtToken
+                accessToken: `${fakeHeader}.${fakePayload}.${fakeSignature}`
             });
 
-        }, 800); // 800ms di attesa
+        }, 800);
     });
+
+    /*
+    * const response = await fetch(`${BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) throw new Error("Credenziali errate");
+
+    // Il backend restituisce: { accessToken: "eyJhbGc..." }
+    return await response.json();
+    *
+    *
+    * */
 };
 
 const getHeaders = () => {
@@ -54,7 +68,6 @@ const getHeaders = () => {
         'Authorization': token ? `Bearer ${token}` : ''
     };
 };
-
 
 export const loginUser = async (email, password) => {
     const response = await fetch(`${BASE_URL}/auth/login`, {
@@ -259,5 +272,158 @@ export const getIssuesByProjectId = async (projectId) => {
 
             resolve(mappedIssues);
         }, 800);
+    });
+};
+
+export const getUsersByProjectId = async (projectId) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`API: Recupero utenti per ProjectID: ${projectId}`);
+
+            /* CHIAMATA REALE AL BACKEND:
+            const response = await fetch(`${BASE_URL}/projects/${projectId}/users`, {
+                method: 'GET',
+                headers: getHeaders()
+            });
+            const data = await response.json();
+            resolve(data);
+            */
+
+            // SIMULAZIONE
+            // Restituiamo tutti gli utenti (il filtro isAdmin lo facciamo nel frontend o nel backend a scelta)
+            // Qui simulo che il backend restituisca tutti i partecipanti al progetto
+            const dbUsers = mockTeamUsers;
+
+            const mappedUsers = dbUsers.map(u => ({
+                id: u.idUtente,
+                nome: u.nome,
+                cognome: u.cognome,
+                email: u.email,
+                role: u.isAdmin === true ? 'admin' : 'user',
+
+                telefono: u.numeroTelefono || u.telefono,
+                dataNascita: u.dataNascita
+            }));
+
+            resolve(mappedUsers);
+        }, 600);
+    });
+};
+
+export const createUser = async (userData) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log("API: Creazione Utente...", userData);
+
+            // SIMULAZIONE BACKEND (Java accetta questi campi)
+            // L'ID viene generato dal DB
+            const newUser = {
+                idUtente: Math.floor(Math.random() * 10000),
+                nome: userData.nome,
+                cognome: userData.cognome,
+                dataNascita: userData.dataNascita,
+                email: userData.email,
+                numeroTelefono: userData.numeroTelefono,
+                password: userData.password,
+                isAdmin: userData.role === 'admin'
+            };
+
+            /* FETCH REALE:
+            const response = await fetch(`${BASE_URL}/users`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify(newUser)
+            });
+            return await response.json();
+            */
+
+            console.log("API: Utente Creato con successo:", newUser);
+            resolve(newUser);
+        }, 1000);
+    });
+};
+
+export const assignProjectToUser = async (userId, projectId) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`API: Assegnazione Utente ${userId} al Progetto ${projectId}`);
+
+            /* FETCH REALE:
+            const response = await fetch(`${BASE_URL}/projects/${projectId}/users/${userId}`, {
+                method: 'POST',
+                headers: getHeaders()
+            });
+            */
+
+            resolve({ success: true });
+        }, 500);
+    });
+};
+
+export const getAllUsersExceptProject = async (projectId) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`API: Recupero utenti NON nel progetto ${projectId}`);
+
+            // SIMULAZIONE:
+            // Restituiamo la lista "potentialUsersToAdd" dal file utils.js
+            // In un caso reale: GET /users?excludeProjectId={projectId}
+
+            const mappedUsers = potentialUsersToAdd.map(u => ({
+                id: u.idUtente || u.id,
+                nome: u.nome,
+                cognome: u.cognome,
+                email: u.email,
+                role: (u.isAdmin === true || u.role === 'admin') ? 'admin' : 'user',
+                telefono: u.numeroTelefono || u.telefono,
+                dataNascita: u.dataNascita
+            }));
+
+            resolve(mappedUsers);
+        }, 600);
+    });
+};
+
+export const getUserById = async (id) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log(`API: Recupero profilo utente ID: ${id}`);
+
+            // Cerca nel mock (o chiamata reale)
+            const found = mockTeamUsers.find(u => u.idUtente == id);
+
+            if (found) {
+                resolve({
+                    id: found.idUtente,
+                    nome: found.nome,
+                    cognome: found.cognome,
+                    email: found.email,
+                    telefono: found.telefono,
+                    dataNascita: found.dataNascita,
+                    password: "passwordSegreta",
+                    role: found.role
+                });
+            } else {
+                reject(new Error("Utente non trovato"));
+            }
+        }, 600);
+    });
+};
+
+export const updateUser = async (id, userData) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log(`API: Aggiornamento utente ${id}`, userData);
+
+            // Qui faresti la PUT al backend
+            /*
+            await fetch(`${BASE_URL}/users/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
+            */
+
+            resolve({ success: true });
+        }, 1000);
     });
 };

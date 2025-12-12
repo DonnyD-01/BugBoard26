@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import './DettaglioIssue.css';
-import {ArrowLeft, Edit2, Trash2, Save, X, Image as ImageIcon, Upload, UploadCloud, AlertCircle} from 'lucide-react';
+import {ArrowLeft, Edit2, Trash2, Save, X, Image as ImageIcon, Upload, UploadCloud, AlertCircle, AlertTriangle} from 'lucide-react';
 import {getTypeIcon, getStatusIcon, getStatusColor, mockIssues, mockTeamUsers} from './utils';
 import StatusTracker from "./Statustracker";
 import AssegnaIssue from "./AssegnaIssue";
@@ -12,7 +12,6 @@ import { getIssueById, updateIssue, deleteIssue } from './services/api';
 export function DettaglioIssue() {
     const {id} = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { user, isAdmin } = useAuth();
 
@@ -24,6 +23,9 @@ export function DettaglioIssue() {
     const [editedData, setEditedData] = useState(null);
     const [showAssignPanel, setShowAssignPanel] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fileInputRef = useRef(null);
 
@@ -60,8 +62,7 @@ export function DettaglioIssue() {
         const newData = {
             ...issue,
             status: "Assegnata",
-            assigneeEmail: selectedUser.email, // Salva l'email (EmailAss)
-            assigneeName: selectedUser.nome
+            assigneeEmail: selectedUser.email
         };
 
         try {
@@ -78,16 +79,22 @@ export function DettaglioIssue() {
         setEditedData(prev => ({ ...prev, status: newStatus }));
     };
 
-    const handleDeleteIssue = async () => {
-        if (window.confirm("Sei sicuro di voler eliminare questa issue? Questa azione è irreversibile.")) {
-            try {
-                await deleteIssue(id);
-                navigate(isAdmin ? '/admin/home' : '/home');
-            } catch (err) {
-                alert("Errore durante l'eliminazione");
-            }
+    const handleDeleteClick = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            setIsDeleting(true);
+            await deleteIssue(id);
+            // Naviga via dopo successo
+            navigate(isAdmin ? '/admin/home' : '/home');
+        } catch (err) {
+            alert("Errore durante l'eliminazione");
+            setIsDeleting(false); // Riabilita se fallisce
+            setShowDeleteConfirm(false);
         }
-    }
+    };
 
     if (loading) return <LoadingSpinner message="Caricamento dettaglio..." />;
 
@@ -172,9 +179,41 @@ export function DettaglioIssue() {
     return (
         <div className="page-init">
 
+            {showDeleteConfirm && (
+                <div className="overlay-delete">
+                    <div className="card-delete">
+                        <div className="icon-box-delete">
+                            <AlertTriangle size={48} color="#d32f2f" />
+                        </div>
+                        <h2>Sei sicuro?</h2>
+                        <p>
+                            Stai per eliminare definitivamente la issue.
+                            <br/>Questa azione è irreversibile.
+                        </p>
+
+                        <div className="delete-actions">
+                            <button
+                                className="btn-cancel-delete"
+                                onClick={() => setShowDeleteConfirm(false)}
+                                disabled={isDeleting}
+                            >
+                                Annulla
+                            </button>
+                            <button
+                                className="btn-confirm-delete"
+                                onClick={confirmDelete}
+                                disabled={isDeleting}
+                            >
+                                {isDeleting ? "Eliminazione..." : "Elimina Issue"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {showAssignPanel && (
                 <AssegnaIssue
-                    users={mockTeamUsers}
+                    projectId={issue.projectId}
                     onSelect={handleAssignUser}
                     onClose={() => setShowAssignPanel(false)}
                 />
@@ -209,7 +248,7 @@ export function DettaglioIssue() {
                     )}
 
                     {isAdmin && !isEditing && (
-                        <button className="btn-delete-issue" onClick={handleDeleteIssue}>
+                        <button className="btn-delete-issue" onClick={handleDeleteClick}>
                             <Trash2 size={20}/> Elimina Issue
                         </button>
                     )}

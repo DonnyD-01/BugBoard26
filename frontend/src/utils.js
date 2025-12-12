@@ -35,10 +35,48 @@ export const mockIssues = [
 ];
 
 export const mockTeamUsers = [
-    { id: 100, nome: "Gennaro", cognome: "Esposito", email: "gennaro@email.com", role: "user" },
-    { id: 200, nome: "Mario", cognome: "Rossi", email: "mario@email.com", role: "user" },
-    { id: 300, nome: "Luigi", cognome: "Verdi", email: "luigi@email.com", role: "user" },
-    { id: 400, nome: "Anna", cognome: "Bianchi", email: "anna@email.com", role: "user" },
+    {
+        idUtente: 1,
+        nome: "Walter",
+        cognome: "Filosa",
+        email: "walter@email.com",
+        dataNascita: "2003-01-10",
+        telefono: "3348443511",
+        isAdmin: false
+    },
+    {
+        idUtente: 100,
+        nome: "Gennaro",
+        cognome: "Esposito",
+        email: "gennaro@email.com",
+        telefono: "3331122334",
+        isAdmin: false // Utente normale (DEV)
+    },
+    {
+        idUtente: 200,
+        nome: "Mario",
+        cognome: "Rossi",
+        dataNascita: "2025-12-12",
+        email: "mario@email.com",
+        telefono: "3334455667",
+        isAdmin: false // Utente normale (DEV)
+    },
+    {
+        idUtente: 300,
+        nome: "Luigi",
+        cognome: "Verdi",
+        email: "luigi@admin.com",
+        numeroTelefono: "3337788990",
+        isAdmin: true // ADMIN (Non deve comparire nella lista di assegnazione)
+    },
+    {
+        idUtente: 400,
+        nome: "Anna",
+        cognome: "Bianchi",
+        email: "anna@email.com",
+        numeroTelefono: "3330000000",
+        isAdmin: false // Utente normale (DEV)
+    }
 ];
 
 export const mockUsers = [

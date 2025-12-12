@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './HomePage.css'
 import {useLocation, useNavigate} from "react-router-dom";
-import { getTypeIcon } from './utils';
+import { getTypeIcon, getStatusColor, getStatusIcon } from './utils';
 import { ChevronUp, ChevronDown, AlertCircle} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
 import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
-import {mockIssues, getStatusColor, getStatusIcon} from "./utils";
-import {getIssues, getIssuesByProjectId} from "./services/api";
+import { getIssuesByProjectId } from "./services/api";
 import LoadingSpinner from './LoadingSpinner';
 import {useAuth} from "./context/AuthContext";
 

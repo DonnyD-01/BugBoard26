@@ -8,33 +8,17 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const parseJwt = (token) => {
-        try {
-            // Divide il token in 3 parti e prende la seconda (Payload)
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
-        } catch (e) {
-            console.error("Errore decodifica token:", e);
-            return null;
-        }
-    };
-
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedRole = localStorage.getItem("userRole");
         const storedId = localStorage.getItem("userId");
         const storedEmail = localStorage.getItem("userEmail");
 
-        if (storedToken && storedRole) {
+        if (storedToken && storedRole && storedId) {
             setUser({
                 token: storedToken,
                 role: storedRole,
-                id: storedId,
+                idUtente: storedId,
                 email: storedEmail
             });
         }
@@ -54,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         const roleString = isBackendAdmin ? "admin" : "user";
 
         const userEmail = decoded.sub;
-        const userId = decoded.id;
+        const userId = decoded.id || decoded.idUtente;
 
         localStorage.setItem("token", token);
         localStorage.setItem("userRole", roleString);

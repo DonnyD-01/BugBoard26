@@ -1,26 +1,71 @@
 import React, {useEffect, useState} from 'react';
 import './GestisciUtenti.css';
 import { useNavigate } from 'react-router-dom';
-import { mockUsers, potentialUsersToAdd } from './utils';
-import { Search, ChevronDown, ChevronUp, UserPlus, ShieldCheck, User2, CircleCheck} from "lucide-react";
+import {mockTeamUsers, mockUsers, potentialUsersToAdd} from './utils';
+import {Search, ChevronDown, ChevronUp, UserPlus, ShieldCheck, User2, CircleCheck, AlertCircle} from "lucide-react";
 import DettaglioUtente from './DettaglioUtente';
 import AggiungiUtenteEsistente from "./AggiungiUtenteEsistente";
+import LoadingSpinner from './LoadingSpinner';
+import { getUsersByProjectId, getAllUsersExceptProject, assignProjectToUser } from './services/api';
 
 export default function GestisciUtenti() {
 
     const navigate = useNavigate();
 
-    const [usersList, setUsersList] = useState(mockUsers);
+    const currentProjectId = localStorage.getItem("currentProjectId") || 1;
 
-    const [availableUsers, setAvailableUsers] = useState(potentialUsersToAdd);
+    const [loading, setLoading] = useState(true);   // <--- MANCAVA QUESTA
+    const [error, setError] = useState(null);
+
+    const [usersList, setUsersList] = useState([]);
+
+    const [showAddPanel, setShowAddPanel] = useState(false);
+    const [availableUsers, setAvailableUsers] = useState([]); // Lista utenti fuori progetto
+    const [loadingAvailable, setLoadingAvailable] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [roleFilter, setRoleFilter] = useState("All"); // 'All', 'admin', 'user'
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
 
-    const [showAddPanel, setShowAddPanel] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [addedUserName, setAddedUserName] = useState("");
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const fetchProjectUsers = async () => {
+        try {
+            setLoading(true);
+            const data = await getUsersByProjectId(currentProjectId);
+            setUsersList(data);
+        } catch (err) {
+            console.error(err);
+            setError("Impossibile caricare la lista utenti.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (currentProjectId) {
+            fetchProjectUsers();
+        }
+    }, [currentProjectId]);
+
+    useEffect(() => {
+        const fetchAvailableUsers = async () => {
+            if (showAddPanel) {
+                try {
+                    setLoadingAvailable(true);
+                    const data = await getAllUsersExceptProject(currentProjectId);
+                    setAvailableUsers(data);
+                } catch (err) {
+                    console.error("Errore caricamento utenti disponibili", err);
+                } finally {
+                    setLoadingAvailable(false);
+                }
+            }
+        };
+        fetchAvailableUsers();
+    }, [showAddPanel, currentProjectId]);
 
     useEffect(() => {
         if (showSuccess) {
@@ -29,11 +74,11 @@ export default function GestisciUtenti() {
         }
     }, [showSuccess]);
 
-    const filteredUsers = mockUsers.filter(user => {
+    const filteredUsers = usersList.filter(user => {
         const matchesSearch =
-            user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.cognome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase());
+            (user.nome || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.cognome || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.email || "").toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesRole = roleFilter === "All" || user.role === roleFilter;
 
@@ -71,19 +116,27 @@ export default function GestisciUtenti() {
             : <ChevronDown size={16} className="sort-icon active" />;
     };
 
-    const handleUserSelectedToAdd = (userToAdd) => {
-        // 1. Qui faresti la chiamata al BACK-END
-        // await api.addUserToProject(userToAdd.id);
+    const handleUserSelectedToAdd = async (userToAdd) => {
         console.log(`ID inviato al backend: ${userToAdd.id}`);
 
-        // 2. Aggiorniamo il Frontend
-        setUsersList(prev => [...prev, userToAdd]);
-        setAvailableUsers(prev => prev.filter(u => u.id !== userToAdd.id));
+        try {
+            // 1. Chiamata API al Backend
+            await assignProjectToUser(userToAdd.id, currentProjectId);
 
-        // 3. Chiudi pannello e mostra successo
-        setShowAddPanel(false);
-        setAddedUserName(`${userToAdd.nome} ${userToAdd.cognome}`);
-        setShowSuccess(true);
+            // 2. Aggiornamento Ottimistico Frontend
+            // Aggiungiamo alla lista principale
+            setUsersList(prev => [...prev, userToAdd]);
+            // Rimuoviamo dalla lista "disponibili"
+            setAvailableUsers(prev => prev.filter(u => u.id !== userToAdd.id));
+
+            // 3. Feedback
+            setShowAddPanel(false);
+            setAddedUserName(`${userToAdd.nome} ${userToAdd.cognome}`);
+            setShowSuccess(true);
+
+        } catch (err) {
+            alert("Errore durante l'aggiunta dell'utente.");
+        }
     };
 
     const handleAddUser = () => {
@@ -91,7 +144,15 @@ export default function GestisciUtenti() {
         navigate('/admin/nuovo-utente');
     };
 
-    const [selectedUser, setSelectedUser] = useState(null);
+    if (loading) return <LoadingSpinner message="Caricamento utenti..." />;
+
+    if (error) return (
+        <div style={{padding: 40, textAlign: 'center', color: 'red'}}>
+            <AlertCircle size={48} style={{margin:'0 auto 10px'}}/>
+            <p>{error}</p>
+            <button className="btn-action" onClick={() => window.location.reload()} style={{marginTop:20}}>Riprova</button>
+        </div>
+    );
 
     return (
         <div className="homepage">
@@ -117,6 +178,7 @@ export default function GestisciUtenti() {
             {showAddPanel && (
                 <AggiungiUtenteEsistente
                     users={availableUsers}
+                    loading={loadingAvailable}
                     onSelect={handleUserSelectedToAdd}
                     onClose={() => setShowAddPanel(false)}
                 />

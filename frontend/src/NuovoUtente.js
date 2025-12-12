@@ -15,9 +15,12 @@ import {
     ArrowLeft
 } from "lucide-react";
 import PrefixMenu from "./PrefixMenu";
+import { createUser, assignProjectToUser } from './services/api';
 
 export default function NuovoUtente() {
     const navigate = useNavigate();
+
+    const currentProjectId = localStorage.getItem("currentProjectId");
 
     const [formData, setFormData] = useState({
         nome: '',
@@ -37,6 +40,9 @@ export default function NuovoUtente() {
     const [showSuccess, setShowSuccess] = useState(false);
 
     const [showWarning, setShowWarning] = useState(false);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const hasUnsavedChanges =
         formData.nome !== '' ||
@@ -85,11 +91,45 @@ export default function NuovoUtente() {
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
     }, [hasUnsavedChanges, showSuccess]);
 
-    const handleSubmit = () => {
-        // Qui andrebbe la chiamata API al backend per creare l'utente
-        console.log("Creazione utente:", formData);
+    const handleSubmit = async () => {
+        if (!isFormValid) return;
 
-        setShowSuccess(true);
+        // Controllo ProjectID
+        if (!currentProjectId) {
+            setErrorMsg("Errore: Nessun progetto selezionato. Impossibile assegnare l'utente.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        setErrorMsg(null);
+
+        const userPayload = {
+            nome: formData.nome,
+            cognome: formData.cognome,
+            dataNascita: formData.dataNascita,
+            email: formData.email,
+            numeroTelefono: `${formData.prefisso} ${formData.telefono}`,
+            password: formData.password,
+            role: formData.role
+        };
+
+        try {
+            const createdUser = await createUser(userPayload);
+
+            if (createdUser && createdUser.idUtente) {
+                await assignProjectToUser(createdUser.idUtente, currentProjectId);
+
+                setShowSuccess(true);
+            } else {
+                throw new Error("Creazione fallita: ID utente non ricevuto.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            setErrorMsg("Si è verificato un errore durante la creazione. Riprova.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleCancelRequest = () => {
@@ -124,6 +164,15 @@ export default function NuovoUtente() {
                         <h2>Utente Creato!</h2>
                         <p>L'account per <b>{formData.nome} {formData.cognome}</b> è stato creato con successo.</p>
                     </div>
+                </div>
+            )}
+
+            {errorMsg && (
+                <div style={{
+                    backgroundColor: '#ffebee', color: '#c62828', padding: '15px',
+                    borderRadius: '8px', marginBottom: '20px', display: 'flex', alignItems:'center', gap:10
+                }}>
+                    <AlertTriangle size={20}/> {errorMsg}
                 </div>
             )}
 
@@ -242,6 +291,7 @@ export default function NuovoUtente() {
                             <button
                                 className="toggle-password-btn"
                                 onClick={() => setShowPassword(!showPassword)}
+                                type="button"
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>

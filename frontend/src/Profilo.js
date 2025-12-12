@@ -2,80 +2,36 @@ import React, {useState, useEffect} from 'react';
 import './Profilo.css';
 import {CircleCheck, Edit2, Save, ShieldCheck, X, EyeOff, Eye} from 'lucide-react';
 import PrefixMenu from './PrefixMenu';
+import { useAuth } from './context/AuthContext';
+import { getUserById, updateUser } from './services/api';
+import LoadingSpinner from './LoadingSpinner';
 
 export function Profilo() {
+    
+    const { user, isAdmin } = useAuth();
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const [showSuccess, setShowSuccess] = useState(false);
-
     const [isEditing, setIsEditing] = useState(false);
-
     const [showPassword, setShowPassword] = useState(false);
 
-    const userRole = localStorage.getItem("userRole");
-    const isAdmin = userRole === "admin";
-
     const [userData, setUserData] = useState({
-        id: "882910",
-        nome: "Gennaro",
-        cognome: "Esposito",
-        dataNascita: "1990-05-12",
-        email: "gennaro.esposito@email.com",
-        password: "passwordSegreta123",
-        telefono: "3331234567"
+        id: "",
+        nome: "",
+        cognome: "",
+        dataNascita: "",
+        email: "",
+        password: "",
+        telefono: ""
     });
 
     const [originalData, setOriginalData] = useState(null);
 
-    const handleStartEdit = () => {
-        setOriginalData({...userData});
-        setUserData(prev => ({...prev, vecchiaPassword: "", nuovaPassword: ""}))
-        setIsEditing(true);
-    };
-
-    const handleCancel = () => {
-        setUserData(originalData);
-        setOriginalData(null);
-        setIsEditing(false);
-        setShowPassword(false);
-    };
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-
-        if (name === "telefono") {
-            const isNumeric = /^\d*$/.test(value);
-
-            if (isNumeric && value.length <= 11) {
-                setUserData(prev => ({
-                    ...prev,
-                    [name]: value
-                }));
-            }
-        } else {
-            setUserData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    };
-
-    const handleSave = () => {
-        const numeroCompleto = `${userData.prefisso}${userData.telefono}`;
-
-        console.log("Dati inviati al backend:", {
-            email: userData.email,
-            telefono: numeroCompleto
-        });
-
-        if (userData.nuovaPassword) {
-            setUserData(prev => ({...prev, password: prev.nuovaPassword}));
-        }
-
-        setShowSuccess(true);
-        setIsEditing(false);
-        setOriginalData(null);
-        setShowPassword(false);
-    };
+    const [prefissiList, setPrefissiList] = useState([]);
+    const [loadingPrefixes, setLoadingPrefixes] = useState(true);
 
     const splitPhoneNumber = (fullNumber, list) => {
         if (!fullNumber) return {prefisso: "+39", telefono: ""};
@@ -90,7 +46,28 @@ export function Profilo() {
         return {prefisso: "+39", telefono: fullNumber};
     };
 
-    const backendPhoneNumber = userData.telefono;
+    useEffect(() => {
+        const fetchUserData = async () => {
+            if (!user || !user.id) return;
+
+            try {
+                setLoading(true);
+                const data = await getUserById(user.id);
+
+                setUserData(prev => ({
+                    ...prev,
+                    ...data,
+                }));
+            } catch (err) {
+                console.error(err);
+                setError("Impossibile caricare il profilo.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [user]);
 
     useEffect(() => {
         if (showSuccess) {
@@ -99,8 +76,12 @@ export function Profilo() {
         }
     }, [showSuccess]);
 
-    const [prefissiList, setPrefissiList] = useState([]);
-    const [loadingPrefixes, setLoadingPrefixes] = useState(true);
+    useEffect(() => {
+        if (showSuccess) {
+            const timer = setTimeout(() => setShowSuccess(false), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [showSuccess]);
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -142,7 +123,7 @@ export function Profilo() {
                 setLoadingPrefixes(false);
 
 
-                const splitted = splitPhoneNumber(backendPhoneNumber, finalList);
+                const splitted = splitPhoneNumber(userData.telefono, finalList);
                 setUserData(prev => ({
                     ...prev,
                     prefisso: splitted.prefisso,
@@ -158,7 +139,71 @@ export function Profilo() {
 
         fetchCountries();
     }, []);
-    const currentPrefixData = prefissiList.find(p => p.code === userData.prefisso) || { iso: 'it', country: 'IT', name: 'Caricamento...' };
+
+    const handleStartEdit = () => {
+        setOriginalData({...userData});
+        setUserData(prev => ({...prev, vecchiaPassword: "", nuovaPassword: ""}))
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setUserData(originalData);
+        setOriginalData(null);
+        setIsEditing(false);
+        setShowPassword(false);
+    };
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+
+        if (name === "telefono") {
+            const isNumeric = /^\d*$/.test(value);
+
+            if (isNumeric && value.length <= 11) {
+                setUserData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
+        } else {
+            setUserData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+    };
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        const numeroCompleto = `${userData.prefisso}${userData.telefono}`;
+
+        const payload = {
+            email: userData.email,
+            numeroTelefono: numeroCompleto,
+            ...(userData.nuovaPassword ? { password: userData.nuovaPassword } : {})
+        };
+
+        try {
+            await updateUser(user.id, payload);
+
+            if (userData.nuovaPassword) {
+                setUserData(prev => ({...prev, password: prev.nuovaPassword}));
+            }
+
+            setShowSuccess(true);
+            setIsEditing(false);
+            setOriginalData(null);
+            setShowPassword(false);
+        } catch (err) {
+            alert("Errore durante il salvataggio.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    if (loading) return <LoadingSpinner message="Caricamento profilo..." />;
+
+    if (error) return <div style={{padding:40, textAlign:'center', color:'red'}}>{error}</div>;
 
     return (
         <div className="homepage-container">
@@ -297,7 +342,7 @@ export function Profilo() {
                     <div className="floating-label-group disabled-group">
                         <input
                             type="password"
-                            value={userData.password}
+                            value="********"
                             className="campo disabled-input"
                             disabled
                             placeholder=" "

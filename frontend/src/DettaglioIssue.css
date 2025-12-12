@@ -606,3 +606,117 @@
 .detail-image-container.editable:hover {
     border-color: #002060;
 }
+
+/* --- OVERLAY ELIMINAZIONE --- */
+
+.overlay-delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Sfondo scuro semitrasparente */
+    backdrop-filter: blur(4px);
+    z-index: 2000; /* Sopra tutto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.card-delete {
+    background: white;
+    width: 400px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.icon-box-delete {
+    background-color: #ffebee;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.card-delete h2 {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    color: #d32f2f;
+    margin: 0;
+    font-size: 24px;
+}
+
+.card-delete p {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-cancel-delete {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #E0E0E0;
+    background-color: white;
+    color: #555;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+}
+
+.btn-cancel-delete:hover {
+    background-color: #F5F5F5;
+    border-color: #ccc;
+}
+
+.btn-confirm-delete {
+    flex: 1;
+    padding: 12px;
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+}
+
+.btn-confirm-delete:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

@@ -2,7 +2,6 @@ package org.bugboard.backend.controller;
 
 import lombok.NonNull;
 import org.bugboard.backend.model.UserLogin;
-import org.bugboard.backend.model.Utente;
 import org.bugboard.backend.service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +21,6 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<@NonNull String> loginUser(@RequestBody UserLogin userLogin){
         return new ResponseEntity<>(service.verifyUser(userLogin),HttpStatus.OK);
-    }
-
-    @PutMapping("/admin/{projectId}/register")
-    public ResponseEntity<@NonNull Utente> registerUser(@PathVariable int projectId, @RequestBody Utente utente){
-        int userId=service.registerUser(utente).getIdUtente();
-        return new ResponseEntity<>(service.assignProjectToUser(projectId,userId), HttpStatus.CREATED);
     }
 
 }

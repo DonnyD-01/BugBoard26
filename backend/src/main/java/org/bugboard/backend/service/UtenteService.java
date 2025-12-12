@@ -3,11 +3,9 @@ package org.bugboard.backend.service;
 import org.bugboard.backend.model.Progetto;
 import org.bugboard.backend.model.UserLogin;
 import org.bugboard.backend.model.Utente;
-import org.bugboard.backend.repository.ProgettoRepo;
 import org.bugboard.backend.repository.UtenteRepo;
 import org.bugboard.backend.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,27 +14,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UtenteService {
 
     private final UtenteRepo utenteRepo;
-    private final ProgettoRepo progettoRepo;
-    private final ApplicationContext applicationContext;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final OptionalService optionalService;
 
     @Autowired
-    public UtenteService(UtenteRepo repo, ProgettoRepo progettoRepo, ApplicationContext applicationContext, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService) {
+    public UtenteService(UtenteRepo repo,PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService, OptionalService optionalService) {
         this.utenteRepo = repo;
-        this.progettoRepo = progettoRepo;
-        this.applicationContext = applicationContext;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.optionalService = optionalService;
     }
 
     public String verifyUser(UserLogin userLogin) {
@@ -53,40 +48,29 @@ public class UtenteService {
         return utenteRepo.save(utente);
     }
 
-    public List<Utente> getAllUsers() {
-        return utenteRepo.findAll();
-    }
-
     @Transactional
     public Utente assignProjectToUser(int projectId, int userId) {
-        applicationContext.getBean(Utente.class);
-        applicationContext.getBean(Progetto.class);
-        Utente user;
-        Progetto project;
+        Progetto project=optionalService.checkProgetto(projectId);
+        Utente user=optionalService.checkUtente(userId);
 
-        Optional<Utente> optUser = utenteRepo.findById(userId);
-        if(optUser.isPresent()){
-            user=optUser.get();
-        }
-        else {
-            return null;
-        }
-        Optional<Progetto> optProject = progettoRepo.findById(projectId);
-        if(optProject.isPresent()){
-            project=optProject.get();
-        }
-        else {
-            return null;
+        if(project!=null && user!=null){
+            Set<Progetto> projectSet = user.getProgettiAssegnati();
+            projectSet.add(project);
+            user.setProgettiAssegnati(projectSet);
+            return utenteRepo.save(user);
         }
 
-        Set<Progetto> projectSet = user.getProgettiAssegnati();
-        projectSet.add(project);
-        user.setProgettiAssegnati(projectSet);
-        return utenteRepo.save(user);
+        return null;
     }
+
 
     public List<Utente> getAllUsersFromProject(int projectId) {
         return utenteRepo.findByProgettiAssegnati_idProgetto(projectId);
     }
 
+    public List<Utente> getAllOtherUsersFromProject(int projectId) {
+        List<Utente> utenteList = utenteRepo.findByProgettiAssegnati_idProgettoIsNot(projectId);
+        utenteList.removeIf(utente -> utenteRepo.existsUtenteByProgettiAssegnati_idProgettoAndIdUtente(projectId, utente.getIdUtente()));
+        return utenteList;
+    }
 }

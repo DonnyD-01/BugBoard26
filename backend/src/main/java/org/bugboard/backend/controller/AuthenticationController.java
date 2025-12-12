@@ -20,7 +20,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<@NonNull String> loginUser(@RequestBody UserLogin userLogin){
-        return new ResponseEntity<>(service.verifyUser(userLogin),HttpStatus.OK);
+        String response=service.verifyUser(userLogin);
+        if(response.equals("Login Failed")){
+            return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+        }
+        else{
+            return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+        }
     }
 
 }

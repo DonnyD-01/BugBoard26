@@ -35,7 +35,6 @@ public class Issue {
     @JoinColumn(name="idcreatore",referencedColumnName="idutente")
     private Utente utenteCreatore;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="idassegnato",referencedColumnName="idutente")
     private Utente utenteAssegnato;

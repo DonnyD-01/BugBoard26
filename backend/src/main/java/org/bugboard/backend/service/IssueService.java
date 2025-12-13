@@ -15,6 +15,9 @@ import java.util.Optional;
 public class IssueService {
     private final IssueRepo issueRepo;
     private final OptionalService optionalService;
+    private static final String ISSUE_ASSEGNATA ="Assegnata";
+    private static final String ISSUE_TODO="ToDo";
+    private static final String ISSUE_RISOLTA ="Risolta";
 
     @Autowired
     public IssueService(IssueRepo issueRepo, OptionalService optionalService) {
@@ -27,7 +30,7 @@ public class IssueService {
     }
 
     public List<Issue> getAllOtherIssues(int projectId,int userId) {
-        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteIsNotOrProgetto_IdProgettoAndStato(projectId,userId,projectId,"ToDo");
+        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteIsNotOrProgetto_IdProgettoAndStato(projectId,userId,projectId,ISSUE_TODO);
     }
 
     public List<Issue> getAllIssuesFromProject(int projectId) {
@@ -48,16 +51,16 @@ public class IssueService {
             }
             issue.setProgetto(project);
             issue.setUtenteCreatore(user);
-            issue.setStato("ToDo");
+            issue.setStato(ISSUE_TODO);
             issue.setLinkImmagine("https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg");
             return issueRepo.save(issue);
         }
         return null;
     }
 
-    public Issue updateIssue(Issue updatedIssue) {
+    public Issue updateIssue(int issueId,Issue updatedIssue) {
         Issue oldIssue;
-        Optional<Issue> optIssue = issueRepo.findById(updatedIssue.getIdIssue());
+        Optional<Issue> optIssue = issueRepo.findById(issueId);
         if (optIssue.isPresent()) {
             oldIssue = optIssue.get();
             updatedIssue.setProgetto(oldIssue.getProgetto());
@@ -83,7 +86,7 @@ public class IssueService {
 
         if(issue!=null && user!=null) {
             issue.setUtenteAssegnato(user);
-            issue.setStato("Assegnata");
+            issue.setStato(ISSUE_ASSEGNATA);
             return issueRepo.save(issue);
         }
         return null;
@@ -92,10 +95,10 @@ public class IssueService {
     public Issue setIssueAsSolved(int issueId) {
         Issue issue = optionalService.checkIssue(issueId);
         if(issue!=null){
-            if(!issue.getStato().equals("Assegnata")){
+            if(!issue.getStato().equals(ISSUE_ASSEGNATA)){
                 return null;
             }
-            issue.setStato("Risolta");
+            issue.setStato(ISSUE_RISOLTA);
             return issueRepo.save(issue);
         }
         return null;

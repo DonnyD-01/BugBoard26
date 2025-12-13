@@ -30,6 +30,11 @@ public class UtenteController {
         return new ResponseEntity<>(service.getAllUsersFromProject(projectId),HttpStatus.OK);
     }
 
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Utente> getUser(@PathVariable int userId) {
+        return new ResponseEntity<>(service.getUserFromId(userId),HttpStatus.OK);
+    }
+
 
     @PutMapping("/admin/{projectId}/assign/{userId}")
     public ResponseEntity<Utente> assignProjectToUser(
@@ -43,6 +48,7 @@ public class UtenteController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
 
 }

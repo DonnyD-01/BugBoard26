@@ -76,4 +76,8 @@ public class UtenteService {
         utenteList.removeIf(utente -> utenteRepo.existsUtenteByProgettiAssegnati_idProgettoAndIdUtente(projectId, utente.getIdUtente()));
         return utenteList;
     }
+
+    public Utente getUserFromId(int userId) {
+        return optionalService.checkUtente(userId);
+    }
 }

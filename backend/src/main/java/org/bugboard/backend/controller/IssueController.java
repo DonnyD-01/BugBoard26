@@ -57,9 +57,9 @@ public class IssueController {
         }
     }
 
-    @PutMapping("/admin/issue/update")
-    public ResponseEntity<Issue> updateIssue(@RequestBody Issue issue) {
-        Issue newIssue=service.updateIssue(issue);
+    @PutMapping("/admin/issues/{issueId}/update")
+    public ResponseEntity<Issue> updateIssue(@PathVariable int issueId, @RequestBody Issue issue) {
+        Issue newIssue=service.updateIssue(issueId,issue);
         if(newIssue!=null) {
             return new ResponseEntity<>(newIssue,HttpStatus.CREATED);
         }
@@ -68,7 +68,7 @@ public class IssueController {
         }
     }
 
-    @DeleteMapping("/admin/issue/{issueId}")
+    @DeleteMapping("/admin/issues/{issueId}")
     public ResponseEntity<Issue> deleteIssue(@PathVariable int issueId) {
         Issue issue=service.deleteIssue(issueId);
         if(issue!=null) {

@@ -710,7 +710,6 @@
     transform: translateY(-2px);
 }
 
-/* Animazioni */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

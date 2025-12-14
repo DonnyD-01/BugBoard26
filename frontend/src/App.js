@@ -16,6 +16,7 @@ import {Progetti} from "./Progetti";
 import SplashScreen from "./SplashScreen";
 import {useEffect, useState} from "react";
 import { AuthProvider } from './context/AuthContext';
+import About from "./About";
 
 const LayoutUtente = () => {
     return (
@@ -73,6 +74,7 @@ const LayoutAdmin = () => {
 
                     <Routes>
                         <Route path="/" element={<Login/>}/>
+                        <Route path="/about" element={<About/>}/>
 
                         <Route path="/progetti" element={<Progetti/>} />
 

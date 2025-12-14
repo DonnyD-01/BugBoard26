@@ -185,7 +185,7 @@ export const createUser = async (userData) => {
 };
 
 export const updateUser = async (id, userData) => {
-    const response = await fetch(`${BASE_URL}/users/${id}`, {
+    const response = await fetch(`${BASE_URL}/users/update`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(userData)
@@ -197,16 +197,16 @@ const mapBackendIssueToFrontend = (backendIssue) => {
     if (!backendIssue) return null;
     return {
         id: backendIssue.idIssue,
-        title: backendIssue.titolo || backendIssue.titolo,
-        description: backendIssue.descrizione || backendIssue.descrizione,
-        type: backendIssue.tipo || backendIssue.tipo,
-        priority: backendIssue.priorita || backendIssue.priorita,
-        status: backendIssue.stato || backendIssue.stato,
+        title: backendIssue.titolo,
+        description: backendIssue.descrizione,
+        type: backendIssue.tipo,
+        priority: backendIssue.priorita,
+        status: backendIssue.stato,
         image: backendIssue.linkImmagine,
-        author: backendIssue.emailCr || backendIssue.EmailCr,
-        assigneeEmail: backendIssue.emailAss || backendIssue.EmailAss || null,
-        assigneeName: (backendIssue.emailAss || backendIssue.EmailAss) ?
-            (backendIssue.emailAss || backendIssue.EmailAss).split('@')[0] : "Non assegnato",
+        author: backendIssue.EmailCr,
+        assigneeEmail: backendIssue.EmailAss || null,
+        assigneeName: (backendIssue.EmailAss) ?
+            (backendIssue.EmailAss).split('@')[0] : "Non assegnato",
         projectId: backendIssue.idProgetto || backendIssue.IdProgetto
     };
 };

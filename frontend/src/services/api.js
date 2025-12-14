@@ -25,7 +25,15 @@ export const loginAPI = async (email, password) => {
         body: JSON.stringify({ email, password })
     });
 
-    return handleResponse(response);
+    if (!response.ok) {
+        throw new Error("Credenziali errate");
+    }
+
+    const tokenString = await response.text();
+
+    return {
+        accessToken: tokenString
+    };
 };
 
 export const getIssues = async () => {

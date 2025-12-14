@@ -1,0 +1,171 @@
+.about-splash-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #F8F9FB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOutSplash 0.5s ease-out 3s forwards;
+}
+
+.splash-text-container {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 80px;
+    color: #002060;
+    display: flex;
+    align-items: center;
+}
+
+.splash-rotating-logo {
+    width: 70px;
+    height: auto;
+    margin: 0 5px;
+    animation: spinLogo 1.5s linear infinite;
+    margin-top: 10px;
+}
+
+@keyframes spinLogo {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeOutSplash {
+    from { opacity: 1; visibility: visible; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+.about-page-container {
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    color: #333;
+    animation: fadeInContent 0.8s ease-in 3s backwards;
+}
+
+@keyframes fadeInContent {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.about-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.about-header-logo {
+    width: 150px;
+}
+
+.btn-login-header {
+    background-color: transparent;
+    color: #002060;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 12pt;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.btn-login-header:hover {
+}
+
+.about-content-wrapper {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 40px;
+    gap: 60px;
+    position: relative;
+}
+
+.about-sidebar {
+    flex-basis: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 200px;
+    align-self: start;
+    border-left: 3px solid #eee;
+    padding-left: 20px;
+}
+
+.about-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.about-sidebar li {
+    margin-bottom: 15px;
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: #B0B0B0;
+    display: block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sidebar-link.active {
+    color: #002060;
+    font-weight: bold;
+    transform: translateX(5px);
+}
+
+.about-main-text {
+    flex-grow: 1;
+}
+
+.title-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.main-title {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 60pt;
+    color: #002060;
+    margin-bottom: 40px;
+    display: flex;
+}
+
+.content-section {
+    margin-bottom: 60px;
+    scroll-margin-top: 120px;
+}
+
+.content-section h2 {
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 32px;
+    color: #002060;
+    margin-bottom: 20px;
+}
+
+.content-section p {
+    text-align: justify;
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}

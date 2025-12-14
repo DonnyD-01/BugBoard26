@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Progetti.css';
 import { Search, Folder, Clock, CheckCircle, XCircle, ChevronRight, LogOut, AlertCircle } from 'lucide-react';
-import { mockProjects } from './utils';
 import  Footer from "./Footer";
 import { useAuth } from './context/AuthContext';
 import { getProjectsByUserId, getAssignedActiveProjectsFromUserId } from './services/api';
@@ -18,21 +17,15 @@ export function Progetti() {
 
     useEffect(() => {
         const fetchProjects = async () => {
-            // Se non c'è un utente (es. refresh pagina veloce), aspettiamo o gestiamo
             if (!user || !user.id) return;
 
             try {
                 setLoading(true);
-                // Chiamata al Backend passando l'ID dell'utente loggato
                 let data;
 
                 if (isAdmin) {
-                    // SE ADMIN: Voglio vedere TUTTO lo storico (Attivi, Chiusi, Sospesi)
-                    // Chiamo la funzione generica
                     data = await getProjectsByUserId(user.id);
                 } else {
-                    // SE UTENTE: Voglio vedere SOLO quelli su cui posso lavorare ora
-                    // Chiamo la funzione specifica del backend
                     data = await getAssignedActiveProjectsFromUserId(user.id);
                 }
 

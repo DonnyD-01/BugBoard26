@@ -31,7 +31,7 @@ public class AuthenticationController {
         }
     }
 
-    @PutMapping("/admin/register")
+    @PostMapping("/admin/register")
     public ResponseEntity<@NonNull Utente> registerUser(@RequestBody Utente utente){
         Utente result=service.registerUser(utente);
         if(result==null){

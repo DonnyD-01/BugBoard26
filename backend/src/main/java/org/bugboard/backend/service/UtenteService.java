@@ -73,7 +73,7 @@ public class UtenteService {
     }
 
     public List<Utente> getAllOtherUsersFromProject(int projectId) {
-        List<Utente> utenteList = utenteRepo.findByProgettiAssegnati_idProgettoIsNot(projectId);
+        List<Utente> utenteList = utenteRepo.findAll();
         utenteList.removeIf(utente -> utenteRepo.existsUtenteByProgettiAssegnati_idProgettoAndIdUtente(projectId, utente.getIdUtente()));
         return utenteList;
     }

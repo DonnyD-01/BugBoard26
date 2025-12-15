@@ -81,7 +81,7 @@ export default function NuovoUtente() {
         formData.email &&
         formData.password;
 
-    useEffect(() => {
+    /*useEffect(() => {
         const handleBeforeUnload = (e) => {
             if (hasUnsavedChanges && !showSuccess) {
                 e.preventDefault();
@@ -90,12 +90,11 @@ export default function NuovoUtente() {
         };
         window.addEventListener("beforeunload", handleBeforeUnload);
         return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-    }, [hasUnsavedChanges, showSuccess]);
+    }, [hasUnsavedChanges, showSuccess]);*/
 
     const handleSubmit = async () => {
         if (!isFormValid) return;
 
-        // Controllo ProjectID
         if (!currentProjectId) {
             setErrorMsg("Errore: Nessun progetto selezionato. Impossibile assegnare l'utente.");
             return;

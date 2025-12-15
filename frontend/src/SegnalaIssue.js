@@ -102,19 +102,18 @@ export default function SegnalaIssue() {
         setIsSubmitting(true);
         setErrorMsg(null);
 
-        // A. Convertiamo l'ID del tipo (1,2..) nella stringa che si aspetta il backend ("Bug", "Feature"...)
         const selectedTypeObj = issueTypes.find(t => t.id === selectedType);
         const typeString = selectedTypeObj ? selectedTypeObj.title : "Generic";
 
-        // B. Creiamo l'oggetto Payload (DTO)
         const newIssueData = {
             tipo: typeString,
             titolo: title,
-            description: description,
+            descrizione: description,
             priorita: priority,
             linkImmagine: image,
             stato: "ToDo",
-            assignee: null
+            assignee: null,
+            EmailCr: user.email
         };
 
         try {

@@ -81,14 +81,14 @@ export const getIssueById = async (id) => {
 
 export const createIssue = async (projectId, userId, issueData) => {
     const payload = {
-        titolo: issueData.title,
-        descrizione: issueData.description,
-        tipo: issueData.type,
-        priorita: parseInt(issueData.priority),
+        titolo: issueData.titolo,
+        descrizione: issueData.descrizione,
+        tipo: issueData.tipo,
+        priorita: parseInt(issueData.priorita),
         stato: "To-do",
-        linkImmagine: issueData.image,
+        linkImmagine: issueData.linkImmagine,
         idProgetto: parseInt(projectId),
-        EmailCr: issueData.authorEmail || null
+        EmailCr: issueData.EmailCr || null
     };
 
     const response = await fetch(`${BASE_URL}/${projectId}/${userId}/issue/add`, {
@@ -171,7 +171,7 @@ export const getUsersByProjectId = async (projectId) => {
 
 export const assignProjectToUser = async (userId, projectId) => {
     const response = await fetch(`${BASE_URL}/admin/${projectId}/assign/${userId}`, {
-        method: 'POST',
+        method: 'PUT',
         headers: getHeaders()
     });
     return handleResponse(response);

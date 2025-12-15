@@ -11,6 +11,7 @@
 }
 
 .error-view-icon {
+    width: 80px;
     stroke-width: 1.5px;
     animation: pulse 2s infinite;
 }

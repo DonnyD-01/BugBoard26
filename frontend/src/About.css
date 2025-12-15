@@ -1,3 +1,8 @@
+.testo-evidenza {
+    color: #002060;
+    font-family: 'NeueHaasGroteskDisp Pro Blk', sans-serif;
+}
+
 .about-splash-container {
     position: fixed;
     top: 0;
@@ -83,8 +88,6 @@
     align-items: center;
     gap: 10px;
 }
-.btn-login-header:hover {
-}
 
 .about-content-wrapper {
     display: flex;
@@ -113,14 +116,6 @@
 
 .about-sidebar li {
     margin-bottom: 15px;
-}
-
-.sidebar-link {
-    text-decoration: none;
-    color: #B0B0B0;
-    display: block;
-    transition: all 0.3s ease;
-    cursor: pointer;
 }
 
 .sidebar-link.active {
@@ -258,8 +253,4 @@
     color: #002060;
     font-weight: 700;
     transform: translateX(5px);
-}
-
-.timeline-list li.active::before {
-   opacity: 0;
 }

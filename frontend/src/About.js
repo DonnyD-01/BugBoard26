@@ -149,7 +149,7 @@ export default function About() {
                         <section id="intro" className="content-section" ref={el => sectionRefs.current['intro'] = el}>
                             <h2>Cos'è BugBoard</h2>
                             <p>
-                                <b style={{color: "#002060", fontStyle: "italic"}}>BugBoard26®</b> è una piattaforma per la gestione collaborativa di issue in progetti software. Il sistema consente a team di sviluppo di segnalare problemi relativi a un progetto, monitorarne lo stato, assegnarli a membri del team e tenere traccia delle attività di risoluzione. Il sistema consiste in un’applicazione web-based, attraverso cui gli utenti possono fruire delle funzionalità in modo intuitivo e rapido.
+                                <span className="testo-evidenza">BugBoard26®</span> è una piattaforma per la gestione collaborativa di issue in progetti software. Il sistema consente a team di sviluppo di segnalare problemi relativi a un progetto, monitorarne lo stato, assegnarli a membri del team e tenere traccia delle attività di risoluzione. Il sistema consiste in un’applicazione web-based, attraverso cui gli utenti possono fruire delle funzionalità in modo intuitivo e rapido.
                             </p>
                         </section>
                         <section id="mission" className="content-section" ref={el => sectionRefs.current['mission'] = el}>
@@ -182,9 +182,17 @@ export default function About() {
                             <h2>Il Team</h2>
                             <p>
                                 Siamo un team formato da due giovani sviluppatori studenti del Corso di Studi Triennale di Informatica presso l'<Link to={"https://www.unina.it"} className={"link-pulito"}> Università degli Studi di Napoli "Federico II"</Link>.<br/>
-                                Vincenzo Donadio<br/>
-                                Walter Filosa
                             </p>
+                            <p style={{paddingLeft: "40px"}}>
+                                <div className="testo-evidenza">Vincenzo Donadio</div>
+                                Vincenzo ha apportato un impatto significativo nella realizzazione del cuore dell'applicazione, il back-end.
+                                Grazie al suo ampio background di conoscenze in ambito Java Spring Boot, ha saputo abilmente gestire questa parte.
+                                <div className="testo-evidenza">Walter Filosa</div>
+                                Walter, invece, si è concentrato sulla realizzazione del front-end  di BugBoard. Dopo un attenta analisi del marchio,
+                                e dopo aver realizzato una Brand Identity capace di dare
+                            </p>
+                        </section>
+                        <section>
                             <hr/>
                             <p>
                                 Gli Autori

@@ -7,6 +7,7 @@ import DettaglioUtente from './DettaglioUtente';
 import AggiungiUtenteEsistente from "./AggiungiUtenteEsistente";
 import LoadingSpinner from './LoadingSpinner';
 import { getUsersByProjectId, getAllUsersExceptProject, assignProjectToUser } from './services/api';
+import ErrorMessage from "./ErrorMessage";
 
 export default function GestisciUtenti() {
 
@@ -139,11 +140,7 @@ export default function GestisciUtenti() {
     if (loading) return <LoadingSpinner message="Caricamento utenti..." />;
 
     if (error) return (
-        <div style={{padding: 40, textAlign: 'center', color: 'red'}}>
-            <AlertCircle size={48} style={{margin:'80px auto 10px'}}/>
-            <p>{error}</p>
-            <button className="btn-action" onClick={() => window.location.reload()} style={{marginTop:20}}>Riprova</button>
-        </div>
+        <ErrorMessage message={error} />
     );
 
     return (

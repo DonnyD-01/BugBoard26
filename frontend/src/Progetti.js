@@ -79,7 +79,7 @@ export function Progetti() {
     if (loading) return <LoadingSpinner message="Recupero i tuoi progetti..." />;
 
     if (error) return (
-        <ErrorMessage message="Impossibile caricare gli utenti"/>
+        <ErrorMessage message={error}/>
     );
 
     if (!user) {

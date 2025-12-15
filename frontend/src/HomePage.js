@@ -8,6 +8,7 @@ import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
 import { getIssuesByProjectId } from "./services/api";
 import LoadingSpinner from './LoadingSpinner';
 import {useAuth} from "./context/AuthContext";
+import ErrorMessage from "./ErrorMessage";
 
 export default function HomePage() {
 
@@ -129,11 +130,7 @@ export default function HomePage() {
     }
     if (error) {
         return (
-            <div style={{padding: 100, textAlign: 'center', color: 'red', display:'flex', flexDirection:'column', alignItems:'center'}}>
-                <AlertCircle size={48} />
-                <p>{error}</p>
-                <button className="riprova-button" onClick={() => window.location.reload()}>Riprova</button>
-            </div>
+            <ErrorMessage message={error}/>
         );
     }
 

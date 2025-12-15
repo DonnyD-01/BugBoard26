@@ -182,7 +182,7 @@ export default function GestisciUtenti() {
                     <UserPlus size={18} /> Aggiungi Utente Esistente
                 </button>
                 <button className="btn-action btn-add-user" onClick={handleAddUser}>
-                    <UserPlus size={18} /> Aggiungi Nuovo Utente
+                    <UserPlus size={18} /> Crea un Nuovo Utente
                 </button>
             </div>
 

@@ -95,11 +95,6 @@ export default function NuovoUtente() {
     const handleSubmit = async () => {
         if (!isFormValid) return;
 
-        if (!currentProjectId) {
-            setErrorMsg("Errore: Nessun progetto selezionato. Impossibile assegnare l'utente.");
-            return;
-        }
-
         setIsSubmitting(true);
         setErrorMsg(null);
 

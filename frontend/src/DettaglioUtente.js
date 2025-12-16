@@ -4,6 +4,20 @@ import { X, ShieldCheck, User, Mail, Phone, Calendar} from 'lucide-react';
 
 export default function DettaglioUtente({ user, onClose }) {
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "Non disponibile";
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('it-IT', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        } catch (e) {
+            return dateString;
+        }
+    };
+
     if (!user) return null;
 
     return (
@@ -34,7 +48,7 @@ export default function DettaglioUtente({ user, onClose }) {
 
                         <div className="info-item">
                             <label><Calendar size={16} /> Data di Nascita</label>
-                            <p>{user.dataNascita}</p>
+                            <p>{formatDate(user.dataNascita)}</p>
                         </div>
 
                         <div className="info-item">
@@ -51,7 +65,7 @@ export default function DettaglioUtente({ user, onClose }) {
                             <label><Mail size={14} /> Email</label>
                             <a
                                 href={`mailto:${user.email}`}
-                                className="interactive-data-link"
+                                className="interactive-data-link email-link"
                                 title="Clicca per inviare email"
                             >
                                 {user.email}

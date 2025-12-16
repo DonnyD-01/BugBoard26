@@ -178,13 +178,20 @@ export function Profilo() {
         const numeroCompleto = `${userData.prefisso}${userData.telefono}`;
 
         const payload = {
+            idUtente: user.id,
+            nome: userData.nome,
+            cognome: userData.cognome,
+            dataNascita: userData.dataNascita,
             email: userData.email,
-            numeroTelefono: numeroCompleto,
-            ...(userData.nuovaPassword ? { password: userData.nuovaPassword } : {})
+            numeroTelefono: numeroCompleto
         };
 
+        if (userData.nuovaPassword && userData.nuovaPassword.trim() !== "") {
+            payload.password = userData.nuovaPassword;
+        }
+
         try {
-            await updateUser(user.id, payload);
+            await updateUser(payload);
 
             if (userData.nuovaPassword) {
                 setUserData(prev => ({...prev, password: prev.nuovaPassword}));
@@ -194,6 +201,7 @@ export function Profilo() {
             setIsEditing(false);
             setOriginalData(null);
             setShowPassword(false);
+            setUserData(prev => ({...prev, vecchiaPassword: "", nuovaPassword: ""}));
         } catch (err) {
             alert("Errore durante il salvataggio.");
         } finally {

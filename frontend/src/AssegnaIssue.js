@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './GestisciUtenti.css';
-import { X, Search, ShieldCheck, User2, UserCheck } from 'lucide-react';
+import { X, Search, UserCheck } from 'lucide-react';
 import { getUsersByProjectId } from './services/api';
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -74,8 +74,8 @@ export default function AssegnaIssue({ projectId, onSelect, onClose }) {
 
                         <div className="users-list modal-list">
                             {loading ? (
-                                <div className="loading-row" style={{padding: 20, textAlign:'center'}}>
-                                    <LoadingSpinner message={"Caricamento utenti..."}/>
+                                <div className="loading-row" style={{padding: 0, textAlign:'center'}}>
+                                    <LoadingSpinner message={"Caricamento utenti..."} paddingTop="30px"/>
                                 </div>
                             ) : error ? (
                                 <div className="error-row" style={{padding: 20, textAlign:'center', color:'red'}}>
@@ -84,7 +84,7 @@ export default function AssegnaIssue({ projectId, onSelect, onClose }) {
                             ) : filteredUsers.length > 0 ? (
                                 filteredUsers.map((user) => (
                                     <div
-                                        key={user.idUtente} // Usa idUtente dal Backend
+                                        key={user.id}
                                         className="modal-user-row"
                                         onClick={() => onSelect(user)}
                                         style={{ cursor: 'pointer' }}

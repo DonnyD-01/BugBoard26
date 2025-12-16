@@ -218,7 +218,7 @@ export const createUser = async (userData) => {
     return mapBackendUserToFrontend(data);
 };
 
-export const updateUser = async (id, userData) => {
+export const updateUser = async (userData) => {
     const response = await fetch(`${BASE_URL}/users/update`, {
         method: 'PUT',
         headers: getHeaders(),

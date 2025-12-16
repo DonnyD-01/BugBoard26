@@ -89,6 +89,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top: 20px;
 }
 
 .user-intro h1 {
@@ -144,4 +145,10 @@
     top: 50%;
     transform: translateY(-50%);
     color: #B0B0B0;
+}
+
+.email-link {
+    word-break: break-all;
+    white-space: normal;
+    line-height: 1.4;
 }

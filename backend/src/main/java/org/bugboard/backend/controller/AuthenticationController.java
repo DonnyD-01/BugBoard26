@@ -40,4 +40,9 @@ public class AuthenticationController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
+    @GetMapping("/verify/{userId}/password/{inputtedPassword}/")
+    public ResponseEntity<Boolean> verifyPassword(@PathVariable int userId,@PathVariable String inputtedPassword){
+        return new ResponseEntity<>(service.verifyPassword(userId,inputtedPassword),HttpStatus.OK);
+    }
+
 }

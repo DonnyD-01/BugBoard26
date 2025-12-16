@@ -101,4 +101,12 @@ public class UtenteService {
         }
         return null;
     }
+
+    public Boolean verifyPassword(int userId,String inputtedPassword) {
+        Utente user=optionalService.checkUtente(userId);
+        if(user!=null) {
+            return passwordEncoder.matches(inputtedPassword,user.getPassword());
+        }
+        return false;
+    }
 }

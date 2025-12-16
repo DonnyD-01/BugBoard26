@@ -3,7 +3,7 @@ import './Profilo.css';
 import {CircleCheck, Edit2, Save, ShieldCheck, X, EyeOff, Eye} from 'lucide-react';
 import PrefixMenu from './PrefixMenu';
 import { useAuth } from './context/AuthContext';
-import { getUserById, updateUser } from './services/api';
+import { getUserById, updateUser, verifyUserPassword } from './services/api';
 import LoadingSpinner from './LoadingSpinner';
 
 export function Profilo() {
@@ -24,7 +24,8 @@ export function Profilo() {
         cognome: "",
         dataNascita: "",
         email: "",
-        password: "",
+        vecchiaPassword: "",
+        nuovaPassword: "",
         telefono: ""
     });
 
@@ -186,11 +187,26 @@ export function Profilo() {
             numeroTelefono: numeroCompleto
         };
 
-        if (userData.nuovaPassword && userData.nuovaPassword.trim() !== "") {
-            payload.password = userData.nuovaPassword;
-        }
-
         try {
+            if (userData.nuovaPassword && userData.nuovaPassword.trim() !== "") {
+
+                if (!userData.vecchiaPassword || userData.vecchiaPassword.trim() === "") {
+                    alert("Per cambiare password devi inserire la Vecchia Password.");
+                    setIsSaving(false);
+                    return;
+                }
+
+                const isOldPasswordCorrect = await verifyUserPassword(user.id, userData.vecchiaPassword);
+
+                if (!isOldPasswordCorrect) {
+                    alert("La Vecchia Password inserita non è corretta.");
+                    setIsSaving(false);
+                    return;
+                }
+
+                payload.password = userData.nuovaPassword;
+            }
+
             await updateUser(payload);
 
             if (userData.nuovaPassword) {
@@ -202,8 +218,10 @@ export function Profilo() {
             setOriginalData(null);
             setShowPassword(false);
             setUserData(prev => ({...prev, vecchiaPassword: "", nuovaPassword: ""}));
+
         } catch (err) {
-            alert("Errore durante il salvataggio.");
+            console.error(err);
+            alert("Errore durante il salvataggio: " + err.message);
         } finally {
             setIsSaving(false);
         }

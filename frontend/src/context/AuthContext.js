@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (token) => {
+        localStorage.setItem("token", token);
+
         const decoded = jwtDecode(token);
 
         if (!decoded) {
@@ -54,7 +56,6 @@ export const AuthProvider = ({ children }) => {
             console.warn("Impossibile recuperare il nome utente al login", error);
         }
 
-        localStorage.setItem("token", token);
         localStorage.setItem("userRole", roleString);
         localStorage.setItem("userId", userId);
         localStorage.setItem("userEmail", userEmail);

@@ -3,6 +3,7 @@ import './NavbarUtente.css';
 import {useState} from "react";
 import {FaUserCircle} from 'react-icons/fa';
 import {User2, ChevronDown, LogOut} from "lucide-react";
+import { useAuth } from './context/AuthContext';
 
 function ProfileMenu() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,8 @@ function ProfileMenu() {
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
+    const { user } = useAuth();
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -26,7 +29,7 @@ function ProfileMenu() {
         <div className="profile-wrapper">
             <div className="info-utente">
                 <p className="testo-utente">Benvenuto,</p>
-                <p className="nome-utente">Gennaro</p>
+                <p className="nome-utente">{user.nome}</p>
             </div>
             <div className="profile-menu-container">
                 <div className="profile-button" onClick={toggleMenu}>
@@ -37,7 +40,7 @@ function ProfileMenu() {
                 {isOpen && (
                     <div className="dropdown-menu">
                         <NavLink to="/profilo" className="menu-item"><User2/>Profilo</NavLink>
-                        <NavLink to="/" className="menu-item link-logout"><LogOut/>Esci</NavLink>
+                        <NavLink to="/" className="menu-item link-logout" onClick={handleLogout}><LogOut/>Esci</NavLink>
                     </div>
                 )}
             </div>

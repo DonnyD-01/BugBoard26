@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { jwtDecode } from "jwt-decode";
+import { getUserById } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -13,19 +14,21 @@ export const AuthProvider = ({ children }) => {
         const storedRole = localStorage.getItem("userRole");
         const storedId = localStorage.getItem("userId");
         const storedEmail = localStorage.getItem("userEmail");
+        const storedNome = localStorage.getItem("userNome");
 
         if (storedToken && storedRole && storedId) {
             setUser({
                 token: storedToken,
                 role: storedRole,
                 id: storedId,
-                email: storedEmail
+                email: storedEmail,
+                nome: storedNome || "Utente"
             });
         }
         setLoading(false);
     }, []);
 
-    const login = (token) => {
+    const login = async (token) => {
         const decoded = jwtDecode(token);
 
         if (!decoded) {
@@ -40,16 +43,29 @@ export const AuthProvider = ({ children }) => {
         const userEmail = decoded.sub;
         const userId = decoded.id || decoded.idUtente;
 
+        let nomeUtente = "Utente";
+
+        try {
+            const fullUserData = await getUserById(userId);
+            if (fullUserData && fullUserData.nome) {
+                nomeUtente = fullUserData.nome;
+            }
+        } catch (error) {
+            console.warn("Impossibile recuperare il nome utente al login", error);
+        }
+
         localStorage.setItem("token", token);
         localStorage.setItem("userRole", roleString);
         localStorage.setItem("userId", userId);
         localStorage.setItem("userEmail", userEmail);
+        localStorage.setItem("userNome", nomeUtente);
 
         setUser({
             token: token,
             role: roleString,
             id: userId,
-            email: userEmail
+            email: userEmail,
+            nome: nomeUtente
         });
     };
 
@@ -58,6 +74,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("userRole");
         localStorage.removeItem("userId");
         localStorage.removeItem("userEmail");
+        localStorage.removeItem("userNome");
         setUser(null);
     };
 

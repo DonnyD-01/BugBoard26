@@ -6,6 +6,19 @@ import { useAuth } from './context/AuthContext';
 import { getUserById, updateUser, verifyUserPassword } from './services/api';
 import LoadingSpinner from './LoadingSpinner';
 
+const splitPhoneNumber = (fullNumber, list) => {
+    if (!fullNumber) return {prefisso: "+39", telefono: ""};
+    if (!list || list.length === 0) {
+        if(fullNumber.startsWith("+39")) return { prefisso: "+39", telefono: fullNumber.replace("+39", "") };
+        return {prefisso: "+39", telefono: fullNumber};
+    }
+    const match = list.find(p => fullNumber.startsWith(p.code));
+    if (match) {
+        return { prefisso: match.code, telefono: fullNumber.replace(match.code, "") };
+    }
+    return {prefisso: "+39", telefono: fullNumber};
+};
+
 export function Profilo() {
     
     const { user, isAdmin } = useAuth();
@@ -35,19 +48,6 @@ export function Profilo() {
     const [prefissiList, setPrefissiList] = useState([]);
     const [loadingPrefixes, setLoadingPrefixes] = useState(true);
 
-    const splitPhoneNumber = (fullNumber, list) => {
-        if (!fullNumber) return {prefisso: "+39", telefono: ""};
-        if (!list || list.length === 0) {
-            if(fullNumber.startsWith("+39")) return { prefisso: "+39", telefono: fullNumber.replace("+39", "") };
-            return {prefisso: "+39", telefono: fullNumber};
-        }
-        const match = list.find(p => fullNumber.startsWith(p.code));
-        if (match) {
-            return { prefisso: match.code, telefono: fullNumber.replace(match.code, "") };
-        }
-        return {prefisso: "+39", telefono: fullNumber};
-    };
-
     useEffect(() => {
         const fetchUserData = async () => {
             if (!user || !user.id) return;
@@ -58,20 +58,23 @@ export function Profilo() {
 
                 if (data.dataNascita) {
                     const d = new Date(data.dataNascita);
-
                     if (!isNaN(d.getTime())) {
                         const year = d.getFullYear();
                         const month = String(d.getMonth() + 1).padStart(2, '0');
                         const day = String(d.getDate()).padStart(2, '0');
-
                         data.dataNascita = `${year}-${month}-${day}`;
                     }
                 }
 
+                const phoneSplit = splitPhoneNumber(data.telefono, prefissiList);
+
                 setUserData(prev => ({
                     ...prev,
                     ...data,
+                    prefisso: phoneSplit.prefisso,
+                    telefono: phoneSplit.telefono
                 }));
+
             } catch (err) {
                 console.error(err);
                 setError("Impossibile caricare il profilo.");
@@ -81,7 +84,7 @@ export function Profilo() {
         };
 
         fetchUserData();
-    }, [user]);
+    }, [user, prefissiList]);
 
     useEffect(() => {
         if (showSuccess) {
@@ -108,7 +111,6 @@ export function Profilo() {
                     .map(country => {
                         const root = country.idd.root;
                         const suffix = country.idd.suffixes && country.idd.suffixes.length === 1 ? country.idd.suffixes[0] : "";
-
                         return {
                             code: `${root}${suffix}`,
                             country: country.cca2,
@@ -119,30 +121,16 @@ export function Profilo() {
                     .sort((a, b) => {
                         const numA = parseInt(a.code.replace('+', ''));
                         const numB = parseInt(b.code.replace('+', ''));
-
-                        if (numA !== numB) {
-                            return numA - numB;
-                        }
-
+                        if (numA !== numB) return numA - numB;
                         return a.name.localeCompare(b.name);
-
-                        a.name.localeCompare(b.name)});
+                    });
 
                 const italy = formattedList.find(c => c.iso === 'it');
                 const others = formattedList.filter(c => c.iso !== 'it');
-
                 const finalList = italy ? [italy, ...others] : formattedList;
 
                 setPrefissiList(finalList);
                 setLoadingPrefixes(false);
-
-
-                const splitted = splitPhoneNumber(userData.telefono, finalList);
-                setUserData(prev => ({
-                    ...prev,
-                    prefisso: splitted.prefisso,
-                    telefono: splitted.telefono
-                }));
 
             } catch (error) {
                 console.error("Errore caricamento prefissi:", error);

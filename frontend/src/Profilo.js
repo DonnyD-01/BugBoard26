@@ -210,7 +210,14 @@ export function Profilo() {
                 payload.password = userData.nuovaPassword;
             }
 
-            await updateUser(payload);
+            const response = await updateUser(payload);
+            localStorage.setItem("userEmail", userData.email);
+            if (response && response.accessToken) {
+                console.log("Token aggiornato ricevuto dal backend.");
+                localStorage.setItem("token", response.accessToken);
+            } else if (response && response.token) {
+                localStorage.setItem("token", response.token);
+            }
 
             if (userData.nuovaPassword) {
                 setUserData(prev => ({...prev, password: prev.nuovaPassword}));

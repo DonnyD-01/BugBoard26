@@ -347,3 +347,11 @@ export const assignIssueToUser = async (issueId, userId) => {
 
     return handleResponse(response);
 };
+
+export const setIssueAsSolved = async (issueId) => {
+    const response = await fetch(`${BASE_URL}/issues/${issueId}/solved`, {
+        method: 'POST',
+        headers: getHeaders()
+    });
+    return handleResponse(response);
+};

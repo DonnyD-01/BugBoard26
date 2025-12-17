@@ -7,7 +7,8 @@ import StatusTracker from "./Statustracker";
 import AssegnaIssue from "./AssegnaIssue";
 import { useAuth } from './context/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
-import {getIssueById, updateIssue, deleteIssue, getUserById, assignIssueToUser} from './services/api';
+import {getIssueById, updateIssue, deleteIssue, getUserById, assignIssueToUser, setIssueAsSolved} from './services/api';
+import ErrorMessage from "./ErrorMessage";
 
 export function DettaglioIssue() {
     const {id} = useParams();
@@ -185,20 +186,13 @@ export function DettaglioIssue() {
         const newData = { ...issue, status: "Risolta" };
 
         try {
-            await updateIssue(newData);
+            await setIssueAsSolved(issue.id);
+            const newData = { ...issue, status: "Risolta" };
             setIssue(newData);
             setEditedData(newData);
         } catch (err) {
-            alert("Impossibile aggiornare lo stato");
+            <ErrorMessage message="Impossibile aggiornare lo stato"/>
         }
-    };
-
-    const handleMarkAsAssigned = () => {
-        setIssue(prev => ({
-            ...prev,
-            status: "Assegnata",
-            assigneeId: currentData.id
-        }));
     };
 
     return (

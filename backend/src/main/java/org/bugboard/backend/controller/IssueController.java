@@ -19,6 +19,11 @@ public class IssueController {
         this.service = service;
     }
 
+    @GetMapping("/admin/{projectId}/issues/todo")
+    public ResponseEntity<List<Issue>> getAllToDoIssues(@PathVariable int projectId) {
+        return new ResponseEntity<>(service.getAllToDoIssues(projectId),HttpStatus.OK);
+    }
+
     @GetMapping("/{projectId}/{userId}/issues")
     public ResponseEntity<List<Issue>> getAllAssignedIssues(
             @PathVariable int projectId,

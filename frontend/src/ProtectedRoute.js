@@ -20,10 +20,13 @@ const ProtectedRoute = ({ allowedRole }) => {
 
         const userRole = decoded.role;
 
-        if (userRole  !== allowedRole) {
+        if (allowedRole && userRole  !== allowedRole) {
 
             if (allowedRole === 'admin') {
                 return <Navigate to="/home" replace />;
+            }
+            if (allowedRole === 'user' && userRole === 'admin') {
+                return <Navigate to="/admin/home" replace />;
             }
             return <Navigate to="/" replace />;
         }

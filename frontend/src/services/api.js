@@ -163,30 +163,19 @@ export const updateIssue = async (updatedData) => {
 };
 
 export const deleteIssue = async (id) => {
-    console.log("--- DEBUG DELETE ---");
-    console.log("ID ricevuto:", id);
-    console.log("Tipo ID:", typeof id);
 
     const url = `${BASE_URL}/admin/issue/${id}`;
-    console.log("URL chiamato:", url);
 
-    if (!id || id === "undefined" || id === "null") {
-        alert("ERRORE FATALE: Stai cercando di cancellare un ID non valido!");
-        throw new Error("ID non valido");
-    }
+    if (!id) throw new Error("ID non valido");
 
     const response = await fetch(url, {
         method: 'DELETE',
         headers: getHeaders()
     });
 
-
-    if (response.ok) {
-        return true;
-    }
+    return true;
 
     const errorText = await response.text();
-    console.error("ERRORE DAL SERVER (Body):", errorText);
 
     throw new Error(errorText || `Errore HTTP: ${response.status}`);
 };

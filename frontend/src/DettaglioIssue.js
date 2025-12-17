@@ -106,14 +106,16 @@ export function DettaglioIssue() {
     };
 
     const confirmDelete = async (e) => {
-        if (e) e.preventDefault();
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         try {
             setIsDeleting(true);
             await deleteIssue(id);
             navigate(isAdmin ? '/admin/home' : '/home');
         } catch (err) {
             console.error("Errore dettagliato:", err);
-            alert(`Errore: ${err.message}`);
             setIsDeleting(false);
             setShowDeleteConfirm(false);
         }
@@ -219,6 +221,7 @@ export function DettaglioIssue() {
                                 className="btn-cancel-delete"
                                 onClick={() => setShowDeleteConfirm(false)}
                                 disabled={isDeleting}
+                                type="button"
                             >
                                 Annulla
                             </button>

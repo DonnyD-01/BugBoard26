@@ -105,7 +105,8 @@ export function DettaglioIssue() {
         setShowDeleteConfirm(true);
     };
 
-    const confirmDelete = async () => {
+    const confirmDelete = async (e) => {
+        if (e) e.preventDefault();
         try {
             setIsDeleting(true);
             await deleteIssue(id);
@@ -222,8 +223,9 @@ export function DettaglioIssue() {
                                 Annulla
                             </button>
                             <button
+                                type="button"
                                 className="btn-confirm-delete"
-                                onClick={confirmDelete}
+                                onClick={(e) => confirmDelete(e)}
                                 disabled={isDeleting}
                             >
                                 {isDeleting ? "Eliminazione..." : "Elimina Issue"}

@@ -243,7 +243,7 @@ export default function HomePage() {
             )}
 
             <div className="header-row" style={{ marginTop: '40px' }}>
-                <h1>Tutte le issue del progetto</h1>
+                <h1>Altre issue nel progetto</h1>
             </div>
 
             <FiltersBar

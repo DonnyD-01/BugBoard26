@@ -99,7 +99,7 @@ export const createIssue = async (projectId, userId, issueData) => {
     };
 
     const response = await fetch(`${BASE_URL}/${projectId}/${userId}/issue/add`, {
-        method: 'POST',
+        method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(payload)
     });
@@ -279,6 +279,8 @@ const mapBackendIssueToFrontend = (backendIssue) => {
 
 const mapBackendUserToFrontend = (backendUser) => {
     if (!backendUser) return null;
+    console.log("Utente dal backend:", backendUser);
+    console.log("Valore isAdmin:", backendUser.isAdmin);
     return {
         id: backendUser.idUtente,
         nome: backendUser.nome,

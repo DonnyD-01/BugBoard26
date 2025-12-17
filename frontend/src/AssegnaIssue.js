@@ -8,16 +8,28 @@ export default function AssegnaIssue({ projectId, onSelect, onClose }) {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [usersList, setUsersList] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
+            if (!projectId) {
+                console.error("AssegnaIssue: projectId mancante!");
+                setError("ID Progetto non valido.");
+                setLoading(false);
+                return;
+            }
+
             try {
                 setLoading(true);
                 const data = await getUsersByProjectId(projectId);
-                const eligibleUsers = data.filter(u => u.isAdmin === false);
-                setUsersList(eligibleUsers);
+
+                if (!data || !Array.isArray(data)) {
+                    setUsersList([]);
+                    return;
+                }
+
+                setUsersList(data);
             } catch (err) {
                 console.error("Errore recupero utenti:", err);
                 setError("Impossibile caricare la lista utenti.");

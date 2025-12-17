@@ -234,7 +234,7 @@ export function DettaglioIssue() {
 
             {showAssignPanel && (
                 <AssegnaIssue
-                    projectId={issue.projectId}
+                    projectId={localStorage.getItem("currentProjectId")}
                     onSelect={handleAssignUser}
                     onClose={() => setShowAssignPanel(false)}
                 />

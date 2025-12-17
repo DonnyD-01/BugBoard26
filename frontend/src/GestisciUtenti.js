@@ -179,7 +179,7 @@ export default function GestisciUtenti() {
 
             <div className="action-buttons-group">
                 <button className="btn-action btn-add-user" onClick={() => setShowAddPanel(true)}>
-                    <UserPlus size={18} /> Aggiungi Utente Esistente
+                    <UserPlus size={18} /> Aggiungi Utente al Progetto
                 </button>
                 <button className="btn-action btn-add-user" onClick={handleAddUser}>
                     <UserPlus size={18} /> Crea un Nuovo Utente

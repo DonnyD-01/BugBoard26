@@ -15,12 +15,10 @@ import {
     ArrowLeft
 } from "lucide-react";
 import PrefixMenu from "./PrefixMenu";
-import { createUser, assignProjectToUser } from './services/api';
+import { createUser } from './services/api';
 
 export default function NuovoUtente() {
     const navigate = useNavigate();
-
-    const currentProjectId = localStorage.getItem("currentProjectId");
 
     const [formData, setFormData] = useState({
         nome: '',
@@ -81,17 +79,6 @@ export default function NuovoUtente() {
         formData.email &&
         formData.password;
 
-    /*useEffect(() => {
-        const handleBeforeUnload = (e) => {
-            if (hasUnsavedChanges && !showSuccess) {
-                e.preventDefault();
-                e.returnValue = "";
-            }
-        };
-        window.addEventListener("beforeunload", handleBeforeUnload);
-        return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-    }, [hasUnsavedChanges, showSuccess]);*/
-
     const handleSubmit = async () => {
         if (!isFormValid) return;
 
@@ -112,8 +99,6 @@ export default function NuovoUtente() {
             const createdUser = await createUser(userPayload);
 
             if (createdUser && createdUser.id) {
-                await assignProjectToUser(createdUser.id, currentProjectId);
-
                 setShowSuccess(true);
             } else {
                 throw new Error("Creazione fallita: ID utente non ricevuto.");

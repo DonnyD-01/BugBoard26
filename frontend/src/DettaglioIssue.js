@@ -7,7 +7,7 @@ import StatusTracker from "./Statustracker";
 import AssegnaIssue from "./AssegnaIssue";
 import { useAuth } from './context/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
-import {getIssueById, updateIssue, deleteIssue, getUserById} from './services/api';
+import {getIssueById, updateIssue, deleteIssue, getUserById, assignIssueToUser} from './services/api';
 
 export function DettaglioIssue() {
     const {id} = useParams();
@@ -74,6 +74,7 @@ export function DettaglioIssue() {
     };
 
     const handleAssignUser = async (selectedUser) => {
+
         const newAssigneeName = selectedUser.nome
             ? `${selectedUser.nome} ${selectedUser.cognome || ''}`.trim()
             : selectedUser.email.split('@')[0];
@@ -87,7 +88,7 @@ export function DettaglioIssue() {
         };
 
         try {
-            await updateIssue(newData);
+            await assignIssueToUser(issue.id, selectedUser.id);
             setIssue(newData);
             setEditedData(newData);
             setShowAssignPanel(false);

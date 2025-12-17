@@ -108,6 +108,9 @@ export const createIssue = async (projectId, userId, issueData) => {
 };
 
 export const updateIssue = async (updatedData) => {
+    const assigneeId = updatedData.assigneeId || updatedData.idAssegnatario;
+    const assigneeEmail = updatedData.assigneeEmail || updatedData.EmailAss;
+
     const payload = {
         idIssue: updatedData.id || updatedData.idIssue,
         titolo: updatedData.title,
@@ -116,7 +119,11 @@ export const updateIssue = async (updatedData) => {
         priorita: parseInt(updatedData.priority),
         stato: updatedData.status,
         linkImmagine: updatedData.image,
-        idAssegnatario: updatedData.assigneeId || null
+        idUtente: updatedData.assigneeId || null,
+        utenteAssegnato: assigneeId ? { idUtente: parseInt(assigneeId) } : null,
+        EmailAss: assigneeEmail || null,
+        emailAssegnato: assigneeEmail || null,
+        idAssegnatario: assigneeId ? parseInt(assigneeId) : null
     };
 
     const response = await fetch(`${BASE_URL}/admin/issue/update`, {
@@ -309,6 +316,16 @@ export const verifyUserPassword = async (userId, passwordToCheck) => {
 
     const response = await fetch(url, {
         method: 'GET',
+        headers: getHeaders()
+    });
+
+    return handleResponse(response);
+};
+
+export const assignIssueToUser = async (issueId, userId) => {
+    console.log(`--- API: Assegnazione Issue ${issueId} a User ${userId} ---`);
+    const response = await fetch(`${BASE_URL}/admin/issues/${issueId}/assign/${userId}`, {
+        method: 'PUT',
         headers: getHeaders()
     });
 

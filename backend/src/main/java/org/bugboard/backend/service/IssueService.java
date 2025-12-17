@@ -25,12 +25,16 @@ public class IssueService {
         this.optionalService = optionalService;
     }
 
+    public List<Issue> getAllToDoIssues(int projectId) {
+        return issueRepo.findIssuesByProgetto_IdProgettoAndStato(projectId,ISSUE_TODO);
+    }
+
     public List<Issue> getAllAssignedIssues(int projectId,int userId) {
-        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteOrderByStato(projectId,userId);
+        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteAndStatoOrderByStato(projectId,userId,ISSUE_ASSEGNATA);
     }
 
     public List<Issue> getAllOtherIssues(int projectId,int userId) {
-        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteIsNotOrProgetto_IdProgettoAndStato(projectId,userId,projectId,ISSUE_TODO);
+        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteIsNotOrProgetto_IdProgettoAndUtenteAssegnato_IdUtenteAndStatoIsNot(projectId,userId,projectId,userId,ISSUE_ASSEGNATA);
     }
 
     public List<Issue> getAllIssuesFromProject(int projectId) {
@@ -103,5 +107,6 @@ public class IssueService {
         }
         return null;
     }
+
 
 }

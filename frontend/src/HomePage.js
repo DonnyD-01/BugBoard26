@@ -82,7 +82,7 @@ export default function HomePage() {
 
     const rawTable1Issues = isAdmin
         ? issues.filter(i => i.status === "ToDo")
-        : issues.filter(i => i.assigneeEmail === user?.email);
+        : issues.filter(i => i.assigneeEmail === user?.email && i.status === "Assegnata");
 
     const rawProjectIssues = issues;
 

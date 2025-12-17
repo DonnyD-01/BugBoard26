@@ -5,17 +5,17 @@ import { getTypeIcon, getStatusColor, getStatusIcon } from './utils';
 import { ChevronUp, ChevronDown, AlertCircle} from 'lucide-react';
 import {FiltersBar} from './FiltersBar';
 import {FiltersBarSenzaStato} from './FiltersBarSenzaStato';
-import { getIssuesByProjectId } from "./services/api";
+import {getAssignedIssues, getOtherIssues, getToDoIssues} from "./services/api";
 import LoadingSpinner from './LoadingSpinner';
 import {useAuth} from "./context/AuthContext";
 import ErrorMessage from "./ErrorMessage";
 
 export default function HomePage() {
 
-    const [adminAllIssues, setAdminAllIssues] = useState([]);
+    const [listToDo, setListToDo] = useState([]);
+    const [listAssigned, setListAssigned] = useState([]);
+    const [listOthers, setListOthers] = useState([]);
 
-
-    const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -35,21 +35,44 @@ export default function HomePage() {
     const [projectSort, setProjectSort] = useState({ key: null, direction: 'asc' });
 
     useEffect(() => {
-         const fetchData = async () => {
-             if(!currentProjectId) return;
-             try {
-                 setLoading(true);
-                 const data = await getIssuesByProjectId(currentProjectId);
-                 setIssues(data);
-             } catch (err) {
-                 <ErrorMessage message="Impossibile caricare le issue" marginTop="100px"/>
-             } finally {
-                 setLoading(false);
-             }
-         };
+        const fetchData = async () => {
+            if(!currentProjectId || !user?.id) return;
 
-         fetchData();
-     }, [currentProjectId]);
+            setLoading(true);
+            setError(null);
+
+            try {
+                if (isAdmin) {
+                    const [todoData, assignedData, othersData] = await Promise.all([
+                        getToDoIssues(currentProjectId),
+                        getAssignedIssues(currentProjectId, user.id),
+                        getOtherIssues(currentProjectId, user.id)
+                    ]);
+
+                    setListToDo(todoData);
+                    setListAssigned(assignedData);
+                    setListOthers(othersData);
+
+                } else {
+                    const [assignedData, othersData] = await Promise.all([
+                        getAssignedIssues(currentProjectId, user.id),
+                        getOtherIssues(currentProjectId, user.id)
+                    ]);
+
+                    setListAssigned(assignedData);
+                    setListOthers(othersData);
+                }
+
+            } catch (err) {
+                console.error("Errore fetch dati:", err);
+                setError("Impossibile caricare le issue dal server.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [currentProjectId, user, isAdmin]);
 
     const pageTitle = "Issues";
     const table1Title = isAdmin ? "Issue da assegnare" : "Le tue issue assegnate";
@@ -60,7 +83,7 @@ export default function HomePage() {
             const matchesSearch = issue.title.toLowerCase().includes(filters.search.toLowerCase());
             const matchesType = filters.type === "All" || issue.type === filters.type;
             const matchesStatus = filters.status === "All" || issue.status === filters.status;
-            const matchesPriority = filters.priority === "All" || issue.priority == filters.priority;
+            const matchesPriority = filters.priority === "All" || issue.priority === filters.priority;
 
             return matchesSearch && matchesType && matchesStatus && matchesPriority;
         });
@@ -84,22 +107,15 @@ export default function HomePage() {
         });
     };
 
-    const rawTable1Issues = isAdmin
-        ? issues.filter(i => i.status === "ToDo")
-        : issues.filter(i => i.assigneeEmail === user?.email && i.status === "Assegnata");
-
-    const rawProjectIssues = issues;
+    const rawTable1Issues = isAdmin ? listToDo : listAssigned;
 
     const myFinalList = sortIssuesLogic(filterIssuesLogic(rawTable1Issues, myFilters), mySort);
-    const rawAdminAssignedIssues = issues.filter(i =>
-        i.assigneeEmail === user?.email && i.status === "Assegnata"
-    );
     const adminAssignedFinalList = sortIssuesLogic(
-        filterIssuesLogic(rawAdminAssignedIssues, adminAssignedFilters),
+        filterIssuesLogic(listAssigned, adminAssignedFilters),
         adminAssignedSort
     );
 
-    const projectFinalList = sortIssuesLogic(filterIssuesLogic(rawProjectIssues, projectFilters), projectSort);
+    const projectFinalList = sortIssuesLogic(filterIssuesLogic(listOthers, projectFilters), projectSort);
 
     const handleSortClick = (key, currentSort, setSort) => {
         let direction = 'asc';

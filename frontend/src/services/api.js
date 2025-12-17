@@ -104,6 +104,15 @@ export const getOtherIssues = async (projectId, userId) => {
     return data.map(mapBackendIssueToFrontend);
 };
 
+export const getToDoIssues = async (projectId) => {
+    const response = await fetch(`${BASE_URL}/admin/${projectId}/issues/todo`, {
+        method: 'GET',
+        headers: getHeaders()
+    });
+    const data = await handleResponse(response);
+    return data.map(mapBackendIssueToFrontend);
+};
+
 export const createIssue = async (projectId, userId, issueData) => {
     const payload = {
         titolo: issueData.titolo,

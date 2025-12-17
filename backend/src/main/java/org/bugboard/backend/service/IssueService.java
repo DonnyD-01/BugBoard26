@@ -34,7 +34,9 @@ public class IssueService {
     }
 
     public List<Issue> getAllOtherIssues(int projectId,int userId) {
-        return issueRepo.findIssuesByProgetto_IdProgettoAndUtenteAssegnato_IdUtenteIsNotOrProgetto_IdProgettoAndUtenteAssegnato_IdUtenteAndStatoIsNot(projectId,userId,projectId,userId,ISSUE_ASSEGNATA);
+        List<Issue> issueList=getAllIssuesFromProject(projectId);
+        issueList.removeIf(issue -> issue.getStato().equals(ISSUE_ASSEGNATA) && issue.getUtenteAssegnato().getIdUtente() == userId);
+        return issueList;
     }
 
     public List<Issue> getAllIssuesFromProject(int projectId) {

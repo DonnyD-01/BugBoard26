@@ -16,6 +16,10 @@ export default function About() {
     const sidebarItemRefs = useRef({});
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const timer = setTimeout(() => {
             setShowSplash(false);
         }, 3500);

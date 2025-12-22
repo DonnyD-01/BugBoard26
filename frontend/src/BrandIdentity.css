@@ -133,6 +133,7 @@
     transform: translateY(50px);
     animation: fadeInUpWord 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     color: white;
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .title-word:nth-child(2) {
@@ -161,22 +162,19 @@
     background-color: rgba(0, 32, 96, 1);
 }
 
-
-/* Container principale */
 .brand-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 80px 20px; /* Aumentato il padding superiore */
+    padding: 80px 20px;
 }
 
-/* Sezioni Generali */
 .brand-section {
-    margin-bottom: 120px; /* Aumentato il margine */
+    margin-bottom: 120px;
 }
 
 .brand-section h2 {
     font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
-    font-size: 2.8rem; /* Leggermente più grande */
+    font-size: 2.8rem;
     color: #002060;
     margin-bottom: 40px;
     position: relative;
@@ -186,7 +184,7 @@
 .brand-section h2::after {
     content: '';
     display: block;
-    width: 80px; /* Più largo */
+    width: 80px;
     height: 5px;
     background-color: #002060;
     margin-top: 15px;
@@ -472,4 +470,118 @@
     width: 100%;
     height: auto;
     position: fixed;
+}
+
+.logo-glow {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+    z-index: -1;
+    opacity: 0.8;
+    filter: blur(20px);
+
+    animation: pulseGlow 4s ease-in-out infinite;
+}
+
+.image-logo-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* --- Stili per la Griglia dei Loghi --- */
+
+.logo-grid-container {
+    display: grid;
+    /* Crea due colonne di uguale larghezza */
+    grid-template-columns: 1fr 1fr;
+    /* Spaziatura tra le celle */
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.logo-grid-item {
+    background-color: #f8f9fc;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.logo-grid-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    border-color: transparent;
+}
+
+/* Variante per mostrare loghi chiari su sfondo scuro */
+.logo-grid-item.dark-bg {
+    background-color: #002060; /* Blu BugBoard */
+    border: none;
+}
+.logo-grid-item.dark-bg:hover {
+    background-color: #002875;
+}
+
+/* Contenitore per l'immagine per centrarla e dare spazio */
+.logo-wrapper {
+    height: 150px; /* Altezza fissa per allineare le card */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.logo-grid-img {
+    max-width: 80%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Assicura che il logo non venga distorto */
+}
+
+.logo-label {
+    font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
+    font-size: 1.2rem;
+    color: #002060;
+    margin-bottom: 10px;
+}
+
+.logo-description {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0; /* Rimuove il margine standard dei paragrafi */
+    line-height: 1.4;
+}
+
+/* Aggiustamento colori per la card scura */
+.logo-grid-item.dark-bg .logo-label {
+    color: white;
+}
+.logo-grid-item.dark-bg .logo-description {
+    color: rgba(255,255,255,0.7);
+}
+
+
+/* Aggiunta alla media query esistente per il mobile */
+@media (max-width: 768px) {
+    /* ... tue regole esistenti ... */
+
+    /* Trasforma la griglia 2x2 in una colonna singola su mobile */
+    .logo-grid-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .logo-wrapper {
+        height: 120px; /* Leggermente più piccolo su mobile */
+    }
 }

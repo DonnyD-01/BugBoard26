@@ -4,10 +4,13 @@ import { Copy, Check, LogIn } from 'lucide-react';
 import Footer from './Footer';
 import './BrandIdentity.css';
 
-// ... (Componente RevealOnScroll rimane uguale) ...
 const RevealOnScroll = ({ children }) => {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef(null);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -41,11 +44,11 @@ export default function BrandIdentity() {
     const [copied, setCopied] = useState(null);
     const [showNavbar, setShowNavbar] = useState(false);
 
-    // NUOVO STATO: Traccia la percentuale di scroll per l'effetto zoom
-    const [scale, setScale] = useState(1.5);
+    const [scale, setScale] = useState(1.8);
     const [opacity, setOpacity] = useState(1);
     const [overlayOpacity, setOverlayOpacity] = useState(0);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [containerOpacity, setContainerOpacity] = useState(0);
 
     const handleCopyColor = (color, colorName) => {
         navigator.clipboard.writeText(color);
@@ -57,24 +60,15 @@ export default function BrandIdentity() {
         const handleScroll = () => {
             const scrollY = window.scrollY;
 
-            // 1. Logica Navbar (uguale a prima)
             if (scrollY > 100) {
                 setShowNavbar(true);
             } else {
                 setShowNavbar(false);
             }
-
-            // 2. Logica Zoom Titolo
-            // Calcoliamo un fattore di scala che va da 1.5 (grande) a 1.0 (normale)
-            // L'effetto dura per i primi 400px di scroll
             const maxScroll = 400;
-            const startScale = 1.8; // Grandezza iniziale
-            const endScale = 1.0;   // Grandezza finale
-
-            // Formula di interpolazione lineare
+            const startScale = 1.8;
+            const endScale = 1.0;
             let newScale = startScale - (scrollY / maxScroll) * (startScale - endScale);
-
-            // Limitiamo il valore: non deve mai essere più piccolo di endScale
             if (newScale < endScale) newScale = endScale;
 
             setScale(newScale);
@@ -95,12 +89,22 @@ export default function BrandIdentity() {
 
             setOverlayOpacity(newOverlayOp);
 
+            const fadeStart = 0;
+            const fadeEnd = 400;
+
+            let newContainerOp = (scrollY - fadeStart) / (fadeEnd - fadeStart);
+
+            if (newContainerOp < 0) newContainerOp = 0;
+            if (newContainerOp > 1) newContainerOp = 1;
+
+            setContainerOpacity(newContainerOp);
+
             const winHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (scrollY / winHeight) * 100;
-
             setScrollProgress(scrolled);
         };
 
+        handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -132,6 +136,8 @@ export default function BrandIdentity() {
                     >
                         <span className="title-word">Brand</span>
                         <span className="title-word">Identity</span>
+                        <div className="logo-glow"></div>
+
                     </h1>
 
                     <p className="brand-subtitle animated-subtitle" style={{ opacity: opacity }}>
@@ -141,9 +147,7 @@ export default function BrandIdentity() {
                 <div className="scroll-indicator"></div>
             </div>
 
-            {/* ... Resto del contenuto (Brand Container, etc.) rimane identico ... */}
-            <div className="brand-container">
-                {/* ... (Codice esistente delle sezioni) ... */}
+            <div className="brand-container" style={{ opacity: containerOpacity }}>
                 <RevealOnScroll>
                     <section className="brand-section">
                         <div className="text-content">
@@ -192,6 +196,39 @@ export default function BrandIdentity() {
                             <div className="anatomy-item">
                                 <img src="/Logo/LogoSpin.png" className="big-letter" alt="Logo"></img>
                                 <p><strong>Le Zampe</strong><br/>Le due "B" (Bug & Board) partono dall'interno verso l'esterno, riproducendo le sei zampe.</p>
+                            </div>
+                        </div>
+                    </section>
+                </RevealOnScroll>
+
+                <RevealOnScroll>
+                    <section className="brand-section">
+                        <div className="text-content">
+                            <h2>Le diverse versioni del Logo</h2>
+                        </div>
+                        <div className="logo-grid-container">
+                            <div className="logo-grid-item">
+                                <div className="logo-wrapper">
+                                    <img src="/Logo/LogoBugBoard26.svg" alt="Logo Versione Principale" className="logo-grid-img" />
+                                </div>
+                            </div>
+
+                            <div className="logo-grid-item">
+                                <div className="logo-wrapper">
+                                    <img src="/Logo/LogoBugBoard26-Orizzontale.png" alt="Logo Versione Negativa" className="logo-grid-img"/>
+                                </div>
+                            </div>
+
+                            <div className="logo-grid-item">
+                                <div className="logo-wrapper">
+                                    <img src="/Logo/LogoBugBoard26.png" alt="logo" className="logo-grid-img"/>
+                                </div>
+                            </div>
+
+                            <div className="logo-grid-item dark-bg">
+                                <div className="logo-wrapper">
+                                    <img src="/Logo/LogoBugBoard26-Bianco.png" alt="logo" className="logo-grid-img" />
+                                </div>
                             </div>
                         </div>
                     </section>

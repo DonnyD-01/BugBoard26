@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link} from 'react-router-dom';
 import './About.css';
-import { LogIn } from 'lucide-react';
+import { LogIn, Mail } from 'lucide-react';
 import Footer from "./Footer";
 
 export default function About() {
@@ -79,7 +79,7 @@ export default function About() {
         { id: 'features', title: 'Funzionalità Chiave' },
         { id: 'project', title: 'Il Progetto' },
         { id: 'team', title: 'Il Team' },
-
+        { id: 'contatti', title: 'Contatti'}
     ];
 
 
@@ -87,13 +87,15 @@ export default function About() {
         <>
             <div className="about-splash-container">
                 <div className="splash-text-container">
-                    <span>Ab</span>
-                    <img
-                        src="/Logo/LogoSpin.png"
-                        alt="o"
-                        className="splash-rotating-logo"
-                    />
-                    <span>ut</span>
+                    <div className="splash-fade-in">
+                        <span>Ab</span>
+                        <img
+                            src="/Logo/LogoSpin.png"
+                            alt="o"
+                            className="splash-rotating-logo"
+                        />
+                        <span>ut</span>
+                    </div>
                 </div>
             </div>
 
@@ -165,6 +167,8 @@ export default function About() {
                             <h2>La nostra Mission</h2>
                             <p>
                                 La nostra missione è rendere più facile la gestione delle issue da parte degli sviluppatori e degli amministratori all'interno di un team.
+                                <br/>Pertanto, abbiamo realizzato un'applicazione che permette agli sviluppatoti di segnalare
+                                issue in maniera rapida e agli amministratori di gestirle e assegnarle con pochi click.
                             </p>
                         </section>
                         <section id="features" className="content-section" ref={el => sectionRefs.current['features'] = el}>
@@ -180,6 +184,12 @@ export default function About() {
                         </section>
                         <section id="project" className="content-section" ref={el => sectionRefs.current['project'] = el}>
                             <h2>Il Progetto</h2>
+                            <p>
+                                BugBoard26 è un progetto universitario, propedeutico all'insegnamento di Ingegneria del Software.
+                                La sua realizzazione è stata possibile pertanto grazie all'<Link to={"https://www.unina.it"} className={"link-pulito"}>Università degli Studi di Napoli Federico II</Link>,
+                                in particolare al <Link to={"https://www.dieti.unina.it"} className={"link-pulito"}>DIETI</Link> (Dipartimento di Ingegneria Elettrica e Tecnologie dell'Informazione) e al
+                                <Link to={"https://www.informatica.dieti.unina.it"} className={"link-pulito"}> Corso di Studi in Informatica</Link>, coordinato dal <Link to={"https://www.docenti.unina.it/sergio.dimartino"} className={"link-pulito"}>Prof. Sergio Di Martino</Link>.
+                            </p>
                             <div className="project-images-container">
                                 <img
                                     src="https://upload.wikimedia.org/wikipedia/it/a/a5/Federico_II_University_Logo.svg"
@@ -192,12 +202,6 @@ export default function About() {
                                     className="project-image"
                                 />
                             </div>
-                            <p>
-                                BugBoard26 è un progetto universitario, propedeutico all'insegnamento di Ingegneria del Software.
-                                La sua realizzazione è stata possibile pertanto grazie all'<Link to={"https://www.unina.it"} className={"link-pulito"}>Università degli Studi di Napoli Federico II</Link>,
-                                in particolare al <Link to={"https://www.dieti.unina.it"} className={"link-pulito"}>DIETI</Link> (Dipartimento di Ingegneria Elettrica e Tecnologie dell'Informazione) e al
-                                <Link to={"https://www.informatica.dieti.unina.it"} className={"link-pulito"}> Corso di Studi in Informatica</Link>, coordinato dal <Link to={"https://www.docenti.unina.it/sergio.dimartino"} className={"link-pulito"}>Prof. Sergio Di Martino</Link>.
-                            </p>
                         </section>
                         <section id="team" className="content-section" ref={el => sectionRefs.current['team'] = el}>
                             <h2>Il Team</h2>
@@ -205,13 +209,55 @@ export default function About() {
                                 Siamo un team formato da due giovani sviluppatori studenti del Corso di Studi Triennale di Informatica presso l'<Link to={"https://www.unina.it"} className={"link-pulito"}> Università degli Studi di Napoli "Federico II"</Link>.<br/>
                             </p>
                             <p style={{paddingLeft: "40px"}}>
-                                <div className="testo-evidenza">Vincenzo Donadio</div>
+                                <span className="testo-evidenza">Vincenzo Donadio</span><br/>
                                 Vincenzo ha apportato un impatto significativo nella realizzazione del cuore dell'applicazione, il back-end.
                                 Grazie al suo ampio background di conoscenze in ambito Java Spring Boot, ha saputo abilmente gestire questa parte.
-                                <div className="testo-evidenza">Walter Filosa</div>
+                                <br/><span className="testo-evidenza">Walter Filosa</span><br/>
                                 Walter, invece, si è concentrato sulla realizzazione del front-end  di BugBoard. Dopo un attenta analisi del marchio,
                                 e dopo aver realizzato una Brand Identity capace di dare
                             </p>
+                            <p>
+                                Un ringraziamento particolare va ai nostri docenti, il <Link to="https://www.docenti.unina.it/sergio.dimartino" className={"link-pulito"}>Prof. Sergio Di Martino</Link> e il <Link to="https://www.docenti.unina.it/luigiliberolucio.starace" className={"link-pulito"}>Prof. Luigi Libero Lucio Starace</Link>.
+
+                            </p>
+                        </section>
+                        <section id="contatti" className="content-section" ref={el => sectionRefs.current['contatti'] = el}>
+                            <h2>Contatti</h2>
+                            <div className={"testo-evidenza"} style={{fontSize: "16pt", marginBottom: "8px"}}>
+                                Autori:
+                            </div>
+                            <div className="table-container">
+                                <table className="custom-table">
+                                    <tbody>
+                                    <tr>
+                                        <td className="testo-blu" style={{width: "40%"}}>Vincenzo Donadio</td>
+                                        <td><Link to="mailto:vin.donadio@studenti.unina.it" className="link-pulito-grigio">vin.donadio@studenti.unina.it</Link></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="testo-blu">Walter Filosa</td>
+                                        <td><Link to="mailto:w.filosa@studenti.unina.it" className="link-pulito-grigio">w.filosa@studenti.unina.it</Link></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className={"testo-evidenza"} style={{fontSize: "16pt", marginBottom: "8px"}}>
+                                Docenti:
+                            </div>
+                            <div className="table-container">
+                                <table className="custom-table">
+                                    <tbody>
+                                    <tr>
+                                        <td className="testo-blu" style={{width: "40%"}}>Prof. Sergio Di Martino</td>
+                                        <td><Link to="mailto:sergio.dimartino@unina.it" className="link-pulito-grigio" style={{width: "25%"}}>sergio.dimartino@unina.it</Link></td>
+                                        <td><Link to="tel:081679272" className="link-pulito-grigio">+39 081 679 272</Link></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="testo-blu">Prof. Luigi Libero Lucio Starace</td>
+                                        <td><Link to="mailto:luigiliberolucio.starace@unina.it" className="link-pulito-grigio">luigiliberolucio.starace@unina.it</Link></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </section>
                         <section>
                             <hr/>

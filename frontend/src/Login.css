@@ -13,7 +13,7 @@
     background-color: white;
     width: 100%;
     max-width: 450px;
-    padding: 40px 50px;
+    padding: 30px 50px;
     border-radius: 2px;
     box-shadow: 0 10px 40px rgba(0, 32, 96, 0.08);
     text-align: center;
@@ -160,4 +160,42 @@
     position: relative;
     width: 100%;
     margin-bottom: 20px;
+}
+
+.login-footer-link {
+    margin-top: 20px;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+
+.link-about-login {
+    position: relative;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 11pt;
+}
+
+.link-about-login::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #002060;
+    transition: width 0.3s ease-in-out;
+}
+
+.link-about-login:hover {
+    color: #002060;
+}
+
+.link-about-login:hover::after {
+    width: 100%; 
 }

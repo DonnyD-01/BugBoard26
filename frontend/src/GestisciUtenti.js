@@ -8,6 +8,7 @@ import AggiungiUtenteEsistente from "./AggiungiUtenteEsistente";
 import LoadingSpinner from './LoadingSpinner';
 import { getUsersByProjectId, getAllUsersExceptProject, assignProjectToUser } from './services/api';
 import ErrorMessage from "./ErrorMessage";
+import NoResultMessage from "./NoResultMessage";
 
 export default function GestisciUtenti() {
 
@@ -15,17 +16,17 @@ export default function GestisciUtenti() {
 
     const currentProjectId = localStorage.getItem("currentProjectId") || 1;
 
-    const [loading, setLoading] = useState(true);   // <--- MANCAVA QUESTA
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [usersList, setUsersList] = useState([]);
 
     const [showAddPanel, setShowAddPanel] = useState(false);
-    const [availableUsers, setAvailableUsers] = useState([]); // Lista utenti fuori progetto
+    const [availableUsers, setAvailableUsers] = useState([]);
     const [loadingAvailable, setLoadingAvailable] = useState(false);
 
     const [searchTerm, setSearchTerm] = useState("");
-    const [roleFilter, setRoleFilter] = useState("All"); // 'All', 'admin', 'user'
+    const [roleFilter, setRoleFilter] = useState("All");
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
 
     const [showSuccess, setShowSuccess] = useState(false);
@@ -272,7 +273,7 @@ export default function GestisciUtenti() {
                             </div>
                         ))
                     ) : (
-                        <div className="no-results">Nessun utente trovato.</div>
+                        <NoResultMessage message={"Nessun utente trovato"}/>
                     )}
                 </div>
             </div>

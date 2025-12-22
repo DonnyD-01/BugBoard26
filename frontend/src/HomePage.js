@@ -9,6 +9,7 @@ import {getAssignedIssues, getOtherIssues, getToDoIssues} from "./services/api";
 import LoadingSpinner from './LoadingSpinner';
 import {useAuth} from "./context/AuthContext";
 import ErrorMessage from "./ErrorMessage";
+import NoResultMessage from "./NoResultMessage";
 
 export default function HomePage() {
 
@@ -204,9 +205,7 @@ export default function HomePage() {
                     {myFinalList.length > 0 ? (
                         myFinalList.map(issue => renderRow(issue))
                     ) : (
-                        <div className="no-results">
-                            <p>Nessuna issue trovata.</p>
-                        </div>
+                            <NoResultMessage message={"Nessuna issue trovata"}/>
                     )}
                 </div>
             </div>
@@ -240,9 +239,7 @@ export default function HomePage() {
                             {adminAssignedFinalList.length > 0 ? (
                                 adminAssignedFinalList.map(issue => renderRow(issue))
                             ) : (
-                                <div className="no-results">
-                                    <p>Non hai issue assegnate al momento.</p>
-                                </div>
+                                    <NoResultMessage message={"Non hai issue assegnate al momento."}/>
                             )}
                         </div>
                     </div>
@@ -308,9 +305,7 @@ export default function HomePage() {
                             </div>
                                 ))
                     ) : (
-                        <div className="no-results">
-                            <p>Nessuna issue nel progetto.</p>
-                        </div>
+                            <NoResultMessage message={"Nessuna issue nel progetto."}/>
                     )}
                 </div>
             </div>

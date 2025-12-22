@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './GestisciUtenti.css';
 import { X, Search, ShieldCheck, User2, Plus } from 'lucide-react';
+import NoResultMessage from "./NoResultMessage";
 
 export default function AggiungiUtenteEsistente({ users, onSelect, onClose }) {
 
@@ -74,7 +75,7 @@ export default function AggiungiUtenteEsistente({ users, onSelect, onClose }) {
                                     </div>
                                 ))
                             ) : (
-                                <div className="no-results">Nessun utente disponibile trovato.</div>
+                                <NoResultMessage message={"Nessun utente disponibile trovato"}/>
                             )}
                         </div>
                     </div>

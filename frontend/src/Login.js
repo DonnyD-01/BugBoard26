@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import './Login.css'
-import {Eye, EyeOff, AlertCircle} from 'lucide-react';
+import {Eye, EyeOff, AlertCircle, Info} from 'lucide-react';
 import { loginAPI } from './services/api';
 import LoadingSpinner from "./LoadingSpinner";
 import { useAuth } from './context/AuthContext';
@@ -114,6 +114,11 @@ export default function Login() {
                     </button>
 
                 </form>
+                <div className="login-footer-link">
+                    <Link to="/about" className="link-about-login">
+                        Scopri di più su BugBoard
+                    </Link>
+                </div>
             </div>
         </div>
     );

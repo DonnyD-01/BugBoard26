@@ -216,9 +216,16 @@
 
 .no-results {
     text-align: center;
-    padding: 40px;
+    padding: 50px;
     color: #B0B0B0;
     font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.no-results__img {
+    width: 80px;
 }
 
 @media (max-width: 900px) {

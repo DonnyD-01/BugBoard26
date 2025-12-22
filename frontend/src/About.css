@@ -81,13 +81,17 @@
     font-family: "NeueHaasGroteskDisp Pro Blk", sans-serif;
     font-size: 12pt;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
     text-decoration: none;
 
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+}
+
+.btn-login-header:hover {
+    transform: scale(1.1);
 }
 
 .about-content-wrapper {
@@ -192,6 +196,17 @@
     color: #B0B0B0;
 }
 
+.link-pulito-grigio {
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    text-decoration: none;
+    color: #B0B0B0;
+    cursor: pointer;
+}
+
+.link-pulito-grigio:hover {
+    color: #002060;
+}
+
 .timeline-container {
     position: relative;
     padding-left: 40px;
@@ -273,23 +288,23 @@
 }
 
 .interactive-logo-container {
-    position: relative; /* Necessario per contenere gli elementi assoluti al suo interno */
-    display: inline-block; /* Fa sì che il contenitore si adatti alla larghezza del testo */
+    position: relative;
+    display: inline-block;
+    cursor: default;
 }
 
 .hover-walking-logo {
     position: absolute;
     top: 50%;
-    left: 0; /* Parte da sinistra */
-    transform: translateY(-50%) scale(0); /* Inizialmente piccolo o invisibile */
-    height: 24px; /* Dimensione del logo */
+    left: 0;
+    transform: translateY(-50%) scale(0);
+    height: 24px;
     width: auto;
     z-index: 3;
     pointer-events: none;
-    transition: transform 0.2s;
 }
 
-.wipe-container:hover .placeholder-text {
+.interactive-logo-container:hover .placeholder-text {
     opacity: 0;
 }
 
@@ -305,7 +320,6 @@
 }
 
 .interactive-logo-container:hover .revealed-text {
-    /* Animazione svelamento */
     animation: revealText 2.5s linear infinite;
 }
 
@@ -344,7 +358,9 @@
 
 .placeholder-text {
     opacity: 1;
-    transition: opacity 0.1s;
+    transition: opacity 0.1s ease-in-out;
+    color: #002060;
+    font-family: 'NeueHaasGroteskDisp Pro Blk', sans-serif;
 }
 
 .revealed-text {
@@ -356,5 +372,44 @@
     overflow: hidden;
     white-space: nowrap;
     color: #002060;
+    font-family: 'NeueHaasGroteskDisp Pro Blk', sans-serif;
     z-index: 2;
+    opacity: 1;
+}
+
+.splash-fade-in {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInLogoText 0.5s ease-in forwards;
+    gap: 10px;
+}
+
+@keyframes fadeInLogoText {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.testo-blu {
+    color: #002060;
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+}
+
+.table-container {
+    margin-bottom: 30px;
+}
+
+.custom-table {
+    width: 100%;
+    font-family: "NeueHaasGroteskDisp Pro", sans-serif;
+    background-color: transparent;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 2px 0;
+}
+
+.custom-table td {
+    font-size: 14pt;
 }

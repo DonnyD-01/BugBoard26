@@ -34,5 +34,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+        # FONDAMENTALE: Entriamo nella cartella dove c'è il pom.xml
         working-directory: ./backend
-        run: mvn -B clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=walterfilosa_BugBoard26 -DskipTests
+        
+        run: >
+          mvn -B clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=walterfilosa_BugBoard26
+          -DskipTests
+          -Dsonar.sources=src/main/java
+          -Dsonar.java.binaries=target/classes

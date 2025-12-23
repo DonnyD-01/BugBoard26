@@ -9,6 +9,21 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine # Usa la versione che usi in produzione
+        env:
+          POSTGRES_DB: bugboard_test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        # Opzioni vitali: dicono a GitHub di aspettare che il DB sia acceso prima di proseguire
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,8 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        
-        # FONDAMENTALE: Entriamo nella cartella dove c'è il pom.xml
         working-directory: ./backend
         
         run: >

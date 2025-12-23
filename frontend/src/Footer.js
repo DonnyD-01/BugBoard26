@@ -22,7 +22,7 @@ export default function Footer() {
                 <p>
                     <Link to="https://maps.app.goo.gl/YpnMAD44Vvqr3b6v9" className="footer-link">Via Claudio, 21 - 80125 Napoli (NA)</Link>
                     <br/>
-                    <Link to="tel://0812531111" className="footer-link">(+39) 081 253 1111</Link>
+                    <Link to="tel://0812531111" className="footer-link">(+39) 081 253 11 11</Link>
                 </p>
 
                 <div className="social">

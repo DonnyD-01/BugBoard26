@@ -359,11 +359,15 @@ export const setIssueAsSolved = async (issueId) => {
 export const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
+    const token = localStorage.getItem("token");
+    const headers = {
+        'Authorization': token ? `Bearer ${token}` : ''
+    };
 
     const response = await fetch(`${BASE_URL}/upload`, {
         method: 'POST',
         body: formData,
-        headers: getHeaders()
+        headers: headers
     });
 
     if (!response.ok) {

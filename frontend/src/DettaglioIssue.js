@@ -401,8 +401,24 @@ export function DettaglioIssue() {
 
                 <div className="detail-section">
                     <h3>Immagine</h3>
-                    <div className="overlay-filename-badge">
-                        <span>File: {currentData.fileName || "Nessuna immagine caricata"}</span>
+                    <div className="overlay-filename-badge" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4px' }}>
+
+                        {currentData.image && !currentData.image.startsWith('data:') ? (
+                            <div style={{ wordBreak: 'break-all', fontSize: '14px', lineHeight: '1.4' }}>
+                                <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Link file:</span>
+                                <a
+                                    href={currentData.image}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: '#002060', textDecoration: 'underline', fontWeight: '500' }}
+                                >
+                                    {currentData.image}
+                                </a>
+                            </div>
+                        ) : (
+                            <span>File: {currentData.fileName || "Nessuna immagine caricata"}</span>
+                        )}
+
                     </div>
                     <div className={`detail-image-container ${isEditing ? "editable" : ""}`} onClick={triggerFileUpload}>
                         <input

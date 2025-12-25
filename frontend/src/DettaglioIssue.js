@@ -386,6 +386,7 @@ export function DettaglioIssue() {
                             <span>5</span>
                         </div>
                     </div>
+
                 ) : (
                     <div className="detail-priority-wrapper">
                         <div className="priority-bar-track-large">

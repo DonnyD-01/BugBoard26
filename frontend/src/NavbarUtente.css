@@ -82,18 +82,35 @@
 }
 
 .profile-button {
-    width: 50px;
-    height: 30px;
+    min-width: 60px;
+    height: 36px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: #002060;
     border-radius: 8px;
     padding: 5px 10px;
     cursor: pointer;
-    gap: 5px;
+    gap: 8px;
     position: relative;
     right: auto;
     top: auto;
+    transition: background-color 0.2s;
+}
+
+.profile-initial-circle {
+    width: 28px;
+    height: 28px;
+    background-color: white;
+    color: #002060;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
+    font-size: 16pt;
+    text-transform: uppercase;
+    user-select: none;
 }
 
 .profile-icon {
@@ -108,19 +125,20 @@
 
 .dropdown-menu{
     position: absolute;
-    top: 50px;
-    right: 0px;
+    top: 55px;
+    right: 0;
     background-color: white;
     color: #002060;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
-    min-width: 150px;
+    min-width: 160px;
     margin-top: 5px;
     z-index: 1000;
     font-family: "NeueHaasGroteskDisp Pro Md", sans-serif;
     font-size: 14pt;
+    overflow: hidden;
 }
 
 .dropdown-menu a.menu-item {

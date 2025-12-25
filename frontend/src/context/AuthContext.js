@@ -35,19 +35,32 @@ export const AuthProvider = ({ children }) => {
             const decoded = jwtDecode(token);
             const roleString = getRoleFromToken(decoded);
 
+            // Importante: Assicurati che 'sub' sia l'ID o che il token contenga 'id'/'userId'
+            // Se 'sub' è l'email, getUserById potrebbe fallire se si aspetta un numero.
             const userId = decoded.id || decoded.userId || decoded.sub;
-            const userEmail = decoded.sub || decoded.email; // Nel tuo token l'email è in 'sub'
+            const userEmail = decoded.sub || decoded.email;
+
             let nomeUtente = "Utente";
 
-            if (userId && !localStorage.getItem("userNome")) {
+            // --- MODIFICA QUI ---
+            // Abbiamo rimosso la condizione !localStorage.getItem("userNome")
+            // Ora cerchiamo SEMPRE di aggiornare i dati dell'utente se abbiamo un ID valido.
+            if (userId) {
                 try {
                     const fullUserData = await getUserById(userId);
-                    if (fullUserData?.nome) nomeUtente = fullUserData.nome;
-                } catch (e) { console.warn("Fetch nome fallita"); }
-            } else {
-                nomeUtente = localStorage.getItem("userNome") || "Utente";
+                    // Se troviamo un nome valido dal database, lo usiamo.
+                    if (fullUserData && fullUserData.nome) {
+                        nomeUtente = fullUserData.nome;
+                    }
+                } catch (e) {
+                    console.warn("Fetch nome fallita, uso cache o default");
+                    // Solo se la chiamata fallisce usiamo quello che c'è in memoria come fallback
+                    nomeUtente = localStorage.getItem("userNome") || "Utente";
+                }
             }
+            // --------------------
 
+            // Aggiorniamo il LocalStorage con i dati freschi
             localStorage.setItem("userRole", roleString);
             localStorage.setItem("userId", userId);
             localStorage.setItem("userEmail", userEmail);
@@ -71,18 +84,28 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decoded = jwtDecode(token);
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
+            try {
+                const decoded = jwtDecode(token);
+                const currentTime = Date.now() / 1000;
+                if (decoded.exp < currentTime) {
+                    localStorage.clear();
+                } else {
+                    initializeUser(token);
+                }
+            } catch (e) {
                 localStorage.clear();
-            } else {
-                initializeUser(token);
             }
         }
         setLoading(false);
     }, []);
 
     const login = async (token) => {
+        // Puliamo i vecchi dati utente prima di settare quelli nuovi
+        localStorage.removeItem("userNome");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("userEmail");
+
         localStorage.setItem("token", token);
         await initializeUser(token);
     };

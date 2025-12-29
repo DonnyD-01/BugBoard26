@@ -113,41 +113,6 @@ ALTER TABLE ONLY bugboard26.progetto ALTER COLUMN idprogetto SET DEFAULT nextval
 
 ALTER TABLE ONLY bugboard26.utente ALTER COLUMN idutente SET DEFAULT nextval('bugboard26.utente_idutente_seq'::regclass);
 
-INSERT INTO bugboard26.issue VALUES (13, 'Question', 'Non capisco una mazza', 'Ciao sono nuovo', 2, 'https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg', 'Risolta', 1, 6, 9);
-INSERT INTO bugboard26.issue VALUES (3, 'Bug', 'Problema con gli Id', 'Speriamo che funzioni', 5, 'https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg', 'Risolta', 1, 2, 4);
-INSERT INTO bugboard26.issue VALUES (11, 'Question', 'Quando gioca il Napoli?', 'Forza Napoli', 2, 'https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg', 'ToDo', 3, 2, NULL);
-INSERT INTO bugboard26.issue VALUES (10, 'Documentation', 'Prova', 'Speriamo che funzioni', 5, 'https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg', 'Assegnata', 1, 6, 6);
-INSERT INTO bugboard26.issue VALUES (12, 'Documentation', 'Documentazione assente ', 'Forza Napoli', 2, 'https://i1.rgstatic.net/ii/profile.image/272449132560396-1441968344623_Q512/Sergio-Di-Martino.jpg', 'Assegnata', 1, 6, 6);
-INSERT INTO bugboard26.issue VALUES (1, 'Question', 'Funzionerà?', 'Funziona?!', 5, 'https://blog.obilet.com/wp-content/uploads/2020/05/Napoli-%C4%B0talya.jpeg', 'Assegnata', 1, 2, 2);
-
-
-INSERT INTO bugboard26.lavora VALUES (3, 2);
-INSERT INTO bugboard26.lavora VALUES (2, 2);
-INSERT INTO bugboard26.lavora VALUES (1, 2);
-INSERT INTO bugboard26.lavora VALUES (2, 4);
-INSERT INTO bugboard26.lavora VALUES (1, 4);
-INSERT INTO bugboard26.lavora VALUES (3, 6);
-INSERT INTO bugboard26.lavora VALUES (3, 18);
-INSERT INTO bugboard26.lavora VALUES (3, 9);
-INSERT INTO bugboard26.lavora VALUES (1, 9);
-INSERT INTO bugboard26.lavora VALUES (1, 6);
-INSERT INTO bugboard26.lavora VALUES (1, 10);
-
-INSERT INTO bugboard26.progetto VALUES (1, 'BugBoard27', 'Stocazzo', 'Attivo');
-INSERT INTO bugboard26.progetto VALUES (2, 'DietiDeals24', 'Una Chiavica', 'Attivo');
-INSERT INTO bugboard26.progetto VALUES (3, 'RacingGame', NULL, 'Attivo');
-INSERT INTO bugboard26.progetto VALUES (4, 'BugBoard', 'Best App', 'Attivo');
-
-
-INSERT INTO bugboard26.utente VALUES (4, 'Walter', 'Filosa', '2003-12-21', 'Walter', '21212121', '$2a$12$7jPyLt48sI1xJogS.V6ZCuZ8.B0fcZcw69Pckx9D8kpYL7ol/MxJa', false);
-INSERT INTO bugboard26.utente VALUES (6, 'Prova', 'Prova', '2001-12-07', 'prova@gmail.com', '+39+3956464424424', '$2a$12$aqUy4sVkFvdemxnrtt429.4DMtaoopl0ginYQThSslN5BzBVrWSxm', false);
-INSERT INTO bugboard26.utente VALUES (2, 'Vincenzo', 'Donadio', '2001-12-07', 'vin@gmail.com', '+3953453636464', '$2a$12$ixbnPBVmzpsRdfE/b3sXo.YAdUWyCiZ/cKgH4GKbjgQs5HM9h/zAG', true);
-INSERT INTO bugboard26.utente VALUES (9, 'Peppe', 'Mayo', '1989-04-26', 'peppe@mayo.com', '+39 23120121921', '$2a$12$i1IU7EUgRLn0AEe8KBpRVeUsi.hpqFSVPZsLgguX9SxXGVupHM9/a', false);
-INSERT INTO bugboard26.utente VALUES (10, 'Jan ', 'Haladej', '1989-04-26', 'Jan@gmail.com', '+420 33212123204', '$2a$12$0AHxnblwIeDmuj9cL7cxPuP6rVyuJsFGxD8cvWIwMXMyGEjuj/NXK', true);
-INSERT INTO bugboard26.utente VALUES (11, 'Napoli', 'Regna', '2025-11-19', 'Provola@napoli.com', '+39 12123234233', '$2a$12$713uIQOMUIHP2q5B1WLdQuw7BM6L8RVuubIpB7RaRKDfM8vx2VtJ2', false);
-INSERT INTO bugboard26.utente VALUES (18, 'Ciao', 'Ciao', '1999-12-31', 'Ciao@ciao.com', '+39 32343432545', '$2a$12$Y7KDWU3BBTNnYo2nLEnuFuYnGRrfGmbVzjQIe7VZJ1IF/qWdQz5QK', false);
-
-
 SELECT pg_catalog.setval('bugboard26.issue_idissue_seq', 14, true);
 
 SELECT pg_catalog.setval('bugboard26.progetto_idprogetto_seq', 4, true);

@@ -1,4 +1,9 @@
 .page-init {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding-bottom: 60px;
     margin-top: 80px;
     padding: 20px;
 }

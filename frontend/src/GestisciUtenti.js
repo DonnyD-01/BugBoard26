@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './GestisciUtenti.css';
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from "react-dom";
 import {mockTeamUsers, mockUsers, potentialUsersToAdd} from './utils';
 import {Search, ChevronDown, ChevronUp, UserPlus, ShieldCheck, User2, CircleCheck, AlertCircle} from "lucide-react";
 import DettaglioUtente from './DettaglioUtente';
@@ -144,6 +145,17 @@ export default function GestisciUtenti() {
         </div>
     }
 
+    useEffect(() => {
+        if (showSuccess) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showSuccess]);
+
     if (error) return (
         <ErrorMessage message={error} marginTop={"65px"}/>
     );
@@ -151,7 +163,7 @@ export default function GestisciUtenti() {
     return (
         <div className="homepage">
 
-            {showSuccess && (
+            {showSuccess && createPortal (
                 <div className="success-overlay">
                     <div className="success-card">
                         <CircleCheck size={64} className="success-icon" />
@@ -159,7 +171,8 @@ export default function GestisciUtenti() {
                         <p><b>{addedUserName}</b> è stato aggiunto correttamente alla lista.</p>
                         <button className="btn-close-success" onClick={() => setShowSuccess(false)}>Chiudi</button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {selectedUser && (

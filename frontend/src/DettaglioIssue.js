@@ -17,6 +17,7 @@ import {
     uploadFile
 } from './services/api';
 import ErrorMessage from "./ErrorMessage";
+import {createPortal} from "react-dom";
 
 export function DettaglioIssue() {
     const {id} = useParams();
@@ -247,7 +248,7 @@ export function DettaglioIssue() {
     return (
         <div className="page-init">
 
-            {showSuccess && (
+            {showSuccess && createPortal (
                 <div className="success-overlay">
                     <div className="success-card">
                         <CircleCheck size={48} color="#4dd32f" className="success-icon"/>
@@ -260,10 +261,11 @@ export function DettaglioIssue() {
                             Chiudi
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {showDeleteConfirm && (
+            {showDeleteConfirm && createPortal (
                 <div className="overlay-delete">
                     <div className="card-delete">
                         <div className="icon-box-delete">
@@ -294,7 +296,8 @@ export function DettaglioIssue() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {showAssignPanel && (

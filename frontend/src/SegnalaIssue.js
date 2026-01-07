@@ -1,5 +1,6 @@
 import './SegnalaIssue.css';
 import React, {useEffect, useState} from "react";
+import { createPortal } from "react-dom";
 import {AlertTriangle, CircleCheck, Image as ImageIcon, X} from "lucide-react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {createIssue, uploadFile} from "./services/api";
@@ -156,6 +157,17 @@ export default function SegnalaIssue() {
         }
     }
 
+    useEffect(() => {
+        if (showSuccess || showWarning || errorMsg) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showSuccess, showWarning, errorMsg]);
+
     return (
         <div className="segnalaissue">
 
@@ -170,7 +182,7 @@ export default function SegnalaIssue() {
                 </div>
             )}
 
-            {showSuccess && (
+            {showSuccess && createPortal (
                 <div className="success-overlay">
                     <div className="success-card">
                         <CircleCheck size={64} className="success-icon" />
@@ -189,10 +201,11 @@ export default function SegnalaIssue() {
                             Chiudi e vai alle Issue
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {showWarning && (
+            {showWarning && createPortal (
                 <div className="overlay warning-overlay">
                     <div className="card-overlay warning-card">
                         <AlertTriangle size={64} className="icon-overlay warning-icon" />
@@ -208,7 +221,8 @@ export default function SegnalaIssue() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             <div className="homepage-container">

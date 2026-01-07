@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './DettaglioUtente.css';
 import { X, ShieldCheck, User, Mail, Phone, Calendar} from 'lucide-react';
 
@@ -17,6 +17,13 @@ export default function DettaglioUtente({ user, onClose }) {
             return dateString;
         }
     };
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
 
     if (!user) return null;
 

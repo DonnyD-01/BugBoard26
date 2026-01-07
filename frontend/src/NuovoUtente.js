@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './NuovoUtente.css'
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from "react-dom";
 import {
     User,
     ShieldCheck,
@@ -134,17 +135,29 @@ export default function NuovoUtente() {
         }
     }, [showSuccess, navigate]);
 
-    return (
-        <div className="homepage-container">
+    useEffect(() => {
+        if (showSuccess || showWarning || errorMsg) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showSuccess, showWarning, errorMsg]);
 
-            {showSuccess && (
+    return (
+        <div className="homepage-container fix-width">
+
+            {showSuccess && createPortal (
                 <div className="success-overlay">
                     <div className="success-card">
                         <CheckCircle size={64} className="success-icon" />
                         <h2>Utente Creato!</h2>
                         <p>L'account per <b>{formData.nome} {formData.cognome}</b> è stato creato con successo.</p>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {errorMsg && (
@@ -156,7 +169,7 @@ export default function NuovoUtente() {
                 </div>
             )}
 
-            {showWarning && (
+            {showWarning && createPortal (
                 <div className="overlay warning-overlay">
                     <div className="card-overlay warning-card">
                         <AlertTriangle size={64} className="icon-overlay warning-icon" />
@@ -172,7 +185,8 @@ export default function NuovoUtente() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             <div className="profile-header">

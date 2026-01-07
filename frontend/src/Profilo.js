@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './Profilo.css';
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from "react-dom";
 import {CircleCheck, Edit2, Save, ShieldCheck, X, EyeOff, Eye, CircleAlert, Lock, ArrowLeft} from 'lucide-react';
 import PrefixMenu from './PrefixMenu';
 import { useAuth } from './context/AuthContext';
@@ -43,6 +44,12 @@ export function Profilo({ isStandalone = false }) {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
     const [modalError, setModalError] = useState(null);
+
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        setIsLoaded(true);
+    }, []);
 
     const [userData, setUserData] = useState({
         id: "",
@@ -298,14 +305,27 @@ export function Profilo({ isStandalone = false }) {
         }
     };
 
+    useEffect(() => {
+        if (showSuccess || showConfirmModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showSuccess, showConfirmModal]);
+
     if (loading) return <LoadingSpinner message="Caricamento profilo..." />;
 
     if (error) return <div style={{padding:40, textAlign:'center', color:'red'}}>{error}</div>;
 
-    const ProfileContent = () => (
-        <div className="homepage-container">
+    const content = (
+        <div className={`homepage-container fix-width ${isLoaded ? 'fade-in-page' : ''}`}
+             style={{ opacity: isLoaded ? 1 : 0 }}
+        >
 
-            {showConfirmModal && (
+            {showConfirmModal && createPortal (
                 <div className="overlay-password-confirm" style={{
                     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
                     backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000,
@@ -383,10 +403,11 @@ export function Profilo({ isStandalone = false }) {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {showSuccess && (
+            {showSuccess && createPortal (
                 <div className="success-overlay">
                     <div className="success-card">
                         <CircleCheck size={64} className="success-icon"/>
@@ -402,7 +423,8 @@ export function Profilo({ isStandalone = false }) {
                             Chiudi
                         </button>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {showPasswordError && (
@@ -589,7 +611,7 @@ export function Profilo({ isStandalone = false }) {
                 </header>
 
                 <div style={{flex: 1}}>
-                    <ProfileContent />
+                    {content}
                 </div>
 
                 <Footer />
@@ -597,5 +619,5 @@ export function Profilo({ isStandalone = false }) {
         );
     }
 
-    return <ProfileContent/>;
+    return content;
 }

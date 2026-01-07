@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './GestisciUtenti.css';
+import { createPortal } from 'react-dom';
 import { X, Search, UserCheck } from 'lucide-react';
 import { getUsersByProjectId } from './services/api';
 import LoadingSpinner from "./LoadingSpinner";
@@ -43,13 +44,20 @@ export default function AssegnaIssue({ projectId, onSelect, onClose }) {
         }
     }, [projectId]);
 
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
+
     const filteredUsers = usersList.filter(user =>
         user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.cognome.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    return (
+    const modalContent = (
         <div className="panel-overlay">
             <div className="panel-card wide-panel">
 
@@ -121,4 +129,5 @@ export default function AssegnaIssue({ projectId, onSelect, onClose }) {
             </div>
         </div>
     );
+    return createPortal(modalContent, document.body);
 }

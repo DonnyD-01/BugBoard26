@@ -90,7 +90,7 @@ public class IssueService {
         Utente user = optionalService.checkUtente(userId);
 
         if(issue!=null && user!=null) {
-            if(!issue.getProgetto().getSetUtenti().contains(user)){
+            if(!issue.getProgetto().getSetUtenti().contains(user) || !user.getProgettiAssegnati().contains(issue.getProgetto())){
                 return null;
             }
             issue.setUtenteAssegnato(user);

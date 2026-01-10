@@ -4,6 +4,7 @@ import org.bugboard.backend.model.Issue;
 import org.bugboard.backend.model.Progetto;
 import org.bugboard.backend.model.Utente;
 import org.bugboard.backend.repository.IssueRepo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,9 +32,13 @@ class IssueServiceTest {
     @InjectMocks
     IssueService issueService;
 
-    @Test
-    void testAddIssueSuccess() {
-        Issue issue = Issue.builder()
+    Issue issue;
+    Progetto progetto;
+    Utente utente;
+
+    @BeforeEach
+    void setUp() {
+        issue = Issue.builder()
                 .tipo("Feature")
                 .titolo("Test")
                 .descrizione("Test")
@@ -41,12 +46,12 @@ class IssueServiceTest {
                 .linkImmagine("Link immagine")
                 .build();
 
-        Progetto progetto = Progetto.builder()
+        progetto = Progetto.builder()
                 .idProgetto(1)
                 .titolo("Testing")
                 .descrizione("Testing").build();
 
-        Utente utente = Utente.builder()
+        utente = Utente.builder()
                 .idUtente(1)
                 .nome("Test")
                 .cognome("Ing")
@@ -56,7 +61,10 @@ class IssueServiceTest {
                 .password("Test")
                 .isAdmin(true)
                 .build();
+    }
 
+    @Test
+    void testAddIssueSuccess() {
         HashSet<Utente> utenti = new HashSet<>();
         utenti.add(utente);
         progetto.setSetUtenti(utenti);
@@ -86,13 +94,6 @@ class IssueServiceTest {
 
     @Test
     void testAddIssueProgettoNotFound(){
-        Issue issue = Issue.builder()
-                .tipo("Feature")
-                .titolo("Test")
-                .descrizione("Test")
-                .priorita(5)
-                .linkImmagine("Link immagine")
-                .build();
 
         given(optionalService.checkProgetto(Mockito.any(Integer.class))).willReturn(null);
 
@@ -104,13 +105,6 @@ class IssueServiceTest {
 
     @Test
     void testAddIssueUtenteNotFound(){
-        Issue issue = Issue.builder()
-                .tipo("Feature")
-                .titolo("Test")
-                .descrizione("Test")
-                .priorita(5)
-                .linkImmagine("Link immagine")
-                .build();
 
         given(optionalService.checkUtente(Mockito.any(Integer.class))).willReturn(null);
 
@@ -122,31 +116,7 @@ class IssueServiceTest {
 
     @Test
     void testAddIssueProjectNotCointainsUserFailure(){
-        Issue issue = Issue.builder()
-                .tipo("Feature")
-                .titolo("Test")
-                .descrizione("Test")
-                .priorita(5)
-                .linkImmagine("Link immagine")
-                .build();
-
-        Progetto progetto = Progetto.builder()
-                .idProgetto(1)
-                .titolo("Testing")
-                .descrizione("Testing")
-                .setUtenti(new HashSet<>())
-                .build();
-
-        Utente utente = Utente.builder()
-                .idUtente(1)
-                .nome("Test")
-                .cognome("Ing")
-                .dataNascita(Date.valueOf("2000-01-01"))
-                .email("Test@test.com")
-                .numeroTelefono("999999999")
-                .password("Test")
-                .isAdmin(true)
-                .build();
+        progetto.setSetUtenti(new HashSet<>());
 
         given(optionalService.checkProgetto(progetto.getIdProgetto())).willReturn(progetto);
         given(optionalService.checkUtente(utente.getIdUtente())).willReturn(utente);
@@ -161,33 +131,11 @@ class IssueServiceTest {
 
     @Test
     void testAssignIssueSuccess(){
-        Issue issue = Issue.builder()
-                .idIssue(1)
-                .tipo("Feature")
-                .titolo("Test")
-                .descrizione("Test")
-                .priorita(5)
-                .linkImmagine("Link immagine")
-                .build();
-
-        Progetto progetto = Progetto.builder()
-                .idProgetto(1)
-                .titolo("Testing")
-                .descrizione("Testing")
-                .setUtenti(new HashSet<>())
-                .build();
         issue.setProgetto(progetto);
 
-        Utente utente = Utente.builder()
-                .idUtente(1)
-                .nome("Test")
-                .cognome("Ing")
-                .dataNascita(Date.valueOf("2000-01-01"))
-                .email("Test@test.com")
-                .numeroTelefono("999999999")
-                .password("Test")
-                .isAdmin(true)
-                .build();
+        HashSet<Progetto> progetti = new HashSet<>();
+        progetti.add(progetto);
+        utente.setProgettiAssegnati(progetti);
 
         HashSet<Utente> utenti = new HashSet<>();
         utenti.add(utente);
@@ -239,33 +187,34 @@ class IssueServiceTest {
 
     @Test
     void testAssignIssueProjectNotCointainsUserFailure(){
-        Issue issue = Issue.builder()
-                .tipo("Feature")
-                .titolo("Test")
-                .descrizione("Test")
-                .priorita(5)
-                .linkImmagine("Link immagine")
-                .build();
+        HashSet<Progetto> progetti = new HashSet<>();
+        progetti.add(progetto);
+        utente.setProgettiAssegnati(progetti);
 
-        Progetto progetto = Progetto.builder()
-                .idProgetto(1)
-                .titolo("Testing")
-                .descrizione("Testing")
-                .setUtenti(new HashSet<>())
-                .build();
+        progetto.setSetUtenti(new HashSet<>());
 
         issue.setProgetto(progetto);
 
-        Utente utente = Utente.builder()
-                .idUtente(1)
-                .nome("Test")
-                .cognome("Ing")
-                .dataNascita(Date.valueOf("2000-01-01"))
-                .email("Test@test.com")
-                .numeroTelefono("999999999")
-                .password("Test")
-                .isAdmin(true)
-                .build();
+        given(optionalService.checkIssue(issue.getIdIssue())).willReturn(issue);
+        given(optionalService.checkUtente(utente.getIdUtente())).willReturn(utente);
+
+        Issue returnedIssue = issueService.assignIssue(issue.getIdIssue(),utente.getIdUtente());
+
+        assertThat(returnedIssue).isNull();
+
+        verify(optionalService,times(1)).checkIssue(issue.getIdIssue());
+        verify(optionalService,times(1)).checkUtente(utente.getIdUtente());
+    }
+
+    @Test
+    void testAssignIssueUserNotCointainsProjectFailure(){
+        HashSet<Utente> utenti = new HashSet<>();
+        utenti.add(utente);
+        progetto.setSetUtenti(utenti);
+
+        utente.setProgettiAssegnati(new HashSet<>());
+
+        issue.setProgetto(progetto);
 
         given(optionalService.checkIssue(issue.getIdIssue())).willReturn(issue);
         given(optionalService.checkUtente(utente.getIdUtente())).willReturn(utente);
